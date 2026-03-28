@@ -1,0 +1,13 @@
+{
+  "name": "proof-rootz-global",
+  "version": "1.0.0",
+  "description": "AI with Proof of Origin — proof.rootz.global",
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "author": "Steven Sprague",
+  "license": "MIT"
+}

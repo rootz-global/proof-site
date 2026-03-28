@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI with Proof of Origin | Rootz</title>
+    <meta name="description" content="Every AI output should have a provable origin. Rootz gives AI agents a birth certificate, a cryptographic audit chain, and signed session archives on the blockchain.">
+
+    <meta property="og:title" content="AI with Proof of Origin">
+    <meta property="og:description" content="The first AI agent with a verifiable birth certificate on a public blockchain. Built on Morpheus decentralized inference.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://proof.rootz.global">
+
+    <style>
+        :root {
+            --primary-blue: #4f46e5;
+            --primary-purple: #7c3aed;
+            --secondary-blue: #6366f1;
+            --accent-cyan: #06b6d4;
+            --dark: #1e1b4b;
+            --light: #ffffff;
+            --background: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--background);
+        }
+
+        a { color: var(--primary-blue); }
+        code {
+            background: var(--gray-100);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .proof-hero {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 50%, var(--primary-blue) 100%);
+            color: white;
+            padding: 100px 20px 80px;
+            text-align: center;
+        }
+
+        .proof-hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .proof-hero .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .proof-hero .tagline {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .proof-section {
+            padding: 80px 20px;
+        }
+
+        .proof-section:nth-child(even) {
+            background: var(--gray-50);
+        }
+
+        .proof-section h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .proof-section h3 {
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin: 2rem 0 1rem;
+        }
+
+        .proof-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--gray-600);
+        }
+
+        .proof-content p {
+            margin-bottom: 1.2rem;
+        }
+
+        .chain-visual {
+            background: var(--dark);
+            color: #a5b4fc;
+            border-radius: 12px;
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .chain-visual .highlight {
+            color: #34d399;
+        }
+
+        .chain-visual .dim {
+            color: #6b7280;
+        }
+
+        .chain-visual .accent {
+            color: #fbbf24;
+        }
+
+        .on-chain-box {
+            background: white;
+            border: 2px solid var(--primary-blue);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .on-chain-box h4 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .on-chain-box code {
+            background: var(--gray-100);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .on-chain-box a {
+            color: var(--primary-blue);
+            text-decoration: underline;
+        }
+
+        .layers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .layer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--primary-blue);
+        }
+
+        .layer-card.active {
+            border-top-color: #34d399;
+        }
+
+        .layer-card.designed {
+            border-top-color: #fbbf24;
+        }
+
+        .layer-card.future {
+            border-top-color: var(--gray-300);
+        }
+
+        .layer-card h4 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .layer-card .status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-card .status.working { color: #34d399; }
+        .layer-card .status.ready { color: #fbbf24; }
+        .layer-card .status.spec { color: var(--gray-300); }
+
+        .layer-card p {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .audience-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .audience-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.75rem;
+        }
+
+        .audience-card p {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .code-section {
+            background: var(--dark);
+            color: white;
+            padding: 80px 20px;
+        }
+
+        .code-section h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .code-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .code-link {
+            display: inline-block;
+            padding: 12px 24px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .code-link:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .code-link.primary {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--primary-purple);
+        }
+
+        .analogy-box p {
+            color: var(--dark);
+            font-size: 1.05rem;
+        }
+
+        footer {
+            padding: 3rem 20px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="proof-hero">
+    <div class="container">
+        <h1>AI with Proof of Origin</h1>
+        <p class="subtitle">
+            Every AI output should have a provable origin. Who authorized the agent.
+            What model answered. When it happened. Signed, hash-linked, on-chain.
+        </p>
+        <p class="tagline">
+            The first AI agent with a birth certificate on a public blockchain.
+        </p>
+    </div>
+</section>
+
+<!-- The Problem -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>The Problem</h2>
+        <p>
+            Today, every AI system in the world operates on unsigned messages. When an AI answers
+            your question, there is no cryptographic proof of what you asked, what it answered,
+            which model produced the output, or who authorized the agent to act.
+        </p>
+        <p>
+            The output is ephemeral. The interaction is deniable. The AI is anonymous.
+        </p>
+        <p>
+            This is equivalent to running the internet without TLS. Every AI message is susceptible
+            to tampering, impersonation, and repudiation. And AI agents are being granted authority
+            to take real-world actions &mdash; financial transactions, code execution, data access,
+            communications.
+        </p>
+
+        <div class="analogy-box">
+            <p>
+                <strong>Before TLS</strong>, every web page was transmitted in plaintext. Anyone could read or
+                modify it. TLS didn't change what the web did &mdash; it proved that what you saw was
+                what the server sent.
+            </p>
+            <p style="margin-top: 1rem;">
+                <strong>Before this</strong>, every AI interaction is an unsigned message. What we built is
+                the beginning of <strong>TLS for AI</strong> &mdash; not changing what AI does, but proving what it did.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- What We Built -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>What We Built</h2>
+        <p>
+            An AI agent with a <strong>birth certificate</strong> that names two parents:
+            the AI model that powers it and the human who authorized it.
+            Every inference call is recorded as a <strong>signed, hash-linked Note</strong>.
+            The session is settled with a <strong>Merkle root</strong> anchored on the blockchain.
+        </p>
+
+        <div class="chain-visual">
+            <span class="highlight">Note 0: Birth Certificate</span><br>
+            &nbsp;&nbsp;Agent: 0xB29A...ffaA6<br>
+            &nbsp;&nbsp;AI Parent: <span class="accent">Morpheus / Kimi K2.5</span> (decentralized inference)<br>
+            &nbsp;&nbsp;Authorizer: <span class="accent">Steven Sprague</span> (0xCf31...3fDa)<br>
+            &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+            <br>
+            <span class="highlight">Note 1: Inference</span> &mdash; "State of decentralized AI"<br>
+            &nbsp;&nbsp;Model: kimi-k2.5 | Tokens: 1,542 | Latency: 27s<br>
+            &nbsp;&nbsp;Prompt hash: 0x797b7d... | Response hash: 0x945544...<br>
+            &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+            <br>
+            <span class="highlight">Note 2: Inference</span> &mdash; "Gaps in AI agent identity"<br>
+            &nbsp;&nbsp;Model: kimi-k2.5 | Tokens: 1,702 | Latency: 29s<br>
+            &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+            <br>
+            <span class="highlight">Note 3: Inference</span> &mdash; "Signed receipts and enterprise impact"<br>
+            &nbsp;&nbsp;Model: kimi-k2.5 | Tokens: 969 | Latency: 16s<br>
+            &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+            <br>
+            <span class="highlight">Note 4: Settlement</span><br>
+            &nbsp;&nbsp;Merkle Root: <span class="accent">0xc4f395e627c1ecda...</span><br>
+            &nbsp;&nbsp;3 inference calls | 4,213 total tokens<br>
+            &nbsp;&nbsp;Full session archived to IPFS (encrypted)
+        </div>
+
+        <h3>Built on Morpheus Decentralized Inference</h3>
+        <p>
+            The agent runs on the <a href="https://mor.org" target="_blank">Morpheus</a> decentralized AI network.
+            Three real inference calls to Kimi K2.5 via <code>api.mor.org</code>. Real tokens consumed.
+            No centralized API. No single point of control.
+        </p>
+        <p>
+            Morpheus provides the thinking. Rootz provides the proof.
+        </p>
+    </div>
+</section>
+
+<!-- Live On-Chain -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Live on Polygon</h2>
+        <p>This is not a simulation. The birth certificate and session settlement are on Polygon mainnet.</p>
+
+        <div class="on-chain-box">
+            <h4>Sovereign Secret (Agent Wallet)</h4>
+            <p><strong>Address:</strong> <code>0x70b893e3b519255166a1fb64dcde920d056a2d5c</code></p>
+            <p><strong>Chain:</strong> Polygon Mainnet (137)</p>
+            <p><a href="https://polygonscan.com/address/0x70b893e3b519255166a1fb64dcde920d056a2d5c" target="_blank">View on Polygonscan</a></p>
+        </div>
+
+        <div class="on-chain-box">
+            <h4>Birth Certificate Transaction</h4>
+            <p><strong>TX:</strong> <code>0xa689ba006882b0ee1fae319de9ac3362960d4e1ecb7777686891ba9d16f06f7c</code></p>
+            <p><strong>Block:</strong> 84,799,553 &mdash; March 28, 2026</p>
+            <p><a href="https://polygonscan.com/tx/0xa689ba006882b0ee1fae319de9ac3362960d4e1ecb7777686891ba9d16f06f7c" target="_blank">View on Polygonscan</a></p>
+        </div>
+
+        <p>
+            The content is encrypted (ECDH + AES-256-GCM). Only the owner can decrypt.
+            But the events are publicly verifiable &mdash; anyone can confirm the contract exists,
+            when Notes were written, and that the chain is intact.
+        </p>
+        <p>
+            Total on-chain cost: <strong>$0.03</strong>.
+        </p>
+    </div>
+</section>
+
+<!-- Why It Matters -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Why It Matters</h2>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>Enterprises</h4>
+                <p>When your AI makes a decision that affects a customer or a regulation,
+                   you need proof of what it was asked and what it said. Not log files.
+                   Blockchain-anchored, cryptographically signed evidence.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Regulators</h4>
+                <p>The EU AI Act requires operational logs. The SEC requires disclosure
+                   of material AI use. Today, compliance is self-reporting.
+                   With this, the evidence is on-chain. Verify, don't trust.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Insurance</h4>
+                <p>If an AI causes harm, who is liable? With a birth certificate naming
+                   the model and a chain of signed actions, insurance can be priced
+                   per-model, per-version, per-agent.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Individuals</h4>
+                <p>You asked AI for medical, legal, or financial guidance. Later you need
+                   to prove what it told you. Today you have a screenshot.
+                   With this, you have cryptographic proof.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Four Layers -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Four Layers of Provable AI</h2>
+        <p>Each layer adds trust. Each layer requires different effort. Together they form
+           the complete chain from "who asked" to "where did the model come from."</p>
+
+        <div class="layers-grid">
+            <div class="layer-card active">
+                <div class="status working">WORKING</div>
+                <h4>Layer 1: Agent-Side</h4>
+                <p>Agent signs prompt hashes, hashes responses, chain-links every action.
+                   Settlement Merkle root anchored on-chain. Works with any AI API today.</p>
+            </div>
+            <div class="layer-card active">
+                <div class="status ready">PATCH READY</div>
+                <h4>Layer 2: Provider-Side</h4>
+                <p>Provider signs every response with its registered wallet.
+                   Bilateral proof. Runs on your own Morpheus node.</p>
+            </div>
+            <div class="layer-card designed">
+                <div class="status ready">DESIGNED</div>
+                <h4>Layer 3: Encrypted Channel</h4>
+                <p>ECDH key exchange. AES-256-GCM encrypted channel.
+                   TEE attestation proves the enclave. No eavesdropping.</p>
+            </div>
+            <div class="layer-card future">
+                <div class="status spec">SPEC PHASE</div>
+                <h4>Layer 4: Model Provenance</h4>
+                <p>Model built from signed sources. Training data manifests.
+                   Weight hashes. The AI equivalent of pharmaceutical traceability.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- The Desktop -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Rootz Desktop &mdash; The Data Wallet Runtime</h2>
+        <p>
+            The Morpheus agent is a plugin for <strong>Rootz Desktop V6</strong>, an Electron application
+            that provides the signing, encryption, and blockchain infrastructure for data wallets.
+        </p>
+        <p>
+            Desktop V6 is the agent's hardware security module. It holds TPM-sealed signing keys,
+            manages Sovereign Secrets on Polygon, encrypts content with ECDH + AES-256-GCM,
+            uploads to IPFS, handles credit management, and provides an MCP server that
+            any AI tool (Claude Code, Cursor, ChatGPT) can connect to.
+        </p>
+        <p>
+            The agent never holds a private key. Desktop signs on its behalf via a session token.
+            If the agent is compromised, it has no key to steal. If the host dies, the owner
+            derives a new key from their master seed and the agent's full state is recovered
+            from the blockchain.
+        </p>
+
+        <h3>What Desktop V6 Provides</h3>
+        <ul style="margin: 1rem 0 1rem 1.5rem; line-height: 2;">
+            <li>TPM-sealed wallet keys (hardware-bound, can't be extracted)</li>
+            <li>Secret and Note management on Polygon (V7 contracts)</li>
+            <li>ECDH encryption (agent-to-owner, agent-to-provider)</li>
+            <li>IPFS upload with automatic encryption (Pinata)</li>
+            <li>V7 credit auto-funding (NoteManager)</li>
+            <li>MCP server on port 3021 (any AI tool connects)</li>
+            <li>Session archive pipeline (search, semantic indexing, knowledge extraction)</li>
+            <li>Agent session tokens (scoped, time-limited, revocable)</li>
+        </ul>
+    </div>
+</section>
+
+<!-- Code -->
+<section class="code-section">
+    <div class="proof-content" style="text-align: center;">
+        <h2>The Code</h2>
+        <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;">
+            Open source. MIT license. 4,655 lines of TypeScript across 7 source files.
+            Built in one session. Tested live on Morpheus + Polygon.
+        </p>
+        <div class="code-links">
+            <a href="https://github.com/rootz-global/morpheus-agent" class="code-link primary">GitHub: morpheus-agent</a>
+            <a href="https://github.com/rootz-global/rootz-site" class="code-link">Rootz Site</a>
+            <a href="https://polygonscan.com/address/0x70b893e3b519255166a1fb64dcde920d056a2d5c" class="code-link">Polygonscan</a>
+            <a href="https://mor.org" class="code-link">Morpheus Network</a>
+        </div>
+        <p style="color: rgba(255,255,255,0.5); margin-top: 2rem; font-size: 0.9rem;">
+            Built by Steven Sprague &mdash; <a href="https://rootz.global" style="color: rgba(255,255,255,0.7);">rootz.global</a>
+        </p>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2026 Rootz Corp &mdash; <a href="https://rootz.global">rootz.global</a></p>
+    <p style="margin-top: 0.5rem;">
+        DBA Identity: <code style="font-size: 0.8rem;">0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664</code> (Polygon Mainnet)
+    </p>
+</footer>
+
+</body>
+</html>
