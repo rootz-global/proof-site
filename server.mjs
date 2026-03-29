@@ -8,6 +8,8 @@ const PORT = process.env.PORT || 3070;
 
 const indexHtml = readFileSync(join(__dirname, 'index.html'), 'utf-8');
 const wellKnownAi = readFileSync(join(__dirname, 'well-known-ai.json'), 'utf-8');
+const sitemapXml = readFileSync(join(__dirname, 'sitemap.xml'), 'utf-8');
+const llmsTxt = readFileSync(join(__dirname, 'llms.txt'), 'utf-8');
 
 const server = createServer((req, res) => {
   // AI Discovery Standard
@@ -21,14 +23,35 @@ const server = createServer((req, res) => {
     return;
   }
 
-  // Health check
-  if (req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', service: 'proof.rootz.global', version: '1.0.0' }));
+  // Sitemap
+  if (req.url === '/sitemap.xml') {
+    res.writeHead(200, { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' });
+    res.end(sitemapXml);
     return;
   }
 
-  // Serve index.html for everything else (single page site)
+  // LLMs.txt
+  if (req.url === '/llms.txt') {
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
+    res.end(llmsTxt);
+    return;
+  }
+
+  // Robots.txt
+  if (req.url === '/robots.txt') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('User-agent: *\nAllow: /\nSitemap: https://proof.rootz.global/sitemap.xml\n');
+    return;
+  }
+
+  // Health check
+  if (req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', service: 'proof.rootz.global', version: '1.1.0' }));
+    return;
+  }
+
+  // Serve index.html for everything else
   res.writeHead(200, {
     'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'public, max-age=3600',

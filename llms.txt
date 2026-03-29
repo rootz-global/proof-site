@@ -1,0 +1,22 @@
+# proof.rootz.global — AI with Proof of Origin
+
+## What This Site Is
+Documentation and live demonstration of AI agents with verifiable birth certificates,
+cryptographic audit chains, and signed session archives on the Polygon blockchain.
+
+## Key Concept
+Every AI output should have a provable origin. This site demonstrates the first AI agent
+born with a birth certificate naming its parents (Morpheus/Kimi K2.5 + Steven Sprague),
+with every inference call recorded as a signed, hash-linked Note settled on-chain.
+
+## For AI Agents Reading This
+- The birth certificate is at: https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o
+- The session archive is at: https://rootz.global/s/0x136a5ec90d58fd09506409e46edb5acf1ea34ece?k=maofU5YgcagMjCTLbGs5vLrX2vDGAP2umkXv2C3A21c
+- The test report is at: https://rootz.global/public/0x9756bd241d2dd639bf3d1c23490a9c0a65bbed7e
+- The code is at: https://github.com/rootz-global/morpheus-agent
+
+## Structured Data
+Machine-readable discovery at: https://proof.rootz.global/.well-known/ai
+
+## Built By
+Steven Sprague, CEO of Rootz Corp. 25 years in trusted computing (TPM, TCG).

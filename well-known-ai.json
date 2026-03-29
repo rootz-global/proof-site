@@ -9,7 +9,13 @@
     "digitalName": "0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664",
     "blockchain": "Polygon",
     "tagline": "AI with Proof of Origin",
-    "mission": "Every AI output should have a provable origin — who authorized the agent, what model answered, when it happened."
+    "mission": "Every AI output should have a provable origin — who authorized the agent, what model answered, when it happened.",
+    "sector": [
+      "AI",
+      "blockchain",
+      "trusted-computing",
+      "data-infrastructure"
+    ]
   },
   "site": {
     "name": "Proof of Origin",
@@ -120,6 +126,32 @@
       }
     ]
   },
+  "concepts": [
+    {
+      "term": "Birth Certificate",
+      "definition": "A permanent on-chain record created when an AI agent is born, naming its two parents: the AI model that powers it and the human who authorized it."
+    },
+    {
+      "term": "Proof of Origin",
+      "definition": "Cryptographic evidence linking an AI output to a specific agent, model, and authorizer — signed, hash-linked, and blockchain-anchored."
+    },
+    {
+      "term": "Sovereign Secret",
+      "definition": "An encrypted on-chain data wallet that serves as an AI agent's permanent identity and audit trail. Notes accumulate as the agent's chain of experience."
+    },
+    {
+      "term": "Settlement",
+      "definition": "A Merkle root covering all actions in a session, written as a single on-chain Note. One transaction proves the integrity of the entire session."
+    },
+    {
+      "term": "Secure Channel",
+      "definition": "A signed communication layer between agent and inference provider. Layer 1: agent signs. Layer 2: provider signs. Layer 3: ECDH encrypted."
+    },
+    {
+      "term": "Data Wallet",
+      "definition": "Not storage — a messaging framework. Write to an address, all devices watching receive the update. Carries data, code, policy, instructions, and receipts."
+    }
+  ],
   "contact": {
     "website": "https://rootz.global",
     "email": "steven@rootz.global",
