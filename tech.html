@@ -20,11 +20,19 @@
         theme: 'dark',
         themeVariables: {
           primaryColor: '#4f46e5',
-          primaryTextColor: '#e0e7ff',
-          primaryBorderColor: '#6366f1',
-          lineColor: '#a5b4fc',
+          primaryTextColor: '#ffffff',
+          primaryBorderColor: '#818cf8',
+          lineColor: '#c7d2fe',
           secondaryColor: '#312e81',
           tertiaryColor: '#1e1b4b',
+          nodeTextColor: '#ffffff',
+          noteBkgColor: '#1e1b4b',
+          noteTextColor: '#ffffff',
+          noteBorderColor: '#818cf8',
+          actorTextColor: '#ffffff',
+          signalTextColor: '#ffffff',
+          labelTextColor: '#ffffff',
+          loopTextColor: '#ffffff',
           fontFamily: 'Segoe UI, sans-serif',
           fontSize: '14px'
         }
@@ -225,10 +233,10 @@ graph TB
     Secret --- Notes
     TEE -.->|attestation| Channel
 
-    style Desktop fill:#1e1b4b,stroke:#6366f1,color:#e0e7ff
-    style Agent fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style Morpheus fill:#1e3a5f,stroke:#06b6d4,color:#e0e7ff
-    style Chain fill:#14532d,stroke:#34d399,color:#e0e7ff
+    style Desktop fill:#1e1b4b,stroke:#818cf8,color:#ffffff
+    style Agent fill:#312e81,stroke:#818cf8,color:#ffffff
+    style Morpheus fill:#1e3a5f,stroke:#22d3ee,color:#ffffff
+    style Chain fill:#14532d,stroke:#4ade80,color:#ffffff
         </pre>
     </div>
 </section>
@@ -317,9 +325,9 @@ graph LR
     Agent -->|written to| Secret
     Secret --- Block
 
-    style Parents fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style BirthCert fill:#1e1b4b,stroke:#a5b4fc,color:#e0e7ff
-    style Chain fill:#14532d,stroke:#34d399,color:#e0e7ff
+    style Parents fill:#312e81,stroke:#818cf8,color:#ffffff
+    style BirthCert fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
+    style Chain fill:#14532d,stroke:#4ade80,color:#ffffff
         </pre>
     </div>
 </section>
@@ -347,11 +355,11 @@ graph LR
     N2 -->|previousHash| N3
     N3 -->|previousHash| N4
 
-    style N0 fill:#4f46e5,stroke:#a5b4fc,color:white
-    style N1 fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style N2 fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style N3 fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style N4 fill:#059669,stroke:#34d399,color:white
+    style N0 fill:#4f46e5,stroke:#c7d2fe,color:#ffffff
+    style N1 fill:#312e81,stroke:#818cf8,color:#ffffff
+    style N2 fill:#312e81,stroke:#818cf8,color:#ffffff
+    style N3 fill:#312e81,stroke:#818cf8,color:#ffffff
+    style N4 fill:#059669,stroke:#4ade80,color:#ffffff
         </pre>
     </div>
 
@@ -379,10 +387,10 @@ graph BT
     L2 --> L3
     L3 --> L4
 
-    style L1 fill:#059669,stroke:#34d399,color:white
-    style L2 fill:#d97706,stroke:#fbbf24,color:white
-    style L3 fill:#4f46e5,stroke:#a5b4fc,color:white
-    style L4 fill:#6b7280,stroke:#9ca3af,color:white
+    style L1 fill:#059669,stroke:#4ade80,color:#ffffff
+    style L2 fill:#b45309,stroke:#fbbf24,color:#ffffff
+    style L3 fill:#4338ca,stroke:#c7d2fe,color:#ffffff
+    style L4 fill:#4b5563,stroke:#d1d5db,color:#ffffff
         </pre>
     </div>
 
@@ -430,9 +438,9 @@ graph LR
     Sign -->|signature only| Sig
     Sign -->|write note| Note
 
-    style Agent fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style Desktop fill:#1e1b4b,stroke:#a5b4fc,color:#e0e7ff
-    style Output fill:#14532d,stroke:#34d399,color:#e0e7ff
+    style Agent fill:#312e81,stroke:#818cf8,color:#ffffff
+    style Desktop fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
+    style Output fill:#14532d,stroke:#4ade80,color:#ffffff
         </pre>
     </div>
 
@@ -523,9 +531,9 @@ graph LR
     Desktop2 -->|outbound WebSocket| MCP_Relay
     Desktop2 --- Agent2
 
-    style AI fill:#312e81,stroke:#6366f1,color:#e0e7ff
-    style Cloud fill:#1e3a5f,stroke:#06b6d4,color:#e0e7ff
-    style Local fill:#14532d,stroke:#34d399,color:#e0e7ff
+    style AI fill:#312e81,stroke:#818cf8,color:#ffffff
+    style Cloud fill:#1e3a5f,stroke:#22d3ee,color:#ffffff
+    style Local fill:#14532d,stroke:#4ade80,color:#ffffff
         </pre>
     </div>
 
