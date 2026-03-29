@@ -539,8 +539,8 @@
 
         <table class="tech-table" style="margin: 1.5rem 0;">
             <tr><th style="background: var(--dark); color: white;">Claim</th><th style="background: var(--dark); color: white;">How It's Proven</th></tr>
-            <tr><td><strong>This agent exists and was authorized by this human</strong></td>
-                <td>Birth certificate on-chain, signed by the authorizer's wallet. <code>ecrecover(sig) == authorizerAddress</code>. Forgery requires the private key.</td></tr>
+            <tr><td><strong>This agent exists and was authorized by the holder of this key</strong></td>
+                <td>Birth certificate on-chain, signed by the authorizer's wallet. <code>ecrecover(sig) == authorizerAddress</code>. Forgery requires the private key. The authorizer could be a person, a company, another agent, or a smart contract.</td></tr>
             <tr><td><strong>This specific prompt was asked</strong></td>
                 <td>SHA-256 hash of the prompt, signed by the agent. Pre-image resistance: 2<sup>256</sup> search space.</td></tr>
             <tr><td><strong>This specific response was received</strong></td>
