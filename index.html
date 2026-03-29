@@ -529,6 +529,60 @@
     </div>
 </section>
 
+<!-- What Can Be Proven -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>What Can Be Proven</h2>
+
+        <h3>Provable Today</h3>
+        <p>These claims are backed by real cryptography running in production. The math holds or it doesn't.</p>
+
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Claim</th><th style="background: var(--dark); color: white;">How It's Proven</th></tr>
+            <tr><td><strong>This agent exists and was authorized by this human</strong></td>
+                <td>Birth certificate on-chain, signed by the authorizer's wallet. <code>ecrecover(sig) == authorizerAddress</code>. Forgery requires the private key.</td></tr>
+            <tr><td><strong>This specific prompt was asked</strong></td>
+                <td>SHA-256 hash of the prompt, signed by the agent. Pre-image resistance: 2<sup>256</sup> search space.</td></tr>
+            <tr><td><strong>This specific response was received</strong></td>
+                <td>SHA-256 hash of the response content. If the hash matches, the content matches.</td></tr>
+            <tr><td><strong>This happened in this order</strong></td>
+                <td>Each Note contains the hash of the previous Note. Alter any entry and the chain breaks visibly. Same math as Bitcoin.</td></tr>
+            <tr><td><strong>The session is complete and unmodified</strong></td>
+                <td>Settlement Merkle root covers all actions. Any missing or altered Note changes the root.</td></tr>
+            <tr><td><strong>The full conversation is preserved</strong></td>
+                <td>Complete prompts and responses archived to IPFS, encrypted, recoverable from one wallet address. Not just hashes &mdash; the actual words.</td></tr>
+            <tr><td><strong>The data is owned by the user, not the platform</strong></td>
+                <td>Encrypted with the owner's key (ECDH + AES-256-GCM). The platform, the node operator, and the blockchain can't read it. Only the owner and those they share the key with.</td></tr>
+        </table>
+
+        <h3>Provable Tomorrow</h3>
+        <p>These require additional infrastructure we're building. The designs exist. The code is in progress.</p>
+
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: #4b5563; color: white;">Claim</th><th style="background: #4b5563; color: white;">What's Needed</th></tr>
+            <tr><td><strong>The provider actually ran this model</strong></td>
+                <td><em>Layer 2:</em> Provider signs responses with their registered wallet. Bilateral proof. Patch ready for our own Morpheus node.</td></tr>
+            <tr><td><strong>The response wasn't modified in transit</strong></td>
+                <td><em>Layer 2:</em> Provider signature binds the response content to the provider's identity. No intermediary can alter it.</td></tr>
+            <tr><td><strong>No one eavesdropped on the conversation</strong></td>
+                <td><em>Layer 3:</em> ECDH key exchange between agent and provider. AES-256-GCM encrypted channel. End-to-end privacy.</td></tr>
+            <tr><td><strong>The inference ran in a verified enclave</strong></td>
+                <td><em>Layer 3:</em> TEE attestation (Intel TDX / AMD SEV). Hardware-signed proof that specific code ran in an isolated environment.</td></tr>
+            <tr><td><strong>The model weights are genuine</strong></td>
+                <td><em>Layer 4:</em> Model built from signed sources. Weight hashes in a Reference Integrity Manifest (TCG RIM). Verified at load time inside the TEE.</td></tr>
+            <tr><td><strong>The training data has provenance</strong></td>
+                <td><em>Layer 4:</em> Training data manifests with signed sources. Every dataset hashed, publisher signed. The AI equivalent of pharmaceutical traceability.</td></tr>
+            <tr><td><strong>Any attested node can run this agent</strong></td>
+                <td><em>HSM Network:</em> Agent state lives in the Secret on-chain. Any node whose TEE passes attestation can load and run the agent. Portable like a smart contract.</td></tr>
+        </table>
+
+        <p style="margin-top: 1rem; font-style: italic; color: var(--gray-600);">
+            Each layer builds on the one below. Layer 1 is working today. Each subsequent layer
+            adds trust without replacing what's already proven.
+        </p>
+    </div>
+</section>
+
 <!-- Four Layers -->
 <section class="proof-section">
     <div class="proof-content">
