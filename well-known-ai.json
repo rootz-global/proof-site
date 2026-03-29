@@ -1,0 +1,134 @@
+{
+  "$schema": "https://rootz.global/ai/schemas/ai-discovery-v1.2.json",
+  "specVersion": "1.2.0",
+  "schemaVersion": "2026-03",
+  "generated": "2026-03-29T00:00:00Z",
+  "organization": {
+    "name": "Rootz Corp",
+    "domain": "rootz.global",
+    "digitalName": "0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664",
+    "blockchain": "Polygon",
+    "tagline": "AI with Proof of Origin",
+    "mission": "Every AI output should have a provable origin — who authorized the agent, what model answered, when it happened."
+  },
+  "site": {
+    "name": "Proof of Origin",
+    "domain": "proof.rootz.global",
+    "type": "research",
+    "description": "Documentation and live demonstration of AI agents with birth certificates, cryptographic audit chains, and signed session archives on the Polygon blockchain. Built on Morpheus decentralized inference.",
+    "primaryLanguage": "en",
+    "topics": [
+      "ai-agent-identity",
+      "proof-of-origin",
+      "birth-certificate",
+      "signed-inference",
+      "decentralized-ai",
+      "morpheus",
+      "trusted-computing",
+      "blockchain-attestation",
+      "data-wallet"
+    ]
+  },
+  "capabilities": {
+    "ai_readable": true,
+    "structured_data": true,
+    "blockchain_verifiable": true,
+    "mcp_available": false
+  },
+  "technology": {
+    "description": "Morpheus AI agent as a Rootz data wallet — every inference call signed, hash-linked, and settled on-chain",
+    "stack": [
+      "TypeScript",
+      "Node.js",
+      "Polygon (EVM)",
+      "IPFS",
+      "MCP (Model Context Protocol)",
+      "Morpheus decentralized inference"
+    ],
+    "protocols": [
+      "secp256k1 ECDSA signing",
+      "ECDH + AES-256-GCM encryption",
+      "SHA-256 hash-linking",
+      "Merkle tree settlement",
+      "OpenAI-compatible inference API"
+    ]
+  },
+  "proof": {
+    "description": "Live on-chain proof artifacts from the first AI agent with a birth certificate",
+    "agent": {
+      "address": "0xB29A12a4741430e707E596F71e9d7Bca722ffaA6",
+      "model": "kimi-k2.5",
+      "provider": "Morpheus (mor.org)",
+      "authorizer": "Steven Sprague"
+    },
+    "chain": "Polygon Mainnet (137)",
+    "contracts": {
+      "sovereignSecret": "0x70b893e3b519255166a1fb64dcde920d056a2d5c",
+      "sessionArchive": "0x136a5ec90d58fd09506409e46edb5acf1ea34ece",
+      "testReport": "0x9756bd241d2dd639bf3d1c23490a9c0a65bbed7e"
+    },
+    "shareLinks": {
+      "birthCertificate": "https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o",
+      "sessionArchive": "https://rootz.global/s/0x136a5ec90d58fd09506409e46edb5acf1ea34ece?k=maofU5YgcagMjCTLbGs5vLrX2vDGAP2umkXv2C3A21c",
+      "testReport": "https://rootz.global/public/0x9756bd241d2dd639bf3d1c23490a9c0a65bbed7e"
+    },
+    "transactions": {
+      "birthCertificate": "0xa689ba006882b0ee1fae319de9ac3362960d4e1ecb7777686891ba9d16f06f7c",
+      "block": 84799553
+    }
+  },
+  "fourLayers": {
+    "description": "Four layers of provable AI, each adding trust",
+    "layers": [
+      {
+        "name": "Agent-Side Signing",
+        "status": "working",
+        "description": "Agent signs prompt hashes, hashes responses, chain-links every action, settles Merkle root on-chain"
+      },
+      {
+        "name": "Provider-Side Signing",
+        "status": "patch-ready",
+        "description": "Provider signs responses with registered wallet — bilateral proof of conversation"
+      },
+      {
+        "name": "Encrypted Channel",
+        "status": "designed",
+        "description": "ECDH key exchange, AES-256-GCM encryption, TEE attestation proves the enclave"
+      },
+      {
+        "name": "Model Provenance",
+        "status": "spec-phase",
+        "description": "Model built from signed sources — training data manifests, weight hashes, build attestation"
+      }
+    ]
+  },
+  "code": {
+    "repositories": [
+      {
+        "name": "morpheus-agent",
+        "url": "https://github.com/rootz-global/morpheus-agent",
+        "description": "Morpheus AI agent as a Rootz data wallet",
+        "language": "TypeScript",
+        "license": "MIT"
+      },
+      {
+        "name": "proof-site",
+        "url": "https://github.com/rootz-global/proof-site",
+        "description": "proof.rootz.global website source",
+        "language": "HTML",
+        "license": "MIT"
+      }
+    ]
+  },
+  "contact": {
+    "website": "https://rootz.global",
+    "email": "steven@rootz.global",
+    "github": "https://github.com/rootz-global"
+  },
+  "related": {
+    "rootzGlobal": "https://rootz.global/.well-known/ai",
+    "aiDiscoveryStandard": "https://rootz.global/ai/standard.md",
+    "morpheus": "https://mor.org",
+    "polygonscan": "https://polygonscan.com/address/0x70b893e3b519255166a1fb64dcde920d056a2d5c"
+  }
+}

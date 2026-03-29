@@ -7,8 +7,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3070;
 
 const indexHtml = readFileSync(join(__dirname, 'index.html'), 'utf-8');
+const wellKnownAi = readFileSync(join(__dirname, 'well-known-ai.json'), 'utf-8');
 
 const server = createServer((req, res) => {
+  // AI Discovery Standard
+  if (req.url === '/.well-known/ai' || req.url === '/.well-known/ai/') {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'public, max-age=3600',
+    });
+    res.end(wellKnownAi);
+    return;
+  }
+
   // Health check
   if (req.url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
