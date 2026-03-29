@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Architecture | AI with Proof of Origin | Rootz</title>
+    <meta name="description" content="Technical architecture of AI agents with provable origin — TPM signing, Sovereign Secrets, hash-linked chains, and four layers of trust.">
+
+    <meta property="og:title" content="Technical Architecture — AI with Proof of Origin">
+    <meta property="og:description" content="How AI agent birth certificates, signed inference chains, and blockchain-anchored settlements work.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://proof.rootz.global/tech">
+
+    <link rel="ai-discovery" type="application/json" href="/.well-known/ai" title="AI Discovery — Proof of Origin">
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#4f46e5',
+          primaryTextColor: '#e0e7ff',
+          primaryBorderColor: '#6366f1',
+          lineColor: '#a5b4fc',
+          secondaryColor: '#312e81',
+          tertiaryColor: '#1e1b4b',
+          fontFamily: 'Segoe UI, sans-serif',
+          fontSize: '14px'
+        }
+      });
+    </script>
+
+    <style>
+        :root {
+            --primary-blue: #4f46e5;
+            --primary-purple: #7c3aed;
+            --dark: #1e1b4b;
+            --light: #ffffff;
+            --background: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--background);
+        }
+
+        a { color: var(--primary-blue); }
+        code {
+            background: var(--gray-100);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .tech-hero {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+
+        .tech-hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .tech-hero p { opacity: 0.8; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .tech-hero .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-bottom: 1rem; }
+        .tech-hero .back-link:hover { color: white; }
+
+        .tech-section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tech-section:nth-child(even) { background: var(--gray-50); max-width: 100%; }
+        .tech-section:nth-child(even) > * { max-width: 900px; margin-left: auto; margin-right: auto; }
+
+        .tech-section h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .tech-section h3 {
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+            margin: 2rem 0 0.75rem;
+        }
+
+        .tech-section p {
+            font-size: 1.05rem;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .diagram-container {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .diagram-container .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .tech-table th {
+            background: var(--dark);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .tech-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .tech-table tr:nth-child(even) { background: var(--gray-50); }
+
+        .note-box {
+            background: #ede9fe;
+            border-left: 4px solid var(--primary-purple);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .contract-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .contract-grid .label { font-weight: 600; color: var(--dark); }
+        .contract-grid .value { font-family: monospace; color: var(--gray-600); word-break: break-all; }
+
+        footer {
+            padding: 3rem 20px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        footer a { color: var(--primary-blue); }
+    </style>
+</head>
+<body>
+
+<section class="tech-hero">
+    <a href="/" class="back-link">&larr; Back to Proof of Origin</a>
+    <h1>Technical Architecture</h1>
+    <p>How AI agents get birth certificates, signed inference chains, and blockchain-anchored provenance.</p>
+</section>
+
+<!-- System Overview -->
+<section class="tech-section">
+    <h2>System Overview</h2>
+    <p>
+        The system has three components: the Desktop (signs everything with TPM-sealed keys),
+        the Morpheus network (decentralized inference), and the Polygon blockchain (permanent record).
+        The agent is a smart contract with identity — a Sovereign Secret — where Notes accumulate as its chain of experience.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph TB
+    subgraph Desktop["Desktop V6 (Your PC)"]
+        TPM["TPM 2.0<br/>Hardware-sealed keys"]
+        MCP["MCP Server<br/>Port 3021"]
+        Archive["Archive Pipeline<br/>Encrypt → IPFS → Chain"]
+    end
+
+    subgraph Agent["Morpheus Agent Plugin"]
+        Birth["Birth Certificate<br/>Note 0"]
+        Actions["Action Chain<br/>Hash-linked Notes"]
+        Settle["Settlement<br/>Merkle Root"]
+        Channel["Secure Channel<br/>Signed prompts/responses"]
+    end
+
+    subgraph Morpheus["Morpheus Network"]
+        API["Inference API<br/>api.mor.org"]
+        Kimi["Kimi K2.5<br/>GLM-4.7"]
+        TEE["TEE Attestation<br/>Intel TDX"]
+    end
+
+    subgraph Chain["Polygon Blockchain"]
+        Secret["Sovereign Secret<br/>Agent Identity"]
+        Notes["Encrypted Notes<br/>Action History"]
+        IPFS["IPFS<br/>Full Content"]
+    end
+
+    TPM -->|signs| MCP
+    MCP -->|relay| Agent
+    Agent -->|signed prompts| API
+    API --> Kimi
+    Kimi -->|responses| Agent
+    Agent -->|hash-linked| Actions
+    Actions -->|settle| Settle
+    Settle -->|write| Archive
+    Archive -->|encrypt + store| IPFS
+    Archive -->|anchor| Secret
+    Secret --- Notes
+    TEE -.->|attestation| Channel
+
+    style Desktop fill:#1e1b4b,stroke:#6366f1,color:#e0e7ff
+    style Agent fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style Morpheus fill:#1e3a5f,stroke:#06b6d4,color:#e0e7ff
+    style Chain fill:#14532d,stroke:#34d399,color:#e0e7ff
+        </pre>
+    </div>
+</section>
+
+<!-- Agent Lifecycle -->
+<section class="tech-section" style="background: var(--gray-50); max-width: 100%; padding: 60px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+    <h2>Agent Lifecycle</h2>
+    <p>
+        An agent is born, works, and settles. Every step is signed, hash-linked, and anchored on-chain.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+sequenceDiagram
+    participant Owner as Steven (Owner)
+    participant Desktop as Desktop V6 (TPM)
+    participant Agent as Morpheus Agent
+    participant Morpheus as Morpheus API
+    participant Polygon as Polygon Chain
+
+    Note over Owner,Polygon: 1. BIRTH — Agent gets a birth certificate
+
+    Owner->>Desktop: Create agent (derive key m/44'/60'/0'/1/0)
+    Desktop->>Polygon: Deploy Sovereign Secret
+    Desktop->>Polygon: Write Note 0: Birth Certificate
+    Note right of Polygon: Parents: Morpheus/Kimi K2.5<br/>+ Steven Sprague<br/>Policy: 100 MOR/day
+
+    Note over Owner,Polygon: 2. WORK — Every inference is recorded
+
+    Agent->>Morpheus: Signed prompt hash + query
+    Morpheus-->>Agent: Response (Kimi K2.5)
+    Agent->>Agent: Hash response, link to previous Note
+    Agent->>Desktop: Write action Note (via relay)
+    Desktop->>Polygon: Encrypted Note (ECDH + AES-256-GCM)
+
+    Agent->>Morpheus: Second query
+    Morpheus-->>Agent: Response
+    Agent->>Agent: Hash-link to previous
+    Agent->>Desktop: Write action Note
+    Desktop->>Polygon: Encrypted Note
+
+    Note over Owner,Polygon: 3. SETTLE — One Merkle root covers all actions
+
+    Agent->>Agent: Compute Merkle root of session
+    Agent->>Desktop: Build session archive (full content)
+    Desktop->>Polygon: Write settlement Note + archive to IPFS
+    Note right of Polygon: Merkle root: 0xc4f3...<br/>3 actions, 4213 tokens<br/>Full content on IPFS (encrypted)
+        </pre>
+    </div>
+    </div>
+</section>
+
+<!-- Birth Certificate -->
+<section class="tech-section">
+    <h2>The Birth Certificate</h2>
+    <p>
+        Every agent has two parents. The birth certificate names both:
+        the AI that gives it capability and the human who gives it authority.
+        It follows the TCG DICE pattern — identity composed from layers.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph LR
+    subgraph Parents
+        AI["AI Parent<br/>Morpheus / Kimi K2.5<br/>api.mor.org"]
+        Human["Authorizer<br/>Steven Sprague<br/>0xCf31...3fDa"]
+    end
+
+    subgraph BirthCert["Birth Certificate (Note 0)"]
+        Agent["Agent Identity<br/>0xB29A...ffaA6<br/>m/44'/60'/0'/1/0"]
+        Policy["Policy<br/>100 MOR/day<br/>scope: research"]
+        Key["Key Protection<br/>TPM-sealed<br/>NIST Level 2"]
+    end
+
+    subgraph Chain["On-Chain"]
+        Secret["Sovereign Secret<br/>0x70b893..."]
+        Block["Block 84,799,553<br/>March 28, 2026"]
+    end
+
+    AI -->|powers| Agent
+    Human -->|authorizes| Agent
+    Agent --- Policy
+    Agent --- Key
+    Agent -->|written to| Secret
+    Secret --- Block
+
+    style Parents fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style BirthCert fill:#1e1b4b,stroke:#a5b4fc,color:#e0e7ff
+    style Chain fill:#14532d,stroke:#34d399,color:#e0e7ff
+        </pre>
+    </div>
+</section>
+
+<!-- Hash Chain -->
+<section class="tech-section" style="background: var(--gray-50); max-width: 100%; padding: 60px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+    <h2>Hash-Linked Action Chain</h2>
+    <p>
+        Each Note contains the SHA-256 hash of the previous Note. This creates a tamper-evident chain —
+        altering any entry breaks all subsequent links. The settlement Merkle root proves the entire session.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph LR
+    N0["Note 0<br/>Birth Certificate<br/>hash: 0x039d..."]
+    N1["Note 1<br/>Inference: DeAI state<br/>1,542 tokens<br/>hash: 0x797b..."]
+    N2["Note 2<br/>Inference: Agent identity<br/>1,702 tokens<br/>hash: 0x9455..."]
+    N3["Note 3<br/>Inference: Enterprise impact<br/>969 tokens<br/>hash: 0x127b..."]
+    N4["Note 4<br/>Settlement<br/>Merkle Root: 0xc4f3..."]
+
+    N0 -->|previousHash| N1
+    N1 -->|previousHash| N2
+    N2 -->|previousHash| N3
+    N3 -->|previousHash| N4
+
+    style N0 fill:#4f46e5,stroke:#a5b4fc,color:white
+    style N1 fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style N2 fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style N3 fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style N4 fill:#059669,stroke:#34d399,color:white
+        </pre>
+    </div>
+
+    <div class="note-box">
+        <strong>Tamper detection:</strong> If Note 2 is altered, its hash changes, which means Note 3's
+        <code>previousHash</code> no longer matches. The chain breaks visibly. This is the same math that secures Bitcoin.
+    </div>
+    </div>
+</section>
+
+<!-- Four Layers -->
+<section class="tech-section">
+    <h2>Four Layers of Trust</h2>
+    <p>Each layer adds cryptographic guarantees. Each requires different infrastructure.</p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph BT
+    L1["Layer 1: Agent-Side Signing<br/>Agent signs prompt hashes, hashes responses<br/>Hash-links every action, settles Merkle root<br/>STATUS: WORKING"]
+    L2["Layer 2: Provider-Side Signing<br/>Provider signs responses with registered wallet<br/>Bilateral proof of conversation<br/>STATUS: PATCH READY"]
+    L3["Layer 3: Encrypted Channel<br/>ECDH key exchange, AES-256-GCM encryption<br/>TEE attestation proves the enclave<br/>STATUS: DESIGNED"]
+    L4["Layer 4: Model Provenance<br/>Model built from signed training data<br/>Weight hashes, build attestation (TCG RIM)<br/>STATUS: SPEC PHASE"]
+
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+
+    style L1 fill:#059669,stroke:#34d399,color:white
+    style L2 fill:#d97706,stroke:#fbbf24,color:white
+    style L3 fill:#4f46e5,stroke:#a5b4fc,color:white
+    style L4 fill:#6b7280,stroke:#9ca3af,color:white
+        </pre>
+    </div>
+
+    <table class="tech-table">
+        <tr><th>Layer</th><th>What It Proves</th><th>Crypto</th><th>Status</th></tr>
+        <tr><td>1. Agent-Side</td><td>What was asked, what was received, in what order</td><td>SHA-256, secp256k1 ECDSA, Merkle trees</td><td>Working</td></tr>
+        <tr><td>2. Provider-Side</td><td>Provider signed the response, bilateral proof</td><td>Provider wallet secp256k1 signature</td><td>Patch ready</td></tr>
+        <tr><td>3. Encrypted Channel</td><td>No eavesdropping, verified enclave</td><td>ECDH + AES-256-GCM, Intel TDX attestation</td><td>Designed</td></tr>
+        <tr><td>4. Model Provenance</td><td>Model weights match signed build manifest</td><td>TCG RIM, Sigstore, ML-DSA (post-quantum)</td><td>Spec phase</td></tr>
+    </table>
+</section>
+
+<!-- Signing Architecture -->
+<section class="tech-section" style="background: var(--gray-50); max-width: 100%; padding: 60px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+    <h2>Signing Architecture</h2>
+    <p>
+        The agent never holds a private key. Desktop V6 is the Hardware Security Module.
+        All signing is proxied through a session token — if the agent is compromised, there is no key to steal.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph LR
+    subgraph Agent["Agent Process"]
+        Token["Session Token<br/>(32 random bytes)"]
+        Logic["Agent Logic<br/>No private key"]
+    end
+
+    subgraph Desktop["Desktop V6 (HSM)"]
+        TPM["TPM 2.0<br/>Hardware-bound key"]
+        Validate["Validate Token<br/>Check policy"]
+        Sign["Sign with TPM<br/>Return signature only"]
+    end
+
+    subgraph Output["Signed Output"]
+        Sig["Signature<br/>0x..."]
+        Note["Encrypted Note<br/>On Polygon"]
+    end
+
+    Token -->|authenticate| Validate
+    Logic -->|sign request| Validate
+    Validate -->|approved| Sign
+    TPM -->|hardware signs| Sign
+    Sign -->|signature only| Sig
+    Sign -->|write note| Note
+
+    style Agent fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style Desktop fill:#1e1b4b,stroke:#a5b4fc,color:#e0e7ff
+    style Output fill:#14532d,stroke:#34d399,color:#e0e7ff
+        </pre>
+    </div>
+
+    <h3>Key Protection Levels</h3>
+    <table class="tech-table">
+        <tr><th>Level</th><th>Implementation</th><th>Security</th><th>Use Case</th></tr>
+        <tr><td>Consumer</td><td>Browser localStorage key</td><td>Software-only</td><td>Testing, demos</td></tr>
+        <tr><td>Professional</td><td>TPM-sealed key (Desktop V6)</td><td>Hardware-bound</td><td>Production agents</td></tr>
+        <tr><td>Enterprise</td><td>MPC split: server + user device</td><td>Neither party alone can sign</td><td>Regulated industries</td></tr>
+        <tr><td>Government</td><td>HSM + Ledger/Trezor with trusted display</td><td>FIPS hardware + visual consent</td><td>High-assurance</td></tr>
+    </table>
+    </div>
+</section>
+
+<!-- On-Chain Contracts -->
+<section class="tech-section">
+    <h2>On-Chain Artifacts</h2>
+    <p>All data is on Polygon mainnet. The content is encrypted — only the owner can decrypt.
+       The events (contract creation, Note writes) are publicly verifiable.</p>
+
+    <h3>Live Contracts</h3>
+    <div class="contract-grid">
+        <span class="label">Sovereign Secret (Agent):</span>
+        <span class="value"><a href="https://polygonscan.com/address/0x70b893e3b519255166a1fb64dcde920d056a2d5c" target="_blank" rel="noopener">0x70b893e3b519255166a1fb64dcde920d056a2d5c</a></span>
+        <span class="label">Birth Certificate TX:</span>
+        <span class="value"><a href="https://polygonscan.com/tx/0xa689ba006882b0ee1fae319de9ac3362960d4e1ecb7777686891ba9d16f06f7c" target="_blank" rel="noopener">0xa689ba00...6f7c</a></span>
+        <span class="label">Session Archive:</span>
+        <span class="value"><a href="https://polygonscan.com/address/0x136a5ec90d58fd09506409e46edb5acf1ea34ece" target="_blank" rel="noopener">0x136a5ec90d58fd09506409e46edb5acf1ea34ece</a></span>
+        <span class="label">Signing Wallet:</span>
+        <span class="value">0x3f07D9DE7D4f803d748f254c526Fa6F351e3f8B1 (TPM-derived)</span>
+        <span class="label">Block:</span>
+        <span class="value">84,799,553 — March 28, 2026</span>
+        <span class="label">Chain:</span>
+        <span class="value">Polygon Mainnet (137)</span>
+    </div>
+
+    <h3>V6/V7 Infrastructure</h3>
+    <div class="contract-grid">
+        <span class="label">Secret Factory:</span>
+        <span class="value">0xC683540Ab2A9f017Ea48E044aA74f0b74D9DC4E4</span>
+        <span class="label">Registry:</span>
+        <span class="value">0x83B25fDD25516057AaaAf8027464C8bbb2f91d5B</span>
+        <span class="label">Identity Factory:</span>
+        <span class="value">0xc6361e4780eb16ee8643538376600D97F9E4C9c0</span>
+        <span class="label">Credit Purchase:</span>
+        <span class="value">0x0D6F37Be6227D0b2C882338924CDc7063fa11346</span>
+    </div>
+
+    <h3>View the Data</h3>
+    <p>
+        <a href="https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o" target="_blank" rel="noopener">Birth Certificate</a> (encrypted, shared link) &nbsp;|&nbsp;
+        <a href="https://rootz.global/s/0x136a5ec90d58fd09506409e46edb5acf1ea34ece?k=maofU5YgcagMjCTLbGs5vLrX2vDGAP2umkXv2C3A21c" target="_blank" rel="noopener">Session Archive</a> (encrypted, shared link) &nbsp;|&nbsp;
+        <a href="https://rootz.global/public/0x9756bd241d2dd639bf3d1c23490a9c0a65bbed7e" target="_blank" rel="noopener">Test Report</a> (public)
+    </p>
+</section>
+
+<!-- MCP + Cloud Relay -->
+<section class="tech-section" style="background: var(--gray-50); max-width: 100%; padding: 60px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+    <h2>MCP + Cloud Relay</h2>
+    <p>
+        The Desktop connects outbound to a cloud relay via WebSocket. Any AI platform
+        (Claude, ChatGPT, Grok) accesses the user's local signing infrastructure through the relay.
+        No inbound firewall rules. No tunnel. The keys never leave the local machine.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph LR
+    subgraph AI["AI Platforms"]
+        Claude["Claude Code"]
+        ChatGPT["ChatGPT"]
+        Grok["Grok"]
+    end
+
+    subgraph Cloud["Cloud Relay"]
+        MCP_Relay["mcp.rootz.global<br/>Wallet-authenticated<br/>WebSocket reverse proxy"]
+    end
+
+    subgraph Local["Your Machine"]
+        Desktop2["Desktop V6<br/>TPM keys + MCP server"]
+        Agent2["Morpheus Agent<br/>Plugin"]
+    end
+
+    Claude -->|MCP calls| MCP_Relay
+    ChatGPT -->|MCP calls| MCP_Relay
+    Grok -->|MCP calls| MCP_Relay
+    Desktop2 -->|outbound WebSocket| MCP_Relay
+    Desktop2 --- Agent2
+
+    style AI fill:#312e81,stroke:#6366f1,color:#e0e7ff
+    style Cloud fill:#1e3a5f,stroke:#06b6d4,color:#e0e7ff
+    style Local fill:#14532d,stroke:#34d399,color:#e0e7ff
+        </pre>
+    </div>
+
+    <div class="note-box">
+        <strong>Security model:</strong> The relay authenticates users via wallet signature challenges (EIP-191).
+        No API keys — your wallet IS your credential. The relay forwards MCP requests but never sees
+        the private key. All content is encrypted end-to-end between the AI platform and your Desktop.
+    </div>
+    </div>
+</section>
+
+<!-- Standards -->
+<section class="tech-section">
+    <h2>Standards Alignment</h2>
+    <p>This architecture applies existing trusted computing standards to AI agents — not new cryptography.</p>
+
+    <table class="tech-table">
+        <tr><th>Standard</th><th>Application</th></tr>
+        <tr><td>TCG TPM 2.0 (ISO 11889)</td><td>Hardware root of trust for agent signing keys</td></tr>
+        <tr><td>TCG DICE</td><td>Layered identity composition: hardware → platform → agent → session</td></tr>
+        <tr><td>NIST SP 800-193</td><td>Protect/Detect/Recover for agent integrity</td></tr>
+        <tr><td>IETF RATS (RFC 9334)</td><td>Agent = Attester, Owner = Relying Party, TEE = Evidence</td></tr>
+        <tr><td>TCG RIM</td><td>Reference Integrity Manifests for model provenance (Layer 4)</td></tr>
+        <tr><td>EIP-191 / EIP-712</td><td>Ethereum message signing for wallet authentication</td></tr>
+        <tr><td>secp256k1 ECDSA</td><td>All signing operations (same curve as Bitcoin/Ethereum)</td></tr>
+        <tr><td>ECDH + AES-256-GCM</td><td>End-to-end encryption for all Note content</td></tr>
+    </table>
+
+    <div class="note-box">
+        <strong>From the NIST RFI (Docket NIST-2025-0035):</strong>
+        "The fundamental security challenge with AI agent systems is not access control — it is message security.
+        Every interaction between a human, an AI agent, an AI factory, and the systems they touch is a message.
+        Today, virtually none of these messages are signed, attributed, or verifiable."
+    </div>
+</section>
+
+<footer>
+    <p><a href="/">Back to Proof of Origin</a> &nbsp;|&nbsp; <a href="https://github.com/rootz-global/morpheus-agent" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp; <a href="https://rootz.global" target="_blank" rel="noopener">rootz.global</a></p>
+    <p style="margin-top: 0.5rem;">&copy; 2026 Rootz Corp</p>
+</footer>
+
+</body>
+</html>

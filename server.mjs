@@ -7,6 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3070;
 
 const indexHtml = readFileSync(join(__dirname, 'index.html'), 'utf-8');
+const techHtml = readFileSync(join(__dirname, 'tech.html'), 'utf-8');
 const wellKnownAi = readFileSync(join(__dirname, 'well-known-ai.json'), 'utf-8');
 const sitemapXml = readFileSync(join(__dirname, 'sitemap.xml'), 'utf-8');
 const llmsTxt = readFileSync(join(__dirname, 'llms.txt'), 'utf-8');
@@ -65,6 +66,13 @@ const server = createServer((req, res) => {
   if (req.url === '/robots.txt') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('User-agent: *\nAllow: /\nSitemap: https://proof.rootz.global/sitemap.xml\n');
+    return;
+  }
+
+  // Tech page
+  if (req.url === '/tech' || req.url === '/tech/') {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
+    res.end(techHtml);
     return;
   }
 
