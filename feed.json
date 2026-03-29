@@ -1,0 +1,66 @@
+{
+  "specVersion": "1.2.0",
+  "generated": "2026-03-29T00:00:00Z",
+  "domain": "proof.rootz.global",
+  "entries": [
+    {
+      "id": "morpheus-agent-live-2026-03-28",
+      "title": "First AI Agent with Birth Certificate Goes Live on Polygon",
+      "date": "2026-03-28",
+      "summary": "Created the world's first AI agent with a verifiable birth certificate on a public blockchain. The agent runs on Morpheus decentralized inference (Kimi K2.5), with every inference call recorded as a signed, hash-linked Note settled on Polygon mainnet.",
+      "keyFacts": [
+        "Birth certificate names two parents: AI (Morpheus/Kimi K2.5) and Authorizer (Steven Sprague)",
+        "3 inference calls, 4,213 tokens, hash-linked chain with settlement Merkle root",
+        "Sovereign Secret on Polygon: 0x70b893e3b519255166a1fb64dcde920d056a2d5c",
+        "Full session archive encrypted on IPFS, viewable via share link",
+        "Total on-chain cost: $0.03"
+      ],
+      "tags": ["milestone", "morpheus", "birth-certificate", "polygon", "live"],
+      "url": "https://proof.rootz.global"
+    },
+    {
+      "id": "morpheus-agent-v020-2026-03-29",
+      "title": "v0.2.0: Full Session Archiving + Secure Channel",
+      "date": "2026-03-29",
+      "summary": "Released v0.2.0 with full session content archiving (prompts + responses to IPFS), SecureChannel integration (Layer 1 agent-side signing), and settle-to-Notes optimization reducing cost from $0.41 to $0.01 per session.",
+      "keyFacts": [
+        "Full AI output now archived to IPFS encrypted, recoverable from wallet address",
+        "SecureChannel wired into every inference call — prompt hashes signed, responses hashed",
+        "Session archives append as Notes to Sovereign Secret (40x cheaper than new Secrets)",
+        "7,082 tokens across 3 inference calls in Session 2",
+        "Kimi K2.5 independently described exact Rootz architecture without knowing it exists"
+      ],
+      "tags": ["release", "archiving", "secure-channel", "cost-optimization"],
+      "url": "https://github.com/rootz-global/morpheus-agent"
+    },
+    {
+      "id": "proof-site-launch-2026-03-29",
+      "title": "proof.rootz.global Launched",
+      "date": "2026-03-29",
+      "summary": "Launched proof.rootz.global — the public-facing site documenting AI with Proof of Origin. Includes live share links to on-chain birth certificate, session archive, and test report. AI Discovery Standard deployed.",
+      "keyFacts": [
+        "Three shareable on-chain secrets: birth certificate, session archive, test report",
+        "AI Discovery Standard (/.well-known/ai) with full three-tier architecture",
+        "GitHub repos: rootz-global/morpheus-agent and rootz-global/proof-site",
+        "All content encrypted on IPFS, decryptable via share links in browser"
+      ],
+      "tags": ["launch", "website", "ai-discovery", "share-links"],
+      "url": "https://proof.rootz.global"
+    },
+    {
+      "id": "four-layers-2026-03-28",
+      "title": "Four Layers of Provable AI Defined",
+      "date": "2026-03-28",
+      "summary": "Defined the four-layer trust model for provable AI: Layer 1 (agent signs), Layer 2 (provider signs), Layer 3 (ECDH + TEE), Layer 4 (model provenance from signed sources). Layer 1 working, Layer 2 patch ready.",
+      "keyFacts": [
+        "Layer 1: Working — agent signs prompt hashes, hashes responses, settles Merkle root",
+        "Layer 2: Patch ready — Go middleware for Morpheus proxy-router response signing",
+        "Layer 3: Designed — ECDH channel + TEE attestation",
+        "Layer 4: Spec phase — model built from signed training data, weight hashes, build attestation",
+        "Layer 4 applies TCG Reference Integrity Manifest (RIM) to AI model supply chain"
+      ],
+      "tags": ["architecture", "four-layers", "tee", "model-provenance"],
+      "url": "https://proof.rootz.global"
+    }
+  ]
+}

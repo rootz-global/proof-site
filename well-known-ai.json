@@ -39,7 +39,18 @@
     "ai_readable": true,
     "structured_data": true,
     "blockchain_verifiable": true,
-    "mcp_available": false
+    "mcp_available": false,
+    "discovery": true,
+    "knowledge": true,
+    "feed": true
+  },
+  "knowledge": {
+    "url": "https://proof.rootz.global/.well-known/ai/knowledge",
+    "format": "application/json"
+  },
+  "feed": {
+    "url": "https://proof.rootz.global/.well-known/ai/feed",
+    "format": "application/json"
   },
   "technology": {
     "description": "Morpheus AI agent as a Rootz data wallet — every inference call signed, hash-linked, and settled on-chain",

@@ -1,0 +1,108 @@
+{
+  "specVersion": "1.2.0",
+  "generated": "2026-03-29T00:00:00Z",
+  "domain": "proof.rootz.global",
+  "products": [
+    {
+      "name": "Morpheus Agent Data Wallet",
+      "description": "A plugin for Rootz Desktop V6 that turns Morpheus decentralized AI agents into data wallets with birth certificates, signed action chains, and session archives on Polygon.",
+      "url": "https://github.com/rootz-global/morpheus-agent",
+      "status": "active",
+      "technology": ["TypeScript", "Node.js", "MCP", "Polygon", "IPFS"]
+    },
+    {
+      "name": "Secure Channel",
+      "description": "Three-layer signed communication between AI agents and inference providers. Layer 1: agent signs prompts. Layer 2: provider signs responses. Layer 3: ECDH encrypted channel with TEE attestation.",
+      "status": "active"
+    },
+    {
+      "name": "Rootz Desktop V6",
+      "description": "Electron desktop application providing TPM-sealed wallet keys, Secret/Note management on Polygon, ECDH encryption, IPFS upload, credit management, and MCP server for AI tool integration.",
+      "url": "https://rootz.global",
+      "status": "active"
+    }
+  ],
+  "team": [
+    {
+      "name": "Steven Sprague",
+      "role": "CEO & Co-Founder",
+      "background": "Former CEO of Wave Systems Corp (2003-2017). Co-chaired TCG Technical Working Group. 25+ years in trusted computing, TPM, device attestation. Four US/international patents in device attestation and identity verification.",
+      "expertise": ["trusted-computing", "TPM", "TCG", "blockchain", "AI-agent-security"]
+    }
+  ],
+  "technology": {
+    "stack": [
+      "TypeScript / Node.js (agent plugin, MCP server)",
+      "Polygon Mainnet (on-chain secrets, notes, settlements)",
+      "IPFS via Pinata (encrypted content storage)",
+      "MCP — Model Context Protocol (tool integration)",
+      "Morpheus decentralized inference (Kimi K2.5, GLM-4.7)",
+      "secp256k1 ECDSA (signing)",
+      "ECDH + AES-256-GCM (encryption)",
+      "SHA-256 hash-linking (chain integrity)",
+      "Merkle trees (settlement proofs)",
+      "TPM 2.0 (hardware key protection)"
+    ],
+    "contracts": {
+      "chain": "Polygon Mainnet (137)",
+      "factory": "0xC683540Ab2A9f017Ea48E044aA74f0b74D9DC4E4",
+      "registry": "0x83B25fDD25516057AaaAf8027464C8bbb2f91d5B",
+      "identityFactory": "0xc6361e4780eb16ee8643538376600D97F9E4C9c0",
+      "creditPurchase": "0x0D6F37Be6227D0b2C882338924CDc7063fa11346"
+    }
+  },
+  "glossary": [
+    {
+      "term": "Birth Certificate",
+      "definition": "A permanent on-chain record created when an AI agent is born, naming its two parents: the AI model that powers it and the human who authorized it."
+    },
+    {
+      "term": "Proof of Origin",
+      "definition": "Cryptographic evidence linking an AI output to a specific agent, model, and authorizer — signed, hash-linked, and blockchain-anchored."
+    },
+    {
+      "term": "Sovereign Secret",
+      "definition": "An encrypted on-chain data wallet that serves as an AI agent's permanent identity and audit trail. Notes accumulate as the agent's chain of experience."
+    },
+    {
+      "term": "Settlement",
+      "definition": "A Merkle root covering all actions in a session, written as a single on-chain Note. One transaction proves the integrity of the entire session."
+    },
+    {
+      "term": "Secure Channel",
+      "definition": "A signed communication layer between agent and inference provider. Layer 1: agent signs. Layer 2: provider signs. Layer 3: ECDH encrypted."
+    },
+    {
+      "term": "Data Wallet",
+      "definition": "Not storage — a messaging framework. Write to an address, all devices watching receive the update. Carries data, code, policy, instructions, and receipts."
+    },
+    {
+      "term": "Lightning Chain",
+      "definition": "Off-chain accumulation of signed actions with periodic on-chain settlement via Merkle root. Efficient: one transaction covers N operations."
+    },
+    {
+      "term": "Four Layers",
+      "definition": "Progressive trust model: Layer 1 (agent signs), Layer 2 (provider signs), Layer 3 (ECDH + TEE), Layer 4 (model provenance from signed sources)."
+    }
+  ],
+  "partnerships": [
+    {
+      "name": "Morpheus",
+      "url": "https://mor.org",
+      "description": "Decentralized AI inference network. Provides the thinking — Rootz provides the proof."
+    }
+  ],
+  "standards": [
+    {
+      "name": "AI Discovery Standard",
+      "version": "1.2",
+      "url": "https://rootz.global/ai/standard.md",
+      "description": "Open standard for organizational AI identity discovery (/.well-known/ai)"
+    },
+    {
+      "name": "NIST AI Agent Security RFI",
+      "reference": "NIST-2025-0035",
+      "description": "Response submitted March 2026 on message security model for AI agents, organizational identity, and trusted computing standards application."
+    }
+  ]
+}

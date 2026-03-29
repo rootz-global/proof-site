@@ -10,6 +10,8 @@ const indexHtml = readFileSync(join(__dirname, 'index.html'), 'utf-8');
 const wellKnownAi = readFileSync(join(__dirname, 'well-known-ai.json'), 'utf-8');
 const sitemapXml = readFileSync(join(__dirname, 'sitemap.xml'), 'utf-8');
 const llmsTxt = readFileSync(join(__dirname, 'llms.txt'), 'utf-8');
+const knowledgeJson = readFileSync(join(__dirname, 'knowledge.json'), 'utf-8');
+const feedJson = readFileSync(join(__dirname, 'feed.json'), 'utf-8');
 
 const server = createServer((req, res) => {
   // AI Discovery Standard
@@ -20,6 +22,28 @@ const server = createServer((req, res) => {
       'Cache-Control': 'public, max-age=3600',
     });
     res.end(wellKnownAi);
+    return;
+  }
+
+  // Knowledge base (Tier 2)
+  if (req.url === '/.well-known/ai/knowledge' || req.url === '/.well-known/ai/knowledge/') {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'public, max-age=3600',
+    });
+    res.end(knowledgeJson);
+    return;
+  }
+
+  // AI Feed (Tier 3)
+  if (req.url === '/.well-known/ai/feed' || req.url === '/.well-known/ai/feed/') {
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'public, max-age=3600',
+    });
+    res.end(feedJson);
     return;
   }
 
