@@ -17,17 +17,23 @@
       import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
       mermaid.initialize({
         startOnLoad: true,
-        theme: 'dark',
+        theme: 'base',
         themeVariables: {
-          primaryColor: '#4f46e5',
+          primaryColor: '#3730a3',
           primaryTextColor: '#ffffff',
-          primaryBorderColor: '#818cf8',
-          lineColor: '#c7d2fe',
-          secondaryColor: '#312e81',
-          tertiaryColor: '#1e1b4b',
+          primaryBorderColor: '#a5b4fc',
+          lineColor: '#e0e7ff',
+          secondaryColor: '#1e1b4b',
+          tertiaryColor: '#312e81',
           nodeTextColor: '#ffffff',
+          nodeBorder: '#a5b4fc',
+          mainBkg: '#3730a3',
+          clusterBkg: '#1e1b4b',
+          clusterBorder: '#6366f1',
+          titleColor: '#e0e7ff',
+          edgeLabelBackground: '#1e1b4b',
           fontFamily: 'Segoe UI, sans-serif',
-          fontSize: '14px'
+          fontSize: '15px'
         }
       });
     </script>
@@ -389,10 +395,10 @@ graph LR
     Chain --> TPM
     TPM --> Allow
 
-    style Request fill:#312e81,stroke:#818cf8,color:#ffffff
-    style TEE fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
-    style Signing fill:#14532d,stroke:#4ade80,color:#ffffff
-    style Result fill:#1e3a5f,stroke:#22d3ee,color:#ffffff
+    style Request fill:#3730a3,stroke:#a5b4fc,color:#ffffff
+    style TEE fill:#312e81,stroke:#a5b4fc,color:#ffffff
+    style Signing fill:#166534,stroke:#4ade80,color:#ffffff
+    style Result fill:#1e3a5f,stroke:#67e8f9,color:#ffffff
         </pre>
     </div>
 
@@ -422,40 +428,34 @@ graph LR
     <div class="diagram-container">
         <pre class="mermaid">
 graph TB
-    subgraph Owner["Owner (Sovereignty)"]
-        Write["Writes policy<br/>as Notes"]
-        Revoke["Can revoke<br/>at any time"]
-    end
+    Owner["Owner<br/>Writes policy, can revoke"]
+    PE["Policy Engine"]
+    MC["Merkle Chain"]
+    SL["Skill Loader"]
+    Set["Settlement"]
+    S1["Skill: morpheus-inference"]
+    S2["Skill: payments"]
+    S3["Skill: data-collection"]
+    TPM["Desktop TPM / HSM"]
 
-    subgraph TEE_Runtime["Agent TEE Runtime"]
-        PolicyEng["Policy Engine"]
-        MerkleChain["Merkle Chain"]
-        SkillLoader["Skill Loader"]
-        Settlement["Settlement"]
-    end
-
-    subgraph Skills["Loaded Skills"]
-        S1["morpheus-inference"]
-        S2["future: payments"]
-        S3["future: data-collection"]
-    end
-
-    subgraph Infra["Signing Infrastructure"]
-        Desktop["Desktop TPM<br/>(today)"]
-        HSM["HSM Network<br/>(future)"]
-    end
-
-    Owner -->|policy Notes| TEE_Runtime
-    SkillLoader -->|verify manifest| Skills
-    S1 -->|ctx.sign()| PolicyEng
-    S1 -->|ctx.recordEvent()| MerkleChain
-    PolicyEng -->|approved| Desktop
-    MerkleChain --> Settlement
+    Owner --> PE
+    SL --> S1
+    SL --> S2
+    SL --> S3
+    S1 --> PE
+    S1 --> MC
+    PE --> TPM
+    MC --> Set
 
     style Owner fill:#059669,stroke:#4ade80,color:#ffffff
-    style TEE_Runtime fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
-    style Skills fill:#312e81,stroke:#818cf8,color:#ffffff
-    style Infra fill:#14532d,stroke:#4ade80,color:#ffffff
+    style PE fill:#3730a3,stroke:#a5b4fc,color:#ffffff
+    style MC fill:#3730a3,stroke:#a5b4fc,color:#ffffff
+    style SL fill:#3730a3,stroke:#a5b4fc,color:#ffffff
+    style Set fill:#3730a3,stroke:#a5b4fc,color:#ffffff
+    style S1 fill:#4338ca,stroke:#818cf8,color:#ffffff
+    style S2 fill:#4338ca,stroke:#818cf8,color:#ffffff
+    style S3 fill:#4338ca,stroke:#818cf8,color:#ffffff
+    style TPM fill:#166534,stroke:#4ade80,color:#ffffff
         </pre>
     </div>
 
