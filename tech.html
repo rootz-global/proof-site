@@ -403,8 +403,81 @@ graph BT
     </table>
 </section>
 
-<!-- Signing Architecture -->
+<!-- Skill Model -->
 <section class="tech-section" style="background: var(--gray-50); max-width: 100%; padding: 60px 20px;">
+    <div style="max-width: 900px; margin: 0 auto;">
+    <h2>The Skill Model</h2>
+    <p>
+        Skills are signed, verified code modules loaded into the TEE runtime.
+        Each skill declares its permissions. The TEE enforces them.
+        Skills never touch keys &mdash; they sign through the runtime context.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph TB
+    subgraph Runtime["Agent Runtime (TEE Container)"]
+        Policy["Policy Engine<br/>ALLOW / DENY / AUTO"]
+        Chain["Internal Chain<br/>Merkle-linked blocks"]
+        Signing["Key Custody<br/>Desktop TPM relay"]
+        Settle["Settlement<br/>Sovereign Secret"]
+    end
+
+    subgraph Skills["Loaded Skills"]
+        S1["Skill #1<br/>morpheus-inference<br/>v0.3.0"]
+        S2["Skill #2<br/>(future) x402-commerce"]
+        S3["Skill #3<br/>(future) data-collection"]
+    end
+
+    subgraph Context["Skill Context (what skills can use)"]
+        Sign["ctx.sign()<br/>→ policy check → TPM"]
+        Record["ctx.recordEvent()<br/>→ unified Merkle chain"]
+        State["ctx.getState()<br/>→ read-only counters"]
+    end
+
+    S1 --> Sign
+    S1 --> Record
+    S1 --> State
+    Sign --> Policy
+    Record --> Chain
+    Policy --> Signing
+    Chain --> Settle
+
+    style Runtime fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
+    style Skills fill:#312e81,stroke:#818cf8,color:#ffffff
+    style Context fill:#14532d,stroke:#4ade80,color:#ffffff
+        </pre>
+    </div>
+
+    <h3>Skill Manifest</h3>
+    <p>
+        Every skill has a manifest declaring what it is and what it can do.
+        The TEE verifies the manifest before loading. Skills can only emit
+        events they declared. Code hash is verified against the manifest.
+    </p>
+
+    <table class="tech-table">
+        <tr><th>Field</th><th>Purpose</th><th>Example</th></tr>
+        <tr><td>name</td><td>Skill identity</td><td><code>morpheus-inference</code></td></tr>
+        <tr><td>version</td><td>Semver</td><td><code>0.3.0</code></td></tr>
+        <tr><td>codeHash</td><td>SHA-256 of code bundle</td><td><code>sha256:abc123...</code></td></tr>
+        <tr><td>emitEvents</td><td>Allowed event categories</td><td><code>[skill_inference, skill_output]</code></td></tr>
+        <tr><td>externalEndpoints</td><td>APIs the skill calls</td><td><code>[https://api.mor.org]</code></td></tr>
+        <tr><td>archiveContent</td><td>Can buffer for archiving</td><td><code>true</code></td></tr>
+        <tr><td>authorSignature</td><td>Author signs the manifest</td><td><code>0xSig...</code></td></tr>
+    </table>
+
+    <div class="note-box">
+        <strong>Why skills, not plugins?</strong> Plugins run in the host's address space &mdash;
+        the host can inspect and tamper. TEE skills run in attested isolation &mdash;
+        the host cannot read skill memory or modify behavior. The TEE proves
+        cryptographically that specific, unmodified code is executing.
+    </div>
+    </div>
+</section>
+
+<!-- Signing Architecture -->
+<section class="tech-section" style="max-width: 100%; padding: 60px 20px;">
     <div style="max-width: 900px; margin: 0 auto;">
     <h2>Signing Architecture</h2>
     <p>

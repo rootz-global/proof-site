@@ -1,23 +1,37 @@
 {
   "specVersion": "1.2.0",
-  "generated": "2026-03-29T00:00:00Z",
+  "generated": "2026-04-01T00:00:00Z",
   "domain": "proof.rootz.global",
   "products": [
     {
-      "name": "Morpheus Agent Data Wallet",
-      "description": "A plugin for Rootz Desktop V6 that turns Morpheus decentralized AI agents into data wallets with birth certificates, signed action chains, and session archives on Polygon.",
+      "name": "Unified Agent Runtime",
+      "description": "The canonical runtime for Rootz AI agents. Provides AgentEvent type system (25 categories), InternalChain (Merkle-linked blocks), SkillRegistry (manifest validation), and Zod schemas for runtime validation. TEE is the container. Skills are loaded code. Secrets are state.",
+      "url": "https://github.com/rootz-global/agent-runtime",
+      "status": "active",
+      "technology": ["TypeScript", "ethers.js", "Zod"]
+    },
+    {
+      "name": "Agent Wallet SDK",
+      "description": "External developer SDK for AI agents with provable origin. Three calls: createAgentWallet() → recordInference() → settle(). Provider-agnostic — works with any AI API. Includes checkpoint/resume with anti-replay.",
+      "url": "https://github.com/rootz-global/agent-wallet",
+      "status": "active",
+      "technology": ["TypeScript", "Node.js"]
+    },
+    {
+      "name": "Morpheus Agent (Skill #1)",
+      "description": "Morpheus decentralized inference integration. Runs as standalone MCP server (6 tools) or as a skill loaded into the TEE runtime. Birth certificates, signed action chains, session archiving, secure channel.",
       "url": "https://github.com/rootz-global/morpheus-agent",
       "status": "active",
       "technology": ["TypeScript", "Node.js", "MCP", "Polygon", "IPFS"]
     },
     {
       "name": "Secure Channel",
-      "description": "Three-layer signed communication between AI agents and inference providers. Layer 1: agent signs prompts. Layer 2: provider signs responses. Layer 3: ECDH encrypted channel with TEE attestation.",
+      "description": "Three-layer signed communication between AI agents and inference providers. Layer 1: agent signs prompts (working). Layer 2: provider signs responses (patch ready). Layer 3: ECDH encrypted channel with TEE attestation (designed).",
       "status": "active"
     },
     {
       "name": "Rootz Desktop V6",
-      "description": "Electron desktop application providing TPM-sealed wallet keys, Secret/Note management on Polygon, ECDH encryption, IPFS upload, credit management, and MCP server for AI tool integration.",
+      "description": "Electron desktop application providing TPM-sealed wallet keys, Secret/Note management on Polygon, ECDH encryption, IPFS upload, credit management, and MCP server for AI tool integration. The agent's Hardware Security Module.",
       "url": "https://rootz.global",
       "status": "active"
     }

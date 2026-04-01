@@ -487,11 +487,6 @@
             </a></p>
         </div>
 
-        <p style="font-size: 0.9rem; color: var(--gray-600); margin-top: 1.5rem;">
-            <em>Note: The Proof of Origin viewer may show a content hash mismatch on these early sessions.
-            This is a known formatting bug in the archive-to-viewer pipeline that has been fixed for
-            future sessions. The content itself is correct and intact.</em>
-        </p>
     </div>
 </section>
 
@@ -659,15 +654,22 @@
     <div class="proof-content" style="text-align: center;">
         <h2>The Code</h2>
         <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;">
-            Open source. MIT license. 4,655 lines of TypeScript across 7 source files.
-            Built in one session. Tested live on Morpheus + Polygon.
+            Open source. MIT license. Four packages, 22 source files, ~10,000 lines of TypeScript.
+            Tested live on Morpheus + Polygon. 10 inference calls, 19,000+ tokens, real TPM signatures.
         </p>
         <div class="code-links">
-            <a href="https://github.com/rootz-global/morpheus-agent" class="code-link primary">GitHub: morpheus-agent</a>
-            <a href="https://github.com/rootz-global/rootz-site" class="code-link">Rootz Site</a>
+            <a href="https://github.com/rootz-global/agent-runtime" class="code-link primary">agent-runtime</a>
+            <a href="https://github.com/rootz-global/agent-wallet" class="code-link primary">agent-wallet SDK</a>
+            <a href="https://github.com/rootz-global/morpheus-agent" class="code-link">morpheus-agent</a>
+            <a href="https://github.com/rootz-global/proof-site" class="code-link">proof-site</a>
             <a href="https://polygonscan.com/address/0x70b893e3b519255166a1fb64dcde920d056a2d5c" class="code-link">Polygonscan</a>
             <a href="https://mor.org" class="code-link">Morpheus Network</a>
         </div>
+        <p style="color: rgba(255,255,255,0.6); margin-top: 1.5rem; font-size: 0.85rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <strong>agent-runtime</strong> &mdash; unified types, Merkle chain, skill loader, Zod schemas<br>
+            <strong>agent-wallet</strong> &mdash; SDK: createAgentWallet(), 3-call API, checkpoint/resume<br>
+            <strong>morpheus-agent</strong> &mdash; Skill #1: Morpheus inference, session archiving, MCP tools
+        </p>
         <p style="color: rgba(255,255,255,0.5); margin-top: 2rem; font-size: 0.9rem;">
             Built by Steven Sprague &mdash; <a href="https://rootz.global" style="color: rgba(255,255,255,0.7);">rootz.global</a>
         </p>
