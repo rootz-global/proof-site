@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | AI with Proof of Origin | Rootz</title>
+    <meta name="description" content="Step-by-step tour: how an AI agent gets a birth certificate, records every decision, settles to blockchain, and creates a permanent audit trail.">
+
+    <meta property="og:title" content="How It Works — AI with Proof of Origin">
+    <meta property="og:description" content="Five steps from birth to proof. See how AI agents get verifiable origin, signed action chains, and blockchain-anchored settlements.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://proof.rootz.global/tour">
+
+    <link rel="ai-discovery" type="application/json" href="/.well-known/ai" title="AI Discovery — Proof of Origin">
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#4f46e5',
+          primaryTextColor: '#ffffff',
+          primaryBorderColor: '#818cf8',
+          lineColor: '#c7d2fe',
+          secondaryColor: '#312e81',
+          tertiaryColor: '#1e1b4b',
+          nodeTextColor: '#ffffff',
+          fontFamily: 'Segoe UI, sans-serif',
+          fontSize: '14px'
+        }
+      });
+    </script>
+
+    <style>
+        :root {
+            --primary-blue: #4f46e5;
+            --primary-purple: #7c3aed;
+            --dark: #1e1b4b;
+            --light: #ffffff;
+            --background: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-900: #111827;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: var(--background); }
+        a { color: var(--primary-blue); }
+        code { background: var(--gray-100); padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
+
+        .tour-hero {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            color: white; padding: 60px 20px 40px; text-align: center;
+        }
+        .tour-hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .tour-hero p { opacity: 0.8; font-size: 1.1rem; max-width: 650px; margin: 0 auto; }
+        .tour-hero .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-bottom: 1rem; }
+
+        .step { padding: 60px 20px; max-width: 850px; margin: 0 auto; }
+        .step:nth-child(odd) { background: var(--gray-50); max-width: 100%; }
+        .step:nth-child(odd) > * { max-width: 850px; margin-left: auto; margin-right: auto; }
+
+        .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .step-number {
+            background: var(--primary-blue); color: white; width: 48px; height: 48px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; font-weight: bold; flex-shrink: 0;
+        }
+        .step-title { font-size: 1.8rem; color: var(--dark); }
+
+        .step p { font-size: 1.05rem; color: var(--gray-600); margin-bottom: 1rem; line-height: 1.8; }
+        .step h3 { font-size: 1.2rem; color: var(--primary-blue); margin: 2rem 0 0.75rem; }
+
+        .value-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem; margin: 1.5rem 0;
+        }
+        .value-card {
+            background: white; border-radius: 10px; padding: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-left: 4px solid var(--primary-blue);
+        }
+        .value-card h4 { color: var(--dark); margin-bottom: 0.5rem; font-size: 1rem; }
+        .value-card p { font-size: 0.9rem; margin-bottom: 0; color: var(--gray-600); }
+
+        .chain-visual {
+            background: var(--dark); color: #a5b4fc; border-radius: 10px;
+            padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.9rem;
+            line-height: 1.7; margin: 1.5rem 0; overflow-x: auto;
+        }
+        .chain-visual .hl { color: #34d399; }
+        .chain-visual .dim { color: #6b7280; }
+        .chain-visual .acc { color: #fbbf24; }
+
+        .diagram-container {
+            background: var(--dark); border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto;
+        }
+        .diagram-container .mermaid { display: flex; justify-content: center; }
+
+        .note-box {
+            background: #ede9fe; border-left: 4px solid var(--primary-purple);
+            border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0;
+            font-size: 0.95rem; color: var(--dark);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            color: white; padding: 60px 20px; text-align: center;
+        }
+        .cta-section h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .cta-section p { opacity: 0.8; max-width: 600px; margin: 0 auto 2rem; font-size: 1.1rem; }
+        .cta-links { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+        .cta-link {
+            display: inline-block; padding: 12px 24px; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px; color: white; text-decoration: none; transition: all 0.3s;
+        }
+        .cta-link:hover { border-color: white; background: rgba(255,255,255,0.1); }
+        .cta-link.primary { background: var(--primary-blue); border-color: var(--primary-blue); }
+
+        footer { padding: 2rem 20px; text-align: center; color: var(--gray-600); font-size: 0.9rem; }
+        footer a { color: var(--primary-blue); }
+    </style>
+</head>
+<body>
+
+<section class="tour-hero">
+    <a href="/" class="back-link">&larr; Back to Proof of Origin</a>
+    <h1>How It Works</h1>
+    <p>Five steps from birth to proof. Every AI output gets a verifiable origin &mdash;
+       who authorized the agent, what model answered, when it happened.</p>
+</section>
+
+<!-- STEP 1: BIRTH -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">1</div>
+        <div class="step-title">The Agent Is Born</div>
+    </div>
+
+    <p>
+        Every agent starts with a <strong>birth certificate</strong> &mdash; a permanent record
+        naming two parents: the AI that gives it capability, and the key holder who gives it authority.
+    </p>
+
+    <div class="chain-visual">
+        <span class="hl">Birth Certificate</span><br>
+        &nbsp;&nbsp;Agent: <span class="acc">0xB29A...ffaA6</span><br>
+        &nbsp;&nbsp;AI Parent: Morpheus / Kimi K2.5 / api.mor.org<br>
+        &nbsp;&nbsp;Authorizer: Steven Sprague / <span class="acc">0xCf31...3fDa</span><br>
+        &nbsp;&nbsp;Policy: 100 MOR/day, scope: enterprise-demo<br>
+        &nbsp;&nbsp;Key Protection: TPM-sealed (hardware-bound)
+    </div>
+
+    <p>
+        The birth certificate is cryptographically signed and written to the blockchain.
+        It can't be altered, forged, or denied. Anyone can verify it.
+    </p>
+
+    <h3>Why This Matters</h3>
+
+    <div class="value-grid">
+        <div class="value-card">
+            <h4>Enterprises</h4>
+            <p>Every AI agent in your organization gets a corporate badge.
+               Unsanctioned agents have no birth certificate &mdash; shadow AI becomes detectable by absence.</p>
+        </div>
+        <div class="value-card">
+            <h4>Decentralized AI</h4>
+            <p>Morpheus agents get verifiable identity. Not just an API key &mdash;
+               a birth certificate naming the specific model, provider, and authorization.</p>
+        </div>
+        <div class="value-card">
+            <h4>Self-Hosted AI</h4>
+            <p>Running Llama or Mistral locally? The birth certificate proves YOUR model
+               produced the output. Your hardware, your keys, your proof.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STEP 2: THE AGENT WORKS -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">2</div>
+        <div class="step-title">Every Action Is Recorded</div>
+    </div>
+
+    <p>
+        When the agent answers a question, every inference call is recorded as a signed,
+        hash-linked entry. The prompt is hashed. The response is hashed. Both are chained
+        to the previous action.
+    </p>
+
+    <div class="chain-visual">
+        <span class="hl">Action Note</span><br>
+        &nbsp;&nbsp;Prompt Hash: <span class="acc">0x8d11...13da</span> <span class="dim">(SHA-256 of question)</span><br>
+        &nbsp;&nbsp;Response Hash: <span class="acc">0x1828...845e</span> <span class="dim">(SHA-256 of answer)</span><br>
+        &nbsp;&nbsp;Previous Hash: <span class="dim">links to birth certificate</span><br>
+        &nbsp;&nbsp;Model: kimi-k2.5 | Tokens: 2,137 | Latency: 21s<br>
+        &nbsp;&nbsp;Channel: Layer 1 (agent-side signing)
+    </div>
+
+    <p>
+        <strong>The content is never stored in the chain &mdash; only the hashes.</strong>
+        The full conversation is encrypted and archived separately. The hashes prove
+        integrity without exposing sensitive content.
+    </p>
+
+    <h3>Why Hashing Matters</h3>
+
+    <p>
+        SHA-256 has a search space of 2<sup>256</sup>. Finding two different prompts with the
+        same hash would take longer than the life of the universe. If the hash matches,
+        the content matches. No trust required &mdash; just math.
+    </p>
+
+    <div class="note-box">
+        <strong>Healthcare example:</strong> A patient asks an AI about chest pain. The AI recommends
+        going to the ER. Six months later, the insurance company disputes the visit. The patient
+        has the hash of exactly what the AI said, when, and which model answered.
+        The proof is patient-owned, not platform-owned.
+    </div>
+</section>
+
+<!-- STEP 3: THE CHAIN GROWS -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <div class="step-title">The Chain Grows</div>
+    </div>
+
+    <p>
+        Each action links to the previous one. The second response can't be moved before the first.
+        Alter any entry and the chain breaks. Same math as Bitcoin &mdash; applied to AI conversations.
+    </p>
+
+    <div class="chain-visual">
+        <span class="hl">Note 0: Birth Certificate</span><br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="hl">Note 1: STEMI Diagnosis</span> &mdash; 2,137 tokens<br>
+        &nbsp;&nbsp;Prompt: "Patient presents with chest pain..."<br>
+        &nbsp;&nbsp;Response: "Acute Inferior STEMI..."<br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="hl">Note 2: Risk Stratification</span> &mdash; 2,899 tokens<br>
+        &nbsp;&nbsp;Prompt: "What are the key risk factors..."<br>
+        &nbsp;&nbsp;Response: "GRACE score, Killip class..."<br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="acc">Tamper-evident: change any Note and every link after it breaks</span>
+    </div>
+
+    <h3>Why Ordering Matters</h3>
+
+    <p>
+        AI agents don't make decisions in one shot. They reason across turns.
+        A doctor asks a follow-up. A financial analyst refines a model. A lawyer challenges a conclusion.
+    </p>
+    <p>
+        Without proof of origin, each turn is independent &mdash; you can't prove the AI's
+        second answer was informed by its first. With the hash chain, the sequence is proven.
+        An auditor walks the chain and verifies every step.
+    </p>
+</section>
+
+<!-- STEP 4: SETTLEMENT -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">4</div>
+        <div class="step-title">One Hash Proves Everything</div>
+    </div>
+
+    <p>
+        At the end of a session, a <strong>Merkle root</strong> is computed &mdash; a single hash
+        that covers every action in the chain. One verification proves the entire session.
+    </p>
+
+    <div class="chain-visual">
+        <span class="hl">Settlement</span><br>
+        &nbsp;&nbsp;Merkle Root: <span class="acc">0x7e1e854fcf3bacdfb1b860c656fe2f0b631b2c17...</span><br>
+        &nbsp;&nbsp;Actions: 2 inference calls<br>
+        &nbsp;&nbsp;Total Tokens: 5,036<br>
+        &nbsp;&nbsp;Models Used: kimi-k2.5<br>
+        &nbsp;&nbsp;Errors: 0<br><br>
+        <span class="dim">Change any bit in any Note &rarr; the Merkle root changes.</span><br>
+        <span class="dim">One hash. One verification. Complete session integrity.</span>
+    </div>
+
+    <h3>The Lightning Chain Model</h3>
+
+    <p>
+        We don't write every action to blockchain individually. That would be expensive and slow.
+        Instead, actions accumulate in memory during the session (free, fast). At settlement,
+        one blockchain write covers everything.
+    </p>
+
+    <div class="value-grid">
+        <div class="value-card">
+            <h4>During the Session</h4>
+            <p>Actions recorded in memory. Hash-linked. Signed. No blockchain cost. No latency.</p>
+        </div>
+        <div class="value-card">
+            <h4>At Settlement</h4>
+            <p>One Merkle root. One blockchain write. Full session proven. Cost: less than a penny.</p>
+        </div>
+        <div class="value-card">
+            <h4>For Auditors</h4>
+            <p>Verify one hash. If it matches, every Note underneath is proven intact.
+               No need to read 10,000 transactions.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STEP 5: PERMANENT RECORD -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">5</div>
+        <div class="step-title">The Proof Goes On-Chain</div>
+    </div>
+
+    <p>
+        The settlement is written to the agent's <strong>Sovereign Secret</strong> on the
+        Polygon blockchain. The full conversation is encrypted and archived to IPFS.
+        The agent's entire history &mdash; every session, every action &mdash; accumulates
+        at one address.
+    </p>
+
+    <div class="chain-visual">
+        <span class="hl">Sovereign Secret: 0x70b893e3...056a2d5c</span> (Polygon Mainnet)<br><br>
+        &nbsp;&nbsp;Note 0: Birth Certificate <span class="dim">(March 28)</span><br>
+        &nbsp;&nbsp;Note 1: Session 1 &mdash; Decentralized AI research <span class="dim">(March 28)</span><br>
+        &nbsp;&nbsp;Note 2: Session 3 &mdash; GTM strategy <span class="dim">(March 30)</span><br>
+        &nbsp;&nbsp;Note 3: Session 4 &mdash; Skills architecture <span class="dim">(March 31)</span><br>
+        &nbsp;&nbsp;Note 4: Session 5 &mdash; TEE demo <span class="dim">(April 1)</span><br>
+        &nbsp;&nbsp;<span class="acc">Note 5: Session 6 &mdash; Healthcare demo (April 1)</span> &larr; just written<br><br>
+        <span class="dim">One address. Six sessions. All encrypted. All verifiable.</span>
+    </div>
+
+    <p>
+        <strong>The agent IS the wallet.</strong> Its identity is the address. Its memory is the Notes.
+        Its history is the chain. Anyone with the share link can read it.
+        Anyone without it sees only encrypted data.
+    </p>
+
+    <div class="note-box">
+        <strong>What this enables:</strong> The agent can be recovered from one address.
+        New hardware reads the Sovereign Secret from the blockchain, loads the latest
+        checkpoint, and resumes. Same identity. Same history. Different machine.
+    </div>
+</section>
+
+<!-- POLICY + TEE -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">&shield;</div>
+        <div class="step-title">The Policy Layer</div>
+    </div>
+
+    <p>
+        Every action the agent takes passes through a <strong>policy engine</strong> inside a
+        Trusted Execution Environment (TEE). The policy is set by the owner. The TEE enforces it.
+        The agent can't bypass it &mdash; not through prompt injection, not through jailbreaking,
+        not through any software trick. The enforcement is in the container, not in the prompt.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph LR
+    subgraph Request["AI Agent Request"]
+        Action["Sign transaction<br/>Call inference<br/>Write data"]
+    end
+
+    subgraph TEE["Trusted Execution Environment"]
+        Policy["Policy Engine<br/>ALLOW / DENY / AUTO"]
+        Chain["Internal Chain<br/>Every decision recorded"]
+    end
+
+    subgraph Signing["Hardware Signing"]
+        TPM["Desktop TPM<br/>Hardware-sealed key"]
+    end
+
+    subgraph Result["Outcome"]
+        Allow["Action executed<br/>Recorded in chain"]
+        Deny["Action blocked<br/>Denial recorded"]
+    end
+
+    Action --> Policy
+    Policy -->|ALLOW| Chain
+    Policy -->|DENY| Deny
+    Chain --> TPM
+    TPM --> Allow
+
+    style Request fill:#312e81,stroke:#818cf8,color:#ffffff
+    style TEE fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
+    style Signing fill:#14532d,stroke:#4ade80,color:#ffffff
+    style Result fill:#1e3a5f,stroke:#22d3ee,color:#ffffff
+        </pre>
+    </div>
+
+    <h3>What the Policy Controls</h3>
+
+    <div class="value-grid">
+        <div class="value-card">
+            <h4>Spending Limits</h4>
+            <p>Daily and weekly caps on value transferred. Per-transaction maximum. Auto-approve threshold for small operations.</p>
+        </div>
+        <div class="value-card">
+            <h4>Allowed Operations</h4>
+            <p>Which contracts the agent can interact with. Which models it can call. Which skills it can load.</p>
+        </div>
+        <div class="value-card">
+            <h4>Skill Permissions</h4>
+            <p>Each loaded skill declares what it can do. The TEE verifies the manifest and enforces the boundaries at runtime.</p>
+        </div>
+        <div class="value-card">
+            <h4>Denial Logging</h4>
+            <p>Denied actions are recorded in the chain too. The audit trail includes what the agent tried to do and was prevented from doing.</p>
+        </div>
+    </div>
+
+    <h3>The TEE: Container, Not Cage</h3>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+graph TB
+    subgraph Owner["Owner (Sovereignty)"]
+        Write["Writes policy<br/>as Notes"]
+        Revoke["Can revoke<br/>at any time"]
+    end
+
+    subgraph TEE_Runtime["Agent TEE Runtime"]
+        PolicyEng["Policy Engine"]
+        MerkleChain["Merkle Chain"]
+        SkillLoader["Skill Loader"]
+        Settlement["Settlement"]
+    end
+
+    subgraph Skills["Loaded Skills"]
+        S1["morpheus-inference"]
+        S2["future: payments"]
+        S3["future: data-collection"]
+    end
+
+    subgraph Infra["Signing Infrastructure"]
+        Desktop["Desktop TPM<br/>(today)"]
+        HSM["HSM Network<br/>(future)"]
+    end
+
+    Owner -->|policy Notes| TEE_Runtime
+    SkillLoader -->|verify manifest| Skills
+    S1 -->|ctx.sign()| PolicyEng
+    S1 -->|ctx.recordEvent()| MerkleChain
+    PolicyEng -->|approved| Desktop
+    MerkleChain --> Settlement
+
+    style Owner fill:#059669,stroke:#4ade80,color:#ffffff
+    style TEE_Runtime fill:#1e1b4b,stroke:#c7d2fe,color:#ffffff
+    style Skills fill:#312e81,stroke:#818cf8,color:#ffffff
+    style Infra fill:#14532d,stroke:#4ade80,color:#ffffff
+        </pre>
+    </div>
+
+    <p>
+        The owner writes the policy. The TEE enforces it. Skills execute within it.
+        The signing key never leaves the hardware. The agent operates with authority
+        but under control &mdash; like an employee with a corporate card and a spending limit.
+    </p>
+
+    <div class="note-box">
+        <strong>Key distinction:</strong> Most AI safety approaches use prompts to tell the AI
+        "be careful." That's quality control by asking the assembly line to behave.
+        Our approach uses cryptographic enforcement &mdash; the policy is in the container,
+        not in the conversation. The agent physically cannot exceed its limits.
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h2>Ready to Add Proof of Origin?</h2>
+    <p>
+        See it working. Read the code. Build on it.
+        For partnerships and enterprise integration, reach out.
+    </p>
+    <div class="cta-links">
+        <a href="/" class="cta-link primary">See the Live Demo</a>
+        <a href="/tech" class="cta-link">Technical Architecture</a>
+        <a href="https://github.com/rootz-global/agent-wallet" class="cta-link">SDK on GitHub</a>
+        <a href="mailto:discover@rootz.global" class="cta-link">discover@rootz.global</a>
+    </div>
+</section>
+
+<footer>
+    <p><a href="/">Proof of Origin</a> &nbsp;|&nbsp; <a href="/tech">Technical Architecture</a> &nbsp;|&nbsp; <a href="https://rootz.global">rootz.global</a></p>
+    <p style="margin-top: 0.5rem;">&copy; 2026 Rootz Corp</p>
+</footer>
+
+</body>
+</html>
