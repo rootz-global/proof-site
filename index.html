@@ -327,71 +327,72 @@
 <!-- Hero -->
 <section class="proof-hero">
     <div class="container">
-        <h1>Your AI. Your Policy. Your Proof.</h1>
+        <h1>The Trust Layer for AI</h1>
         <p class="subtitle">
-            Rootz is a private execution environment that sits between your AI and every service
-            it connects to. Every call is policy-controlled. Every action is signed and chain-linked.
-            You own the proof. We see nothing.
+            Every AI output has provable origin. Every connection is policy-controlled.
+            Every action is signed and chain-linked. Your keys. Your rules. Your proof.
         </p>
         <p class="tagline">
-            Router. Policy. Audit. The trust layer for AI.
+            Proof. Policy. Routing. Privacy. &mdash; One system.
         </p>
         <p style="margin-top: 1.5rem;">
-            <a href="/tour" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 2rem;">How It Works &rarr;</a>
-            <a href="/tech" style="color: rgba(255,255,255,0.7); text-decoration: underline; font-size: 1rem;">Technical Architecture &rarr;</a>
+            <a href="/tour" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">Proof of Origin &rarr;</a>
+            <a href="/router" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">The AI Router &rarr;</a>
+            <a href="/tech" style="color: rgba(255,255,255,0.7); text-decoration: underline; font-size: 1rem;">Architecture &rarr;</a>
         </p>
     </div>
 </section>
 
-<!-- The Router -->
+<!-- Four Pillars -->
 <section class="proof-section">
     <div class="proof-content">
-        <h2>The AI Router</h2>
-        <p>
-            Your AI connects to your email, your tax service, your bank, your calendar.
-            Who authorized those connections? What data did the AI send? Who owns the audit trail?
-        </p>
-        <p>
-            <strong>Rootz sits in the middle.</strong> Every MCP connection goes through your private
-            execution environment. Policy controls what's allowed. Every call is signed and recorded.
-            High-stakes actions require your confirmation. The proof is on-chain.
-        </p>
+        <h2>Four Capabilities. One System.</h2>
 
-        <div style="background: var(--dark); color: #a5b4fc; border-radius: 12px; padding: 2rem; font-family: monospace; font-size: 0.95rem; line-height: 1.7; margin: 2rem 0; overflow-x: auto;">
-            <span style="color: #34d399;">WITHOUT ROOTZ:</span><br>
-            &nbsp;&nbsp;AI &rarr; Intuit &nbsp;&nbsp;&nbsp;<span style="color: #6b7280;">(direct, no proof, no policy)</span><br>
-            &nbsp;&nbsp;AI &rarr; Email &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #6b7280;">(direct, AI sends whatever it wants)</span><br>
-            &nbsp;&nbsp;AI &rarr; Bank &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #6b7280;">(direct, no access control)</span><br><br>
-            <span style="color: #fbbf24;">WITH ROOTZ:</span><br>
-            &nbsp;&nbsp;AI &rarr; <span style="color: #fbbf24;">Rootz Router</span> &rarr; Policy &rarr; Intuit &rarr; <span style="color: #34d399;">Recorded</span> &rarr; AI<br>
-            &nbsp;&nbsp;AI &rarr; <span style="color: #fbbf24;">Rootz Router</span> &rarr; Policy &rarr; Email &nbsp;&rarr; <span style="color: #34d399;">Recorded</span> &rarr; AI<br>
-            &nbsp;&nbsp;AI &rarr; <span style="color: #fbbf24;">Rootz Router</span> &rarr; Policy &rarr; Bank &nbsp;&nbsp;&rarr; <span style="color: #ef4444;">DENIED</span>
-        </div>
-
-        <div class="audience-grid" style="margin-top: 2rem;">
+        <div class="audience-grid">
             <div class="audience-card">
-                <h4>Private by Architecture</h4>
-                <p>Rootz is the software, not the operator. We see nothing. Your keys are in your TPM.
-                   Your data stays in your enclave. Privacy enforced by hardware, not policy.</p>
+                <h4>Proof of Origin</h4>
+                <p>Every AI agent gets a <strong>birth certificate</strong> naming its parents &mdash;
+                   the AI model and the key holder who authorized it.
+                   Every action is <strong>hash-linked</strong> into a signed chain.
+                   One <strong>Merkle root</strong> proves an entire session.
+                   <a href="/tour">See how it works &rarr;</a></p>
             </div>
             <div class="audience-card">
-                <h4>Hot-Loadable</h4>
-                <p>Add and remove MCP connections at runtime. No restarts. Set per-tool policy on the fly.
-                   Your AI's capabilities grow without stopping.</p>
+                <h4>Policy Enforcement</h4>
+                <p>The owner writes the rules. A <strong>Trusted Execution Environment</strong> enforces them.
+                   Not in the prompt &mdash; in the infrastructure.
+                   Spending limits. Allowed tools. Data redaction.
+                   The AI <strong>physically cannot</strong> exceed its scope.</p>
             </div>
             <div class="audience-card">
-                <h4>Orchestration Ready</h4>
-                <p>Skills run inside the TEE. Multi-step workflows coordinated by policy.
-                   From routing to orchestration &mdash; same infrastructure.</p>
+                <h4>AI Router</h4>
+                <p>Every MCP connection goes through your router.
+                   <strong>Hot-loadable</strong> &mdash; add services at runtime, no restart.
+                   Per-tool policy. Confirmation for high-stakes actions.
+                   Every call recorded.
+                   <a href="/router">See the router tour &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>Privacy by Architecture</h4>
+                <p>Your keys are in your TPM. Your data stays in your enclave.
+                   <strong>Rootz is the software, not the operator.</strong>
+                   We see nothing. You share selectively &mdash;
+                   auditor gets a Merkle root, not your data.</p>
             </div>
         </div>
 
-        <p style="text-align: center; margin-top: 1.5rem;">
-            <a href="/router" style="color: var(--primary-blue); font-weight: 600; margin-right: 2rem;">
-                See How the Router Works &rarr;
-            </a>
-            <a href="mailto:discover@rootz.global" style="color: var(--gray-600);">
-                Partnerships: discover@rootz.global
+        <div class="analogy-box">
+            <p>
+                <strong>Think of it this way:</strong> Proof of Origin is the birth certificate and audit trail.
+                Policy Enforcement is the rulebook. The Router is the delivery mechanism &mdash; how proof
+                and policy reach every service your AI connects to. Privacy is the guarantee that only you
+                control the keys. Together: <strong>the trust layer for AI.</strong>
+            </p>
+        </div>
+
+        <p style="text-align: center; margin-top: 1rem;">
+            <a href="mailto:discover@rootz.global" style="color: var(--primary-blue); font-weight: 600;">
+                Partnerships &amp; Enterprise: discover@rootz.global
             </a>
         </p>
     </div>
