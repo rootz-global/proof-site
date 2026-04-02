@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3070;
 const indexHtml = readFileSync(join(__dirname, 'index.html'), 'utf-8');
 const techHtml = readFileSync(join(__dirname, 'tech.html'), 'utf-8');
 const tourHtml = readFileSync(join(__dirname, 'tour.html'), 'utf-8');
+const routerTourHtml = readFileSync(join(__dirname, 'router-tour.html'), 'utf-8');
 const wellKnownAi = readFileSync(join(__dirname, 'well-known-ai.json'), 'utf-8');
 const sitemapXml = readFileSync(join(__dirname, 'sitemap.xml'), 'utf-8');
 const llmsTxt = readFileSync(join(__dirname, 'llms.txt'), 'utf-8');
@@ -81,6 +82,13 @@ const server = createServer((req, res) => {
   if (req.url === '/tour' || req.url === '/tour/') {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
     res.end(tourHtml);
+    return;
+  }
+
+  // Router tour page
+  if (req.url === '/router' || req.url === '/router/' || req.url === '/router-tour' || req.url === '/router-tour/') {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
+    res.end(routerTourHtml);
     return;
   }
 

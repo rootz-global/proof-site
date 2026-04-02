@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The AI Router | How It Works | Rootz</title>
+    <meta name="description" content="Step-by-step tour: how the Rootz TEE Router controls every AI connection with owner policy, records every call, and proves what happened.">
+
+    <meta property="og:title" content="The AI Router — How It Works">
+    <meta property="og:description" content="Your AI connects to services through your router. Your policy. Your audit trail. Your proof. We see nothing.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://proof.rootz.global/router-tour">
+
+    <link rel="ai-discovery" type="application/json" href="/.well-known/ai" title="AI Discovery — Proof of Origin">
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+          primaryColor: '#e0e7ff',
+          primaryTextColor: '#1e1b4b',
+          primaryBorderColor: '#4f46e5',
+          lineColor: '#6366f1',
+          secondaryColor: '#f5f3ff',
+          tertiaryColor: '#ede9fe',
+          nodeTextColor: '#1e1b4b',
+          nodeBorder: '#4f46e5',
+          mainBkg: '#e0e7ff',
+          clusterBkg: '#f5f3ff',
+          clusterBorder: '#6366f1',
+          titleColor: '#1e1b4b',
+          edgeLabelBackground: '#ffffff',
+          fontFamily: 'Segoe UI, sans-serif',
+          fontSize: '15px'
+        }
+      });
+    </script>
+
+    <style>
+        :root {
+            --primary-blue: #4f46e5;
+            --primary-purple: #7c3aed;
+            --dark: #1e1b4b;
+            --light: #ffffff;
+            --background: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: var(--background); }
+        a { color: var(--primary-blue); }
+        code { background: var(--gray-100); padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
+
+        .tour-hero {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            color: white; padding: 60px 20px 40px; text-align: center;
+        }
+        .tour-hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .tour-hero p { opacity: 0.8; font-size: 1.1rem; max-width: 650px; margin: 0 auto; }
+        .tour-hero .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-bottom: 1rem; }
+
+        .step { padding: 60px 20px; max-width: 850px; margin: 0 auto; }
+        .step:nth-child(odd) { background: var(--gray-50); max-width: 100%; }
+        .step:nth-child(odd) > * { max-width: 850px; margin-left: auto; margin-right: auto; }
+
+        .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .step-number {
+            background: var(--primary-blue); color: white; width: 48px; height: 48px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; font-weight: bold; flex-shrink: 0;
+        }
+        .step-title { font-size: 1.8rem; color: var(--dark); }
+
+        .step p { font-size: 1.05rem; color: var(--gray-600); margin-bottom: 1rem; line-height: 1.8; }
+        .step h3 { font-size: 1.2rem; color: var(--primary-blue); margin: 2rem 0 0.75rem; }
+
+        .value-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem; margin: 1.5rem 0;
+        }
+        .value-card {
+            background: white; border-radius: 10px; padding: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-left: 4px solid var(--primary-blue);
+        }
+        .value-card h4 { color: var(--dark); margin-bottom: 0.5rem; font-size: 1rem; }
+        .value-card p { font-size: 0.9rem; margin-bottom: 0; color: var(--gray-600); }
+        .value-card.deny { border-left-color: #ef4444; }
+        .value-card.confirm { border-left-color: #f59e0b; }
+        .value-card.allow { border-left-color: #10b981; }
+
+        .chain-visual {
+            background: var(--dark); color: #a5b4fc; border-radius: 10px;
+            padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.9rem;
+            line-height: 1.7; margin: 1.5rem 0; overflow-x: auto;
+        }
+        .chain-visual .hl { color: #34d399; }
+        .chain-visual .dim { color: #6b7280; }
+        .chain-visual .acc { color: #fbbf24; }
+        .chain-visual .deny { color: #ef4444; }
+
+        .diagram-container {
+            background: #ffffff; border: 2px solid var(--gray-200); border-radius: 10px;
+            padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto;
+        }
+        .diagram-container .mermaid { display: flex; justify-content: center; }
+
+        .note-box {
+            background: #ede9fe; border-left: 4px solid var(--primary-purple);
+            border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0;
+            font-size: 0.95rem; color: var(--dark);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            color: white; padding: 60px 20px; text-align: center;
+        }
+        .cta-section h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .cta-section p { opacity: 0.8; max-width: 600px; margin: 0 auto 2rem; font-size: 1.1rem; }
+        .cta-links { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+        .cta-link {
+            display: inline-block; padding: 12px 24px; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px; color: white; text-decoration: none; transition: all 0.3s;
+        }
+        .cta-link:hover { border-color: white; background: rgba(255,255,255,0.1); }
+        .cta-link.primary { background: var(--primary-blue); border-color: var(--primary-blue); }
+
+        footer { padding: 2rem 20px; text-align: center; color: var(--gray-600); font-size: 0.9rem; }
+        footer a { color: var(--primary-blue); }
+    </style>
+</head>
+<body>
+
+<section class="tour-hero">
+    <a href="/" class="back-link">&larr; Back to Home</a>
+    <h1>The AI Router</h1>
+    <p>Your AI connects to services through your router. Your policy controls every call.
+       Every action is signed and recorded. We see nothing. You own the proof.</p>
+</section>
+
+<!-- STEP 1: CONNECT -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">1</div>
+        <div class="step-title">Connect a Service</div>
+    </div>
+
+    <p>
+        Your AI needs to access a service &mdash; your tax software, your email, a database, an AI model.
+        Instead of connecting directly, you add the service to your router. <strong>No restart needed.</strong>
+    </p>
+
+    <div class="chain-visual">
+        <span class="acc">proxy_add_connection</span><br>
+        &nbsp;&nbsp;id: "intuit-tax"<br>
+        &nbsp;&nbsp;name: "Intuit Tax Service"<br>
+        &nbsp;&nbsp;url: "https://mcp.intuit.com"<br>
+        &nbsp;&nbsp;<span class="hl">Tools discovered: 5</span><br>
+        &nbsp;&nbsp;<span class="dim">read_w2, read_1099, calculate_tax, draft_return, submit_return</span>
+    </div>
+
+    <p>
+        The router connects to the service, discovers its available tools, and makes them
+        available to your AI &mdash; all in the same conversation. Add another service anytime.
+        Remove one. The AI's capabilities expand and contract dynamically.
+    </p>
+
+    <div class="note-box">
+        <strong>Hot-loadable:</strong> Traditional AI setups require a restart to add new tools.
+        The Rootz router adds and removes services at runtime. Your AI session never stops.
+    </div>
+</section>
+
+<!-- STEP 2: SET POLICY -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">2</div>
+        <div class="step-title">Set Your Policy</div>
+    </div>
+
+    <p>
+        <strong>You decide what your AI can do.</strong> Not the AI company. Not the service provider.
+        You write the rules. The router enforces them cryptographically.
+    </p>
+
+    <div class="chain-visual">
+        <span class="acc">proxy_set_policy</span><br>
+        &nbsp;&nbsp;connection: "intuit-tax"<br>
+        &nbsp;&nbsp;tools_allowed: [<span class="hl">"read_w2"</span>, <span class="hl">"read_1099"</span>, <span class="hl">"calculate_tax"</span>]<br>
+        &nbsp;&nbsp;tools_denied: [<span class="deny">"submit_return"</span>]<br>
+        &nbsp;&nbsp;tools_confirm: [<span class="acc">"draft_return"</span>]<br>
+        &nbsp;&nbsp;rate_limit: 100 calls/hour
+    </div>
+
+    <div class="value-grid">
+        <div class="value-card allow">
+            <h4>ALLOW</h4>
+            <p>Read W-2 data, read 1099s, calculate taxes. The AI can do these freely. Every call is still recorded.</p>
+        </div>
+        <div class="value-card deny">
+            <h4>DENY</h4>
+            <p>Submit the tax return. Blocked. The AI physically cannot call this tool. Denial is recorded in the audit chain.</p>
+        </div>
+        <div class="value-card confirm">
+            <h4>CONFIRM</h4>
+            <p>Draft a return. The AI can prepare it, but YOUR desktop shows a confirmation dialog. You review and approve with your wallet signature.</p>
+        </div>
+    </div>
+
+    <p>
+        Policy is enforced at the infrastructure layer, not in the prompt.
+        You don't ask the AI to be careful. You make it physically impossible for the AI
+        to exceed its authorized scope.
+    </p>
+</section>
+
+<!-- STEP 3: AI WORKS THROUGH ROUTER -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <div class="step-title">The AI Works Through Your Router</div>
+    </div>
+
+    <p>
+        The AI calls tools normally. It doesn't know the router is in the middle.
+        Every call is intercepted, policy-checked, forwarded, and recorded.
+    </p>
+
+    <div class="diagram-container">
+        <pre class="mermaid">
+sequenceDiagram
+    participant AI as Your AI
+    participant Router as Rootz Router
+    participant Policy as Policy Engine
+    participant Service as Intuit MCP
+
+    AI->>Router: intuit_read_w2({ year: 2025 })
+    Router->>Policy: Check: intuit-tax / read_w2
+    Policy-->>Router: ALLOW
+    Router->>Service: read_w2({ year: 2025 })
+    Service-->>Router: W-2 data
+    Note right of Router: Hash request + response<br/>Record in audit chain
+    Router-->>AI: W-2 data returned
+
+    AI->>Router: intuit_submit_return({ data: ... })
+    Router->>Policy: Check: intuit-tax / submit_return
+    Policy-->>Router: DENY
+    Note right of Router: Denial recorded in chain
+    Router-->>AI: BLOCKED by policy
+        </pre>
+    </div>
+
+    <p>
+        The AI asked for W-2 data &mdash; allowed. The AI tried to submit the return &mdash; blocked.
+        Both the allowed call and the denied call are recorded in the audit chain.
+        The AI adjusts and works within its policy.
+    </p>
+</section>
+
+<!-- STEP 4: CONFIRMATION -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">4</div>
+        <div class="step-title">You Approve What Matters</div>
+    </div>
+
+    <p>
+        For high-stakes actions, the router pauses and asks you. Your desktop shows a
+        confirmation dialog. You review what the AI wants to do. You approve with your
+        wallet signature &mdash; or deny.
+    </p>
+
+    <div class="chain-visual">
+        <span class="acc">AI wants to: draft_return</span><br><br>
+        &nbsp;&nbsp;┌─────────────────────────────────────────────┐<br>
+        &nbsp;&nbsp;│&nbsp;&nbsp;Your AI wants to draft a tax return &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;│&nbsp;&nbsp;Service: Intuit Tax &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;│&nbsp;&nbsp;Action: draft_return &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;│&nbsp;&nbsp;[<span class="deny"> Deny </span>]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<span class="hl"> Approve &amp; Sign </span>]&nbsp;&nbsp;│<br>
+        &nbsp;&nbsp;└─────────────────────────────────────────────┘<br><br>
+        <span class="hl">You click Approve</span> &rarr; <span class="acc">Signed with your wallet key</span><br>
+        <span class="dim">Your approval is recorded in the audit chain with your signature.</span><br>
+        <span class="dim">Provable: YOU authorized this specific action.</span>
+    </div>
+
+    <p>
+        The confirmation isn't just a click. It's a <strong>cryptographic signature</strong> from your
+        hardware-sealed wallet key. Proof that you, specifically, reviewed and authorized this action
+        at this time. No one can forge it. No one can deny it.
+    </p>
+</section>
+
+<!-- STEP 5: EVERY CALL RECORDED -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">5</div>
+        <div class="step-title">Every Call Is Recorded</div>
+    </div>
+
+    <p>
+        Every proxied call &mdash; allowed, denied, or confirmed &mdash; becomes a signed entry in
+        your audit chain. Hash-linked. Tamper-evident. Settleable to blockchain.
+    </p>
+
+    <div class="chain-visual">
+        <span class="hl">Call 1:</span> intuit_read_w2 &rarr; <span class="hl">ALLOW</span> &rarr; 5ms &rarr; <span class="dim">hash: 0x8d11...</span><br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="hl">Call 2:</span> intuit_read_1099 &rarr; <span class="hl">ALLOW</span> &rarr; 8ms &rarr; <span class="dim">hash: 0x3a7f...</span><br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="deny">Call 3:</span> intuit_submit_return &rarr; <span class="deny">DENIED</span> &rarr; <span class="dim">hash: 0xc4e2...</span><br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="acc">Call 4:</span> intuit_draft_return &rarr; <span class="acc">CONFIRMED</span> (owner signed) &rarr; <span class="dim">hash: 0x91ab...</span><br>
+        &nbsp;&nbsp;<span class="dim">&darr; hash-linked</span><br>
+        <span class="hl">Call 5:</span> email_send_results &rarr; <span class="hl">ALLOW</span> &rarr; 12ms &rarr; <span class="dim">hash: 0xf7d3...</span><br><br>
+        <span class="acc">Settlement: Merkle root covers all 5 calls across 2 services</span><br>
+        <span class="dim">One hash proves the entire workflow.</span>
+    </div>
+
+    <p>
+        The audit chain includes what was allowed, what was denied, and what you specifically
+        approved. An auditor verifies one Merkle root and knows the complete history of every
+        AI-to-service interaction.
+    </p>
+</section>
+
+<!-- STEP 6: PRIVACY -->
+<section class="step">
+    <div class="step-header">
+        <div class="step-number">&shield;</div>
+        <div class="step-title">Private by Architecture</div>
+    </div>
+
+    <p>
+        <strong>Rootz is the software, not the operator.</strong> We never see your traffic.
+        Your router runs on your hardware. Your keys are in your TPM.
+        Your data stays in your enclave.
+    </p>
+
+    <div class="value-grid">
+        <div class="value-card">
+            <h4>Your Desktop</h4>
+            <p>The router runs locally. Your TPM-sealed key signs everything. The key never leaves your hardware. Rootz Corp has zero access.</p>
+        </div>
+        <div class="value-card">
+            <h4>Your Cloud TEE</h4>
+            <p>Or run in a confidential VM (AMD SEV, Intel TDX). The cloud operator can't see inside. Your keys are in the enclave. Same privacy.</p>
+        </div>
+        <div class="value-card">
+            <h4>Your Proof</h4>
+            <p>You choose what to share. Auditor gets a Merkle root. Regulator gets a settlement. Colleague gets a share link. Default: private.</p>
+        </div>
+    </div>
+
+    <div class="note-box">
+        <strong>The VS Code analogy:</strong> Microsoft built VS Code. They don't see your code.
+        Rootz built the router. We don't see your AI traffic.
+        The software is ours. The data is yours.
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h2>Ready to Control Your AI?</h2>
+    <p>
+        See the proof of origin demo. Read the code. For partnerships, integration,
+        and enterprise deployment &mdash; reach out.
+    </p>
+    <div class="cta-links">
+        <a href="/tour" class="cta-link primary">Proof of Origin Tour</a>
+        <a href="/tech" class="cta-link">Technical Architecture</a>
+        <a href="https://github.com/rootz-global/agent-wallet" class="cta-link">SDK on GitHub</a>
+        <a href="mailto:discover@rootz.global" class="cta-link">discover@rootz.global</a>
+    </div>
+</section>
+
+<footer>
+    <p><a href="/">Home</a> &nbsp;|&nbsp; <a href="/tour">Proof of Origin</a> &nbsp;|&nbsp; <a href="/tech">Architecture</a> &nbsp;|&nbsp; <a href="https://rootz.global">rootz.global</a></p>
+    <p style="margin-top: 0.5rem;">&copy; 2026 Rootz Corp</p>
+</footer>
+
+</body>
+</html>
