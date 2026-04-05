@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI with Proof of Origin | Rootz</title>
-    <meta name="description" content="Every AI output should have a provable origin. Rootz gives AI agents a birth certificate, a cryptographic audit chain, and signed session archives on the blockchain.">
+    <meta name="description" content="AI interactions are opaque. Rootz makes them visible, controllable, and provable. Data Wallets give AI agents identity, signed audit chains, and owner-controlled archives.">
 
-    <meta property="og:title" content="AI with Proof of Origin">
-    <meta property="og:description" content="The first AI agent with a verifiable birth certificate on a public blockchain. Built on Morpheus decentralized inference.">
+    <meta property="og:title" content="AI Interactions Are Opaque. We're Fixing That.">
+    <meta property="og:description" content="Rootz Data Wallets make AI interactions visible, controllable, and provable. Birth certificates, signed message chains, and settlement on Polygon.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://proof.rootz.global">
 
@@ -19,7 +19,7 @@
       "@type": "WebSite",
       "name": "AI with Proof of Origin",
       "url": "https://proof.rootz.global",
-      "description": "The first AI agent with a verifiable birth certificate on a public blockchain. Built on Morpheus decentralized inference.",
+      "description": "Rootz Data Wallets make AI interactions visible, controllable, and provable. Birth certificates, signed message chains, and settlement on Polygon.",
       "publisher": {
         "@type": "Organization",
         "name": "Rootz Corp",
@@ -32,10 +32,10 @@
       },
       "about": {
         "@type": "SoftwareApplication",
-        "name": "Rootz Morpheus Agent",
+        "name": "Rootz Agent Runtime",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Node.js",
-        "url": "https://github.com/rootz-global/morpheus-agent"
+        "url": "https://github.com/rootz-global/agent-runtime"
       }
     }
     </script>
@@ -320,6 +320,29 @@
         footer a {
             color: var(--primary-blue);
         }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tech-table th, .tech-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tech-table td {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--gray-600);
+        }
     </style>
 </head>
 <body>
@@ -327,70 +350,172 @@
 <!-- Hero -->
 <section class="proof-hero">
     <div class="container">
-        <h1>The Trust Layer for AI</h1>
+        <h1>AI Interactions Are Opaque.<br>We&rsquo;re Fixing That.</h1>
         <p class="subtitle">
-            Every AI output has provable origin. Every connection is policy-controlled.
-            Every action is signed and chain-linked. Your keys. Your rules. Your proof.
+            Your AI talks to services, makes decisions, and moves data.
+            But you can&rsquo;t see what it did, you can&rsquo;t control what it accesses,
+            and you can&rsquo;t prove what happened. We&rsquo;re building the infrastructure
+            to make AI interactions visible, controllable, and provable.
         </p>
         <p class="tagline">
-            Proof. Policy. Routing. Privacy. &mdash; One system.
+            Built on Rootz Data Wallets &mdash; data with a chain, not data on a chain.
         </p>
         <p style="margin-top: 1.5rem;">
-            <a href="/tour" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">Proof of Origin &rarr;</a>
-            <a href="/router" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">The AI Router &rarr;</a>
+            <a href="/tour" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">How We Prove It &rarr;</a>
+            <a href="/router" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">AI Governance &rarr;</a>
             <a href="/tech" style="color: rgba(255,255,255,0.7); text-decoration: underline; font-size: 1rem;">Architecture &rarr;</a>
         </p>
     </div>
 </section>
 
-<!-- Four Pillars -->
+<!-- Data Wallets -->
 <section class="proof-section">
     <div class="proof-content">
-        <h2>Four Capabilities. One System.</h2>
+        <h2>The Primitive: Data Wallets</h2>
+        <p>
+            Everything we build starts with one concept: <strong>give the data a contract.</strong>
+            Not data stored on a blockchain &mdash; data wrapped in a smart contract that governs
+            who can read it, who can write to it, and what the rules are. An encrypted envelope
+            with a chain of signed evidence.
+        </p>
+        <p>
+            <strong>Data with a chain, not data on a chain.</strong>
+        </p>
 
         <div class="audience-grid">
             <div class="audience-card">
-                <h4>Proof of Origin</h4>
-                <p>Every AI agent gets a <strong>birth certificate</strong> naming its parents &mdash;
-                   the AI model and the key holder who authorized it.
-                   Every action is <strong>hash-linked</strong> into a signed chain.
-                   One <strong>Merkle root</strong> proves an entire session.
-                   <a href="/tour">See how it works &rarr;</a></p>
+                <h4>An Agent Is a Wallet</h4>
+                <p>The agent&rsquo;s identity, its birth certificate, its action history,
+                   and its policy &mdash; all Notes on a single wallet. The agent IS the wallet.
+                   Recoverable from one address. Portable across hardware.</p>
             </div>
             <div class="audience-card">
-                <h4>Policy Enforcement</h4>
-                <p>The owner writes the rules. A <strong>Trusted Execution Environment</strong> enforces them.
-                   Not in the prompt &mdash; in the infrastructure.
-                   Spending limits. Allowed tools. Data redaction.
-                   The AI <strong>physically cannot</strong> exceed its scope.</p>
+                <h4>A Session Is a Wallet</h4>
+                <p>Every conversation, every workflow, every multi-step interaction &mdash;
+                   a wallet that accumulates signed messages. Watch the address and you see
+                   everything that happened.</p>
             </div>
             <div class="audience-card">
-                <h4>AI Router</h4>
-                <p>Every MCP connection goes through your router.
-                   <strong>Hot-loadable</strong> &mdash; add services at runtime, no restart.
-                   Per-tool policy. Confirmation for high-stakes actions.
-                   Every call recorded.
-                   <a href="/router">See the router tour &rarr;</a></p>
-            </div>
-            <div class="audience-card">
-                <h4>Privacy by Architecture</h4>
-                <p>Your keys are in your TPM. Your data stays in your enclave.
-                   <strong>Rootz is the software, not the operator.</strong>
-                   We see nothing. You share selectively &mdash;
-                   auditor gets a Merkle root, not your data.</p>
+                <h4>A TEE Is a Wallet</h4>
+                <p>The execution environment has its own identity &mdash; attestation history,
+                   loaded skills, policy configuration. The TEE proves its own integrity
+                   through its wallet.</p>
             </div>
         </div>
 
         <div class="analogy-box">
             <p>
-                <strong>Think of it this way:</strong> Proof of Origin is the birth certificate and audit trail.
-                Policy Enforcement is the rulebook. The Router is the delivery mechanism &mdash; how proof
-                and policy reach every service your AI connects to. Privacy is the guarantee that only you
-                control the keys. Together: <strong>the trust layer for AI.</strong>
+                <strong>This is the same technology</strong> that powers the
+                <a href="https://rootz.global/ai-discovery">AI Discovery Standard</a> &mdash;
+                how organizations publish signed, structured data so AI can understand them.
+                The discovery layer feeds verified data INTO the agent. The agent&rsquo;s wallet
+                records what it did WITH that data. As the discovery ecosystem grows,
+                agents have richer verified sources &mdash; and the provenance chain
+                becomes exponentially more valuable.
             </p>
         </div>
+    </div>
+</section>
 
-        <p style="text-align: center; margin-top: 1rem;">
+<!-- What Can You Prove -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>What Can You Actually Prove?</h2>
+        <p>
+            Not what we claim. What the math demonstrates. Click the links below &mdash;
+            these are real artifacts on Polygon mainnet, verified by anyone.
+        </p>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>This Agent Was Authorized</h4>
+                <p>Birth certificate names the AI model and the key holder.
+                   Signed, on-chain, immutable.
+                   <a href="https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o" target="_blank" rel="noopener">
+                   Verify the birth certificate &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>These Messages Were Signed</h4>
+                <p>Every prompt hashed. Every response hashed.
+                   Hash-linked into a tamper-evident chain. Merkle root settles the session.
+                   <a href="https://rootz.global/s/0x136a5ec90d58fd09506409e46edb5acf1ea34ece?k=maofU5YgcagMjCTLbGs5vLrX2vDGAP2umkXv2C3A21c" target="_blank" rel="noopener">
+                   Verify a session archive &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>The Full Record Is Preserved</h4>
+                <p>Complete prompts and responses archived to IPFS, encrypted,
+                   recoverable from one wallet address. Owner-controlled.
+                   <a href="https://rootz.global/public/0x9756bd241d2dd639bf3d1c23490a9c0a65bbed7e" target="_blank" rel="noopener">
+                   Read the test report &rarr;</a></p>
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 1rem; font-style: italic; color: var(--gray-600);">
+            Demonstrated using Morpheus decentralized inference (Kimi K2.5) in our lab.
+            The architecture works with any AI &mdash; OpenAI, Anthropic, local models, any provider.
+        </p>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>How It Works</h2>
+        <p>
+            AI interactions are messages. We sign them. Every prompt, every response,
+            every tool call, every policy decision &mdash; a signed message on the agent&rsquo;s
+            wallet. The chain of messages IS the proof.
+        </p>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>Measured Compute</h4>
+                <p>The agent runs inside a Trusted Execution Environment.
+                   Hardware-sealed keys. Policy enforcement at the infrastructure layer,
+                   not in the prompt. The TEE proves what code ran.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Signed Messages</h4>
+                <p>Every interaction is a signed, hash-linked message.
+                   Not access control &mdash; message security.
+                   Each message references the previous one.
+                   Alter any message and the chain breaks.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Settlement</h4>
+                <p>One Merkle root covers an entire session.
+                   All messages. All services. All policy decisions.
+                   Anchored on-chain. One hash proves everything.</p>
+            </div>
+        </div>
+
+        <p>
+            <strong>For AI governance and orchestration:</strong> every agent interaction &mdash;
+            across every service, every model, every tool &mdash; visible, controllable, provable.
+            Your policy. Your audit trail. Your proof.
+            <a href="/tour">Walk through the full proof flow &rarr;</a>
+            <a href="/router" style="margin-left: 1rem;">See AI governance in action &rarr;</a>
+        </p>
+    </div>
+</section>
+
+<!-- Sovereignty -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Who Owns the Proof?</h2>
+        <p>
+            <strong>You do.</strong> Rootz is the software, not the operator.
+            We never see your traffic. Your keys are in your hardware.
+            Your data stays in your enclave. We provide the infrastructure &mdash;
+            you own everything it produces.
+        </p>
+        <p>
+            The solution runs locally on your desktop, on-premises in your data center,
+            or as a managed service &mdash; from simple server-held keys to confidential compute
+            to a hardware security module that becomes the agent&rsquo;s trusted execution environment.
+        </p>
+
+        <p style="text-align: center; margin-top: 1.5rem;">
             <a href="mailto:discover@rootz.global" style="color: var(--primary-blue); font-weight: 600;">
                 Partnerships &amp; Enterprise: discover@rootz.global
             </a>
@@ -398,48 +523,14 @@
     </div>
 </section>
 
-<!-- The Problem -->
+<!-- What We Built (Lab) -->
 <section class="proof-section">
     <div class="proof-content">
-        <h2>The Problem</h2>
+        <h2>Built and Tested</h2>
         <p>
-            Today, every AI system in the world operates on unsigned messages. When an AI answers
-            your question, there is no cryptographic proof of what you asked, what it answered,
-            which model produced the output, or who authorized the agent to act.
-        </p>
-        <p>
-            The output is ephemeral. The interaction is deniable. The AI is anonymous.
-        </p>
-        <p>
-            This is equivalent to running the internet without TLS. Every AI message is susceptible
-            to tampering, impersonation, and repudiation. And AI agents are being granted authority
-            to take real-world actions &mdash; financial transactions, code execution, data access,
-            communications.
-        </p>
-
-        <div class="analogy-box">
-            <p>
-                <strong>Before TLS</strong>, every web page was transmitted in plaintext. Anyone could read or
-                modify it. TLS didn't change what the web did &mdash; it proved that what you saw was
-                what the server sent.
-            </p>
-            <p style="margin-top: 1rem;">
-                <strong>Before this</strong>, every AI interaction is an unsigned message. What we built is
-                the beginning of <strong>TLS for AI</strong> &mdash; not changing what AI does, but proving what it did.
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- What We Built -->
-<section class="proof-section">
-    <div class="proof-content">
-        <h2>What We Built</h2>
-        <p>
-            An AI agent with a <strong>birth certificate</strong> that names two parents:
-            the AI model that powers it and the human who authorized it.
-            Every inference call is recorded as a <strong>signed, hash-linked Note</strong>.
-            The session is settled with a <strong>Merkle root</strong> anchored on the blockchain.
+            We demonstrated this using <a href="https://mor.org" target="_blank" rel="noopener">Morpheus</a>
+            decentralized inference in our lab &mdash; real AI, real blockchain, real proofs.
+            The architecture is provider-agnostic: it works with any AI that produces output.
         </p>
 
         <div class="chain-visual">
@@ -468,14 +559,15 @@
             &nbsp;&nbsp;Full session archived to IPFS (encrypted)
         </div>
 
-        <h3>Built on Morpheus Decentralized Inference</h3>
+        <h3>Demonstrated with Decentralized AI</h3>
         <p>
-            The agent runs on the <a href="https://mor.org" target="_blank">Morpheus</a> decentralized AI network.
-            Three real inference calls to Kimi K2.5 via <code>api.mor.org</code>. Real tokens consumed.
-            No centralized API. No single point of control.
+            We tested this on the <a href="https://mor.org" target="_blank">Morpheus</a> decentralized AI network &mdash;
+            three real inference calls to Kimi K2.5, real tokens consumed, no centralized API.
+            Morpheus was the lab. The architecture works with any provider:
+            OpenAI, Anthropic, local models, enterprise endpoints.
         </p>
         <p>
-            Morpheus provides the thinking. Rootz provides the proof.
+            The AI provides the thinking. Rootz provides the proof.
         </p>
     </div>
 </section>
@@ -519,7 +611,7 @@
         <div class="on-chain-box">
             <h4>Birth Certificate</h4>
             <p>The agent's permanent origin record &mdash; names the AI parent (Morpheus/Kimi K2.5)
-               and the human authorizer (Steven Sprague). Policy, scope, and key protection level.</p>
+               and the key-holder authorizer (Steven Sprague). Policy, scope, and key protection level.</p>
             <p><a href="https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o" target="_blank">
                 View Birth Certificate (encrypted, shared link)
             </a></p>
@@ -676,8 +768,10 @@
     <div class="proof-content">
         <h2>Rootz Desktop &mdash; The Data Wallet Runtime</h2>
         <p>
-            The Morpheus agent is a plugin for <strong>Rootz Desktop V6</strong>, an Electron application
-            that provides the signing, encryption, and blockchain infrastructure for data wallets.
+            <strong>Rootz Desktop V6</strong> is an Electron application that provides
+            the signing, encryption, and blockchain infrastructure for data wallets.
+            AI agents connect to it as a service &mdash; it&rsquo;s the secure backend
+            for everything described on this page.
         </p>
         <p>
             Desktop V6 is the agent's hardware security module. It holds TPM-sealed signing keys,
