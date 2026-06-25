@@ -34,6 +34,19 @@ function readJsonBody(req, res, cb) {
   req.on('data', (c) => { body += c; if (body.length > 1e6) req.destroy(); });
   req.on('end', () => { try { cb(JSON.parse(body || '{}')); } catch (e) { res.writeHead(400, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'bad-json' })); } });
 }
+const _jwksCache = new Map(); // iss -> { doc, exp }
+async function fetchIssuerJwks(iss) {
+  const c = _jwksCache.get(iss);
+  if (c && c.exp > Date.now()) return c.doc;
+  try {
+    const ctl = AbortSignal.timeout ? AbortSignal.timeout(4000) : undefined;
+    const r = await fetch(`https://${iss}/.well-known/mcp-jwks.json`, { signal: ctl });
+    if (!r.ok) return null;
+    const doc = await r.json();
+    _jwksCache.set(iss, { doc, exp: Date.now() + 600000 });
+    return doc;
+  } catch (e) { return null; }
+}
 function sampleSignedResponse() {
   const result = { content: [{ type: 'text', text: 'This MCP response is signed by proof.rootz.global. Its origin, integrity, and freshness are provable independent of transport.' }] };
   const env = S.sign(result, { keyset: mcpKeyset, ctx: { method: 'tools/call', tool: 'demo', aud: PROOF_ISS } });
@@ -164,18 +177,27 @@ const server = createServer((req, res) => {
   }
 
   // Public verifier — POST { object, envelope } -> { valid, reasons, algs }
+  // Resolves keys for proof's own keyset, OR fetches the issuer's published JWKS
+  // (restricted to *.rootz.global to prevent SSRF; cached 10 min).
   if (req.method === 'POST' && req.url === '/verify') {
-    readJsonBody(req, res, (data) => {
+    readJsonBody(req, res, async (data) => {
       logHit(req, '/verify', { bot });
       const { object, envelope } = data || {};
+      const send = (obj) => { res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }); res.end(JSON.stringify(obj, null, 2)); };
       if (!object || !envelope) { res.writeHead(400, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }); res.end(JSON.stringify({ error: 'send { object, envelope }' })); return; }
-      let out;
-      try { out = S.verify(object, envelope, { keyResolver: mcpResolver }); }
-      catch (e) { out = { valid: false, reasons: ['verify-error:' + e.message], algs: {} }; }
-      // note when the issuer/kid isn't one this verifier holds keys for (future: DNS/JWKS fetch)
-      if (out.reasons.some((r) => r.startsWith('no-key'))) out.note = `This verifier currently resolves keys for ${PROOF_ISS} (${PROOF_KID}). Generic DNS/JWKS resolution for arbitrary issuers is on the roadmap.`;
-      res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-      res.end(JSON.stringify(out, null, 2));
+      try {
+        let resolver = mcpResolver;
+        const iss = envelope.iss;
+        if (iss && iss !== PROOF_ISS) {
+          if (!/^[a-z0-9.-]+\.rootz\.global$/i.test(iss)) { send({ valid: false, reasons: ['issuer-not-allowed:' + iss], algs: {}, note: 'This verifier only resolves keys for *.rootz.global issuers.' }); return; }
+          const jwksDoc = await fetchIssuerJwks(iss);
+          if (!jwksDoc) { send({ valid: false, reasons: ['jwks-unreachable:' + iss], algs: {} }); return; }
+          resolver = S.resolverFromJwks(jwksDoc, envelope.kid);
+        }
+        const out = S.verify(object, envelope, { keyResolver: resolver });
+        out.resolvedVia = (iss && iss !== PROOF_ISS) ? `https://${iss}/.well-known/mcp-jwks.json` : `local (${PROOF_ISS})`;
+        send(out);
+      } catch (e) { send({ valid: false, reasons: ['verify-error:' + e.message], algs: {} }); }
     });
     return;
   }

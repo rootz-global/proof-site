@@ -196,6 +196,26 @@ function dnsSelectorRecords(keyset) {
   return recs;
 }
 
+// Convert a published JWK back into something REG[alg].verify accepts:
+// classical -> a Node KeyObject; ml-dsa -> the base64url public key string.
+function jwkToVerifyKey(alg, jwk) {
+  if (alg === 'ml-dsa-65') return jwk.pub;
+  if (jwk.kty === 'OKP') return crypto.createPublicKey({ key: { kty: 'OKP', crv: jwk.crv, x: jwk.x }, format: 'jwk' });
+  if (jwk.kty === 'EC') return crypto.createPublicKey({ key: { kty: 'EC', crv: jwk.crv, x: jwk.x, y: jwk.y }, format: 'jwk' });
+  throw new Error('jwkToVerifyKey: unsupported kty ' + jwk.kty);
+}
+
+// Build a resolver from a fetched JWKS document (the "proof verifies any service" path).
+// jwk.alg may be cased differently (e.g. 'ML-DSA-65') — match case-insensitively against the registry alg.
+function resolverFromJwks(jwksDoc, expectKid) {
+  const keys = (jwksDoc && jwksDoc.keys) || [];
+  return (_iss, kid, alg) => {
+    const jwk = keys.find((j) => j.alg && j.alg.toLowerCase() === alg && (!expectKid || j.kid === kid || !j.kid));
+    if (!jwk) return null;
+    try { return jwkToVerifyKey(alg, jwk); } catch { return null; }
+  };
+}
+
 // A keyResolver maps (iss, kid, alg) -> public key (PEM or b64u). For local/single-keyset use:
 function resolverFromKeyset(keyset) {
   return (iss, kid, alg) => {
@@ -440,7 +460,8 @@ module.exports = {
   // canonicalization + hashing
   jcs, jcsString, sha256, b64u, fromB64u,
   // registry + keys
-  REG, algsAvailable, pqAvailable, initPqProvider, generateKeyset, publicKeyset, jwks, dnsSelectorRecords, resolverFromKeyset,
+  REG, algsAvailable, pqAvailable, initPqProvider, generateKeyset, publicKeyset, jwks, dnsSelectorRecords,
+  resolverFromKeyset, resolverFromJwks, jwkToVerifyKey,
   // envelope
   ENVELOPE_KEY, DEFAULT_TTL_SEC, sign, signResult, signDefinitions, verify, verifyResult,
   memoryReplayStore,
