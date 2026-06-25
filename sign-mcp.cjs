@@ -119,13 +119,18 @@ async function initPqProvider(opts = {}) {
       }
     } catch { /* try next */ }
   }
-  // 3: @noble/post-quantum fallback
-  try {
-    const noble = await import('@noble/post-quantum/ml-dsa');
-    const d = noble.ml_dsa65;
-    _pq = { sign: (sk, msg) => d.sign(sk, msg), verify: (pk, msg, sig) => d.verify(pk, msg, sig), keygen: () => d.keygen() };
-    REG['ml-dsa-65'].available = true; return true;
-  } catch { /* absent */ }
+  // 3: @noble/post-quantum fallback (export subpath differs by version: 0.6.x = './ml-dsa.js')
+  for (const sub of ['@noble/post-quantum/ml-dsa.js', '@noble/post-quantum/ml-dsa']) {
+    try {
+      const noble = await import(sub);
+      const d = noble.ml_dsa65;
+      if (!d) continue;
+      // noble 0.6.x arg order is sign(message, secretKey) / verify(signature, message, publicKey)
+      // — the REVERSE of @rootz/pq-crypto. Normalize to the common (sk,msg)/(pk,msg,sig) interface.
+      _pq = { sign: (sk, msg) => d.sign(msg, sk), verify: (pk, msg, sig) => d.verify(sig, msg, pk), keygen: () => d.keygen() };
+      REG['ml-dsa-65'].available = true; return true;
+    } catch { /* try next form */ }
+  }
   return false;
 }
 
