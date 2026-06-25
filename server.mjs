@@ -1,22 +1,198 @@
 import { createServer } from 'node:http';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3070;
+const HITS_LOG = join(__dirname, 'hits.jsonl');
 
-const indexHtml = readFileSync(join(__dirname, 'index.html'), 'utf-8');
-const techHtml = readFileSync(join(__dirname, 'tech.html'), 'utf-8');
-const tourHtml = readFileSync(join(__dirname, 'tour.html'), 'utf-8');
-const routerTourHtml = readFileSync(join(__dirname, 'router-tour.html'), 'utf-8');
-const wellKnownAi = readFileSync(join(__dirname, 'well-known-ai.json'), 'utf-8');
-const sitemapXml = readFileSync(join(__dirname, 'sitemap.xml'), 'utf-8');
-const llmsTxt = readFileSync(join(__dirname, 'llms.txt'), 'utf-8');
-const knowledgeJson = readFileSync(join(__dirname, 'knowledge.json'), 'utf-8');
-const feedJson = readFileSync(join(__dirname, 'feed.json'), 'utf-8');
+// --- Signed MCP: vendored capability (CJS) loaded into this ESM server ---
+const require = createRequire(import.meta.url);
+const S = require('./sign-mcp.cjs');
+const KEYS_PATH = join(__dirname, 'proof-mcp-keys.json');
+const PROOF_ISS = 'proof.rootz.global';
+const PROOF_KID = 'proof-2026a';
+const PROOF_CORPID = '0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664';
+
+const pqOk = await S.initPqProvider().catch(() => false); // activates @rootz/pq-crypto ML-DSA-65 if present
+let mcpKeyset;
+if (existsSync(KEYS_PATH)) {
+  mcpKeyset = JSON.parse(readFileSync(KEYS_PATH, 'utf-8'));
+} else {
+  const algs = ['ed25519', 'ecdsa-p256'];
+  if (pqOk) algs.push('ml-dsa-65');
+  mcpKeyset = S.generateKeyset({ iss: PROOF_ISS, kid: PROOF_KID, corpid: PROOF_CORPID, algs });
+  try { writeFileSync(KEYS_PATH, JSON.stringify(mcpKeyset), { mode: 0o600 }); } catch (e) {}
+}
+const mcpResolver = S.resolverFromKeyset(mcpKeyset);
+const signedMcpHtml = existsSync(join(__dirname, 'signed-mcp.html')) ? readFileSync(join(__dirname, 'signed-mcp.html'), 'utf-8') : null;
+
+function readJsonBody(req, res, cb) {
+  let body = '';
+  req.on('data', (c) => { body += c; if (body.length > 1e6) req.destroy(); });
+  req.on('end', () => { try { cb(JSON.parse(body || '{}')); } catch (e) { res.writeHead(400, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'bad-json' })); } });
+}
+function sampleSignedResponse() {
+  const result = { content: [{ type: 'text', text: 'This MCP response is signed by proof.rootz.global. Its origin, integrity, and freshness are provable independent of transport.' }] };
+  const env = S.sign(result, { keyset: mcpKeyset, ctx: { method: 'tools/call', tool: 'demo', aud: PROOF_ISS } });
+  return { object: result, envelope: env };
+}
+
+// Load static files
+const loadFile = (name) => {
+  const path = join(__dirname, name);
+  return existsSync(path) ? readFileSync(path, 'utf-8') : null;
+};
+
+const indexHtml = loadFile('index.html');
+const techHtml = loadFile('tech.html');
+const tourHtml = loadFile('tour.html');
+const routerTourHtml = loadFile('router-tour.html');
+const complianceHtml = loadFile('compliance.html');
+const wellKnownAi = loadFile('well-known-ai.json');
+const sitemapXml = loadFile('sitemap.xml');
+const llmsTxt = loadFile('llms.txt');
+const knowledgeJson = loadFile('knowledge.json');
+const feedJson = loadFile('feed.json');
+
+// --- Analytics: simple hit logging ---
+
+function logHit(req, page, extra) {
+  const entry = {
+    ts: new Date().toISOString(),
+    page: page || req.url,
+    ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress || '',
+    ua: req.headers['user-agent'] || '',
+    ref: req.headers['referer'] || '',
+    ...extra
+  };
+  try {
+    appendFileSync(HITS_LOG, JSON.stringify(entry) + '\n');
+  } catch (e) { /* ignore write errors */ }
+}
+
+function isBot(ua) {
+  if (!ua) return false;
+  const bots = /bot|crawl|spider|slurp|GPTBot|Claude|Anthropic|Google|Bing|Perplexity|ChatGPT|cohere|ai2|applebot/i;
+  return bots.test(ua);
+}
+
+// --- Request handler ---
 
 const server = createServer((req, res) => {
+  const ua = req.headers['user-agent'] || '';
+  const bot = isBot(ua);
+
+  // Analytics beacon endpoint
+  if (req.method === 'POST' && req.url === '/hit') {
+    let body = '';
+    req.on('data', c => { body += c; if (body.length > 2048) req.destroy(); });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body);
+        logHit(req, data.p, { referrer: data.r, width: data.w, beacon: true });
+      } catch (e) { /* ignore bad payloads */ }
+      res.writeHead(204);
+      res.end();
+    });
+    return;
+  }
+
+  // Analytics stats (protected — only from localhost or with key)
+  if (req.url === '/stats' || req.url === '/stats/') {
+    const isLocal = req.socket.remoteAddress === '127.0.0.1' || req.socket.remoteAddress === '::1';
+    const hasKey = req.url.includes('key=' + (process.env.STATS_KEY || 'rootz2026'));
+    if (!isLocal && !hasKey) {
+      res.writeHead(403, { 'Content-Type': 'text/plain' });
+      res.end('Forbidden');
+      return;
+    }
+    try {
+      const lines = existsSync(HITS_LOG) ? readFileSync(HITS_LOG, 'utf-8').trim().split('\n') : [];
+      const hits = lines.map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+      const last24h = hits.filter(h => new Date(h.ts) > new Date(Date.now() - 86400000));
+      const pages = {};
+      const bots = {};
+      last24h.forEach(h => {
+        pages[h.page] = (pages[h.page] || 0) + 1;
+        if (isBot(h.ua)) {
+          const name = h.ua.match(/GPTBot|Claude|Anthropic|Google|Bing|Perplexity|ChatGPT|cohere|applebot|bot/i)?.[0] || 'other';
+          bots[name] = (bots[name] || 0) + 1;
+        }
+      });
+      const stats = {
+        total: hits.length,
+        last24h: last24h.length,
+        pages,
+        bots,
+        lastHit: hits.length > 0 ? hits[hits.length - 1] : null
+      };
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(stats, null, 2));
+    } catch (e) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ total: 0, error: e.message }));
+    }
+    return;
+  }
+
+  // --- Signed MCP: verifier + key discovery (CORS-enabled, opt-in) ---
+
+  // CORS preflight for the public verifier
+  if (req.method === 'OPTIONS' && (req.url === '/verify' || req.url === '/sign-demo')) {
+    res.writeHead(204, { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' });
+    res.end();
+    return;
+  }
+
+  // JWKS — public verification keys (DKIM-style discovery, HTTPS path)
+  if (req.url === '/.well-known/mcp-jwks.json') {
+    logHit(req, req.url, { bot });
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' });
+    res.end(JSON.stringify(S.jwks(mcpKeyset), null, 2));
+    return;
+  }
+
+  // Grab a freshly-signed sample response to paste into /verify
+  if (req.url === '/sign-demo') {
+    logHit(req, req.url, { bot });
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+    res.end(JSON.stringify(sampleSignedResponse(), null, 2));
+    return;
+  }
+
+  // Public verifier — POST { object, envelope } -> { valid, reasons, algs }
+  if (req.method === 'POST' && req.url === '/verify') {
+    readJsonBody(req, res, (data) => {
+      logHit(req, '/verify', { bot });
+      const { object, envelope } = data || {};
+      if (!object || !envelope) { res.writeHead(400, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }); res.end(JSON.stringify({ error: 'send { object, envelope }' })); return; }
+      let out;
+      try { out = S.verify(object, envelope, { keyResolver: mcpResolver }); }
+      catch (e) { out = { valid: false, reasons: ['verify-error:' + e.message], algs: {} }; }
+      // note when the issuer/kid isn't one this verifier holds keys for (future: DNS/JWKS fetch)
+      if (out.reasons.some((r) => r.startsWith('no-key'))) out.note = `This verifier currently resolves keys for ${PROOF_ISS} (${PROOF_KID}). Generic DNS/JWKS resolution for arbitrary issuers is on the roadmap.`;
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+      res.end(JSON.stringify(out, null, 2));
+    });
+    return;
+  }
+
+  // Explainer page
+  if (req.url === '/signed-mcp' || req.url === '/signed-mcp/' || req.url === '/signed-mcp.html') {
+    logHit(req, req.url, { bot });
+    if (signedMcpHtml) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }); res.end(signedMcpHtml); }
+    else { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('signed-mcp.html not built'); }
+    return;
+  }
+
+  // Log every page view
+  logHit(req, req.url, { bot });
+
+  // --- Static routes ---
+
   // AI Discovery Standard
   if (req.url === '/.well-known/ai' || req.url === '/.well-known/ai/') {
     res.writeHead(200, {
@@ -92,10 +268,31 @@ const server = createServer((req, res) => {
     return;
   }
 
+  // Compliance demo page
+  if (req.url === '/compliance' || req.url === '/compliance/') {
+    if (complianceHtml) {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
+      res.end(complianceHtml);
+    } else {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(indexHtml); // fallback to index until compliance.html is built
+    }
+    return;
+  }
+
   // Health check
   if (req.url === '/health') {
+    const hitCount = existsSync(HITS_LOG) ? readFileSync(HITS_LOG, 'utf-8').trim().split('\n').length : 0;
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', service: 'proof.rootz.global', version: '1.1.0' }));
+    res.end(JSON.stringify({
+      status: 'ok',
+      service: 'proof.rootz.global',
+      version: '2.0.0',
+      updated: '2026-05-26',
+      pages: ['/', '/tour', '/tech', '/router', '/compliance'],
+      hits: hitCount,
+      features: ['five-eyes-alignment', 'patent-us-2025-0112783', 'post-quantum', 'compliance-demo', 'analytics']
+    }));
     return;
   }
 
@@ -108,5 +305,8 @@ const server = createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`proof.rootz.global running on port ${PORT}`);
+  console.log(`proof.rootz.global v2.0.0 running on port ${PORT}`);
+  console.log(`  Pages: / /tour /tech /router /compliance`);
+  console.log(`  Analytics: /hit (beacon) /stats (dashboard)`);
+  console.log(`  Discovery: /.well-known/ai`);
 });

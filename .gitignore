@@ -1,0 +1,8 @@
+# private signing key material — NEVER commit
+proof-mcp-keys.json
+*.key
+.fleet-signing-key.json
+
+# runtime / local
+hits.jsonl
+node_modules/
