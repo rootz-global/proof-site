@@ -105,7 +105,7 @@
   <section><div class="wrap">
     <h2>What makes it different</h2>
     <div class="grid">
-      <div class="card"><h3>Identity, not just a key</h3><p>Anyone can bolt a key onto a response. Keys are published in the issuing domain's <strong>DNS</strong> (DKIM-style selector) and at <code>/.well-known/mcp-jwks.json</code>, and bound to a verifiable <strong>legal entity (CorpID)</strong>. The chain is signature → domain key → legal entity. No CA, no allow-list.</p></div>
+      <div class="card"><h3>Domain-anchored keys</h3><p>Keys are published in the issuing domain's own <strong>DNS</strong> (DKIM-style selector) and at <code>/.well-known/mcp-jwks.json</code> — the domain vouches for its output. No CA, no central allow-list. Stronger entity-level anchoring is on the roadmap.</p></div>
       <div class="card"><h3>Crypto-agile + post-quantum</h3><p>An algorithm registry, never a hardcoded alg. Today: <span class="pill">ed25519</span><span class="pill">ecdsa-p256</span><span class="pill">ml-dsa-65 · FIPS 204</span>. The envelope carries <strong>multiple signatures</strong>, so classical + PQ run <strong>hybrid</strong> through the transition.</p></div>
       <div class="card"><h3>Anti tool-poisoning</h3><p>The full tool/resource <strong>definition</strong> (its description + input schema — the text the model reads) is signed in <code>tools/list</code>. A swapped or poisoned definition fails verification.</p></div>
       <div class="card"><h3>Non-breaking</h3><p>The signature lives in the spec-sanctioned <code>result._meta["rootz.global/sig"]</code>. Clients that don't verify simply ignore it. Verification is opt-in.</p></div>
@@ -116,8 +116,8 @@
     <h2>Verify it yourself</h2>
     <p class="muted">Pull a freshly signed response from this server, then verify it. Tamper with the JSON and watch it fail.</p>
     <div class="demo">
-      <button class="btn" id="getSample">Get a signed sample →</button>
-      <button class="btn alt" id="verifyBtn">Verify</button>
+      <button type="button" class="btn" id="getSample">Get a signed sample →</button>
+      <button type="button" class="btn alt" id="verifyBtn">Verify</button>
       <textarea id="payload" placeholder='{ "object": {...}, "envelope": {...} }'></textarea>
       <div id="verdict"></div>
     </div>
@@ -131,13 +131,12 @@ curl -X POST https://proof.rootz.global/verify \
     <h2>The envelope</h2>
     <pre>result._meta["rootz.global/sig"] = {
   "v": 1, "iss": "proof.rootz.global", "kid": "proof-2026a",
-  "corpid": "0xD36A…1664",                         // legal-entity binding
   "canon": "RFC8785",                              // JSON Canonicalization (RFC 8785)
   "payload": { "alg": "sha-256", "hash": "…" },    // hash of the canonical content
   "ts": "…Z", "exp": "…Z", "nonce": "…",           // freshness + replay (NSA)
   "ctx": { "method": "tools/call", "tool": "…",
            "req_id": "…", "aud": "proof.rootz.global" },   // bind to context (NSA)
-  "algs": ["ed25519","ecdsa-p256","ml-dsa-65"],    // downgrade guard (signed)
+  "algs": ["ed25519","ecdsa-p256","ml-dsa-65"],    // crypto-agile, hybrid classical+PQ
   "sigs": { "ed25519": "…", "ecdsa-p256": "…", "ml-dsa-65": "…" }
 }</pre>
     <p class="muted">Every signature covers the <code>algs</code> list, so stripping the post-quantum signature while leaving it claimed fails closed. Keys discover from <a href="/.well-known/mcp-jwks.json">/.well-known/mcp-jwks.json</a> and a DNS selector.</p>
