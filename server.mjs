@@ -3,10 +3,23 @@ import { readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { Binder, infer as binderInfer, callModel as binderCallModel } from './origin-binder.mjs';
+import { buildManifest, assemble, historyRoot, sessionAppend, sessionGet, sessionEnd, DEMO_SYSTEM, DEMO_TOOLS } from './manifest-service.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3070;
 const HITS_LOG = join(__dirname, 'hits.jsonl');
+
+// Load .env from the app dir (e.g. ANTHROPIC_API_KEY) if present — values are never logged.
+try {
+  const envPath = join(__dirname, '.env');
+  if (existsSync(envPath)) {
+    for (const line of readFileSync(envPath, 'utf-8').split('\n')) {
+      const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+      if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+    }
+  }
+} catch (e) { /* ignore */ }
 
 // --- Signed MCP: vendored capability (CJS) loaded into this ESM server ---
 const require = createRequire(import.meta.url);
@@ -69,6 +82,32 @@ const sitemapXml = loadFile('sitemap.xml');
 const llmsTxt = loadFile('llms.txt');
 const knowledgeJson = loadFile('knowledge.json');
 const feedJson = loadFile('feed.json');
+const aiMd = loadFile('ai.md');
+const originHtml = loadFile('origin.html');
+const manifestHtml = loadFile('manifest.html');
+
+// --- Proof of Origin (Pillar 1) binder: persisted P-256 identity + model call ---
+const BINDER = await Binder.load(join(__dirname, '.binder_keys.json'));
+const PROOF_MODEL = process.env.PROOF_MODEL || 'claude-opus-4-8';
+const REAL_CLAUDE = !!process.env.ANTHROPIC_API_KEY && !process.env.PROOF_MOCK;
+
+// --- Demo guardrail: per-IP daily cap + email/feedback gate (protects the open Claude link) ---
+const DEMO_MSG_LIMIT = +(process.env.DEMO_MSG_LIMIT || 4);
+const DEMO_GLOBAL_LIMIT = +(process.env.DEMO_GLOBAL_LIMIT || 300);
+const USAGE_PATH = join(__dirname, 'demo-usage.json');
+const LEADS_PATH = join(__dirname, 'demo-leads.jsonl');
+const demoDay = () => new Date().toISOString().slice(0, 10);
+let usage = { date: demoDay(), total: 0, ips: {} };
+try { if (existsSync(USAGE_PATH)) { const u = JSON.parse(readFileSync(USAGE_PATH, 'utf-8')); if (u && u.date === demoDay()) usage = u; } } catch (e) {}
+const saveUsage = () => { try { writeFileSync(USAGE_PATH, JSON.stringify(usage)); } catch (e) {} };
+const rollDay = () => { if (usage.date !== demoDay()) { usage = { date: demoDay(), total: 0, ips: {} }; saveUsage(); } };
+const clientIp = (req) => {
+  // Trust ONLY the last hop: nginx appends the real client IP on the right ($proxy_add_x_forwarded_for).
+  // The leftmost X-Forwarded-For values are client-supplied and must NOT be trusted for rate limiting.
+  const xff = String(req.headers['x-forwarded-for'] || '').split(',').map((s) => s.trim()).filter(Boolean);
+  return xff.length ? xff[xff.length - 1] : (req.socket.remoteAddress || 'unknown');
+};
+const emailOk = (e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e);
 
 // --- Analytics: simple hit logging ---
 
@@ -202,6 +241,104 @@ const server = createServer((req, res) => {
     return;
   }
 
+  // --- Proof of Origin (Pillar 1): binder public key + infer ---
+  if (req.url === '/api/pubkeys') {
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ binder_sign_pub: BINDER.pubHex, real_claude: REAL_CLAUDE, model: REAL_CLAUDE ? PROOF_MODEL : null }));
+    return;
+  }
+  if (req.method === 'POST' && req.url === '/api/infer') {
+    readJsonBody(req, res, async (data) => {
+      logHit(req, '/api/infer', { bot });
+      const send = (obj) => { res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(obj)); };
+      rollDay();
+      const ip = clientIp(req);
+      const used = usage.ips[ip] || 0;
+      if (usage.total >= DEMO_GLOBAL_LIMIT) { send({ gate: 'global', message: "The public demo has reached today's global limit. Leave your email below and it reopens tomorrow — or reach us at discover@rootz.global for full access." }); return; }
+      if (used >= DEMO_MSG_LIMIT) { send({ gate: 'email', used, limit: DEMO_MSG_LIMIT, message: `You've used your ${DEMO_MSG_LIMIT} demo messages for today. Leave your email + a quick note and you can pick it back up tomorrow.` }); return; }
+      try {
+        const out = await binderInfer(data && data.intent, BINDER);
+        if (!out.error) { usage.ips[ip] = used + 1; usage.total += 1; saveUsage(); out.remaining = Math.max(0, DEMO_MSG_LIMIT - usage.ips[ip]); }
+        send(out);
+      } catch (e) { send({ error: 'binder-error:' + e.message }); }
+    });
+    return;
+  }
+
+  // Demo lead capture (email + feedback at the gate)
+  if (req.method === 'POST' && req.url === '/api/feedback') {
+    readJsonBody(req, res, (data) => {
+      const send = (obj) => { res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }); res.end(JSON.stringify(obj)); };
+      const email = String((data && data.email) || '').trim().slice(0, 200);
+      const feedback = String((data && data.feedback) || '').slice(0, 2000);
+      if (!emailOk(email)) { send({ ok: false, error: 'invalid-email' }); return; }
+      try { appendFileSync(LEADS_PATH, JSON.stringify({ ts: new Date().toISOString(), ip: clientIp(req), date: demoDay(), email, feedback }) + '\n'); } catch (e) {}
+      send({ ok: true });
+    });
+    return;
+  }
+
+  // --- Signed Manifest of Hashes (DESIGN §3.9): build, recover, end/disposition ---
+  if (req.method === 'POST' && req.url === '/api/manifest') {
+    readJsonBody(req, res, async (data) => {
+      logHit(req, '/api/manifest', { bot });
+      const send = (obj) => { res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(obj)); };
+      rollDay();
+      const ip = clientIp(req);
+      const used = usage.ips[ip] || 0;
+      if (usage.total >= DEMO_GLOBAL_LIMIT) { send({ gate: 'global', message: "The public demo has reached today's global limit. Reach us at discover@rootz.global for full access." }); return; }
+      if (used >= DEMO_MSG_LIMIT) { send({ gate: 'email', message: `You've used your ${DEMO_MSG_LIMIT} demo messages for today.` }); return; }
+      try {
+        const session_id = String((data && data.session_id) || ('s_' + Math.random().toString(16).slice(2, 12)));
+        const prompt = String((data && data.prompt) || '');
+        const context = Array.isArray(data && data.context) ? data.context.slice(0, 4).map((c) => ({ ref: String(c.ref || 'doc').slice(0, 60), text: String(c.text || '').slice(0, 4000) })) : [];
+        if (!prompt) { send({ error: 'no-prompt' }); return; }
+        const m = await binderCallModel(assemble(prompt, context));
+        const { object, manifest_root } = buildManifest({ session_id, prompt, context, model: m.model, output: m.text, history_root: historyRoot(session_id) });
+        const envelope = S.sign(object, { keyset: mcpKeyset, ctx: { method: 'manifest', session: session_id, aud: PROOF_ISS } });
+        const s = sessionAppend(session_id, { root: manifest_root, prompt_hash: object.prompt_hash, output_hash: object.output_hash, ts: object.ts }, data && data.disposition, data && data.email);
+        usage.ips[ip] = used + 1; usage.total += 1; saveUsage();
+        send({ object, envelope, manifest_root, output: m.text, real: m.real, remaining: Math.max(0, DEMO_MSG_LIMIT - usage.ips[ip]),
+          preimages: { system: DEMO_SYSTEM, tools: DEMO_TOOLS, context, prompt, output: m.text },
+          session: { id: session_id, count: s.entries.length, running_root: s.running_root, disposition: s.disposition } });
+      } catch (e) { send({ error: 'manifest-error:' + e.message }); }
+    });
+    return;
+  }
+  if (req.method === 'GET' && req.url.startsWith('/api/manifest/session/')) {
+    const id = decodeURIComponent(req.url.slice('/api/manifest/session/'.length));
+    const s = sessionGet(id);
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify(s ? { session_id: id, messages: s.entries.length, running_root: s.running_root, disposition: s.disposition, ended: s.ended || null, entries: s.entries } : { error: 'not-found-or-expired', session_id: id }));
+    return;
+  }
+  if (req.method === 'POST' && req.url === '/api/manifest/end') {
+    readJsonBody(req, res, (data) => {
+      const send = (o) => { res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(o)); };
+      const id = String((data && data.session_id) || '');
+      const disp = String((data && data.disposition) || 'hold');
+      if (disp === 'email' && !emailOk(String((data && data.email) || ''))) { send({ ok: false, error: 'invalid-email' }); return; }
+      const r = sessionEnd(id, disp, data && data.email);
+      if (r.ok && (disp === 'email' || disp === 'wallet')) { try { appendFileSync(join(__dirname, 'demo-manifests.jsonl'), JSON.stringify({ ts: new Date().toISOString(), ip: clientIp(req), session_id: id, disposition: disp, running_root: r.running_root, email: (data && data.email) || null }) + '\n'); } catch (e) {} }
+      send(r);
+    });
+    return;
+  }
+  if (req.url === '/manifest' || req.url === '/manifest/' || req.url === '/manifest.html') {
+    logHit(req, req.url, { bot });
+    if (manifestHtml) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=600' }); res.end(manifestHtml); }
+    else { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('manifest.html not built'); }
+    return;
+  }
+
+  // Proof of Origin demo page
+  if (req.url === '/origin' || req.url === '/origin/' || req.url === '/origin.html') {
+    logHit(req, req.url, { bot });
+    if (originHtml) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=600' }); res.end(originHtml); }
+    else { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('origin.html not built'); }
+    return;
+  }
+
   // Explainer page
   if (req.url === '/signed-mcp' || req.url === '/signed-mcp/' || req.url === '/signed-mcp.html') {
     logHit(req, req.url, { bot });
@@ -259,6 +396,20 @@ const server = createServer((req, res) => {
   if (req.url === '/llms.txt') {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=3600' });
     res.end(llmsTxt);
+    return;
+  }
+
+  // AI brief (Markdown) — the human-readable-for-AI source of record, organized by pillar
+  if (req.url === '/ai.md' || req.url === '/ai.md/') {
+    res.writeHead(aiMd ? 200 : 404, { 'Content-Type': 'text/markdown; charset=utf-8', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' });
+    res.end(aiMd || '# ai.md not built\n');
+    return;
+  }
+
+  // AI brief (JSON) — friendly alias for /.well-known/ai
+  if (req.url === '/ai.json' || req.url === '/ai.json/') {
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=3600' });
+    res.end(wellKnownAi);
     return;
   }
 

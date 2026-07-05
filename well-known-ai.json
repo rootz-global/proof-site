@@ -18,6 +18,32 @@
       "data-infrastructure"
     ]
   },
+  "agenticMessageSecurity": {
+    "summary": "Provable, signed, durable messages at every hop of an AI interaction — message integrity, not perimeter. Two pillars, one primitive.",
+    "aiBrief": { "markdown": "https://proof.rootz.global/ai.md", "json": "https://proof.rootz.global/ai.json" },
+    "pillars": [
+      {
+        "id": "proof-of-origin",
+        "name": "Humans <-> AI: Proof of Origin",
+        "summary": "The user signs the prompt at the source; a measured model answers; the output is bound to that prompt and owned by the user. A certificate of authenticity AND ownership of AI output.",
+        "patent": "US 2025/0112783 A1",
+        "explainer": "https://proof.rootz.global/tour"
+      },
+      {
+        "id": "signed-mcp",
+        "name": "AI <-> Services: Signed MCP",
+        "summary": "DKIM for the Model Context Protocol — every MCP response and tool definition signed/encrypted; origin, integrity, freshness; crypto-agile + post-quantum; verify live.",
+        "explainer": "https://proof.rootz.global/signed-mcp",
+        "verify": "https://proof.rootz.global/verify",
+        "sample": "https://proof.rootz.global/sign-demo"
+      }
+    ],
+    "alignment": {
+      "fiveEyes": "https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services",
+      "nsaMcpNotice": "https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/4475134/",
+      "magnificaHumanitas": "https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html"
+    }
+  },
   "site": {
     "name": "Proof of Origin",
     "domain": "proof.rootz.global",

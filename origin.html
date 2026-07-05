@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Proof of Origin — talk to your LLM and own the answer | Rootz</title>
+<meta name="description" content="Pillar 1: you sign your prompt on this device, a measured binder calls the model, and you get back a signed answer cryptographically bound to your prompt — you own it. Green light = verified; tamper turns it red.">
+<link rel="alternate" type="text/markdown" href="/ai.md" title="AI brief (Markdown)">
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c232d;--line:#2a323d;--txt:#e6edf3;--dim:#8b949e;
+        --ok:#3fb950;--bad:#f85149;--user:#1f6feb;--chip:#21262d;--indigo:#4f46e5;}
+  *{box-sizing:border-box} body{margin:0;height:100vh;background:var(--bg);color:var(--txt);
+    font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
+  .sitenav{display:flex;align-items:center;gap:18px;padding:9px 18px;background:#0b0e13;border-bottom:1px solid var(--line);font-size:13px}
+  .sitenav a{color:var(--dim);text-decoration:none}.sitenav a.brand{color:#fff;font-weight:700}
+  .sitenav a:hover{color:#fff}.sitenav .sp{margin-left:auto}
+  .top{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:600}
+  .shield{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#238636,#2ea043);display:grid;place-items:center;font-size:12px}
+  .badge{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--dim);background:var(--chip);padding:5px 10px;border-radius:20px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  .msgs{flex:1;overflow-y:auto;padding:22px 16px;display:flex;flex-direction:column;gap:14px;max-width:860px;width:100%;margin:0 auto}
+  .msg{max-width:680px;display:flex;flex-direction:column;gap:4px}.msg.user{align-self:flex-end;align-items:flex-end}
+  .bub{padding:10px 14px;border-radius:14px;white-space:pre-wrap}
+  .user .bub{background:var(--user);color:#fff;border-bottom-right-radius:4px}
+  .ai .bub{background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .st{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--dim);cursor:pointer}
+  .light{width:11px;height:11px;border-radius:50%}.light.ok{background:var(--ok);box-shadow:0 0 7px var(--ok)}
+  .light.bad{background:var(--bad);box-shadow:0 0 7px var(--bad);animation:bk 1s infinite}@keyframes bk{50%{opacity:.35}}
+  .det{margin-top:4px;font:12px/1.6 ui-monospace,Menlo,monospace;background:#0b0e13;border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:none;max-width:680px}
+  .det.show{display:block}.okc{color:var(--ok)}.badc{color:var(--bad)}
+  .comp{border-top:1px solid var(--line);padding:13px 16px;background:var(--panel);max-width:860px;width:100%;margin:0 auto}
+  .row{display:flex;gap:10px;align-items:flex-end}
+  textarea{flex:1;resize:none;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:11px 14px;font:14px inherit;max-height:140px}
+  button.send{background:var(--user);color:#fff;border:0;border-radius:12px;padding:11px 18px;font-weight:600;cursor:pointer}
+  .hint{margin-top:7px;font-size:11px;color:var(--dim)}.hint code{background:var(--chip);padding:1px 6px;border-radius:5px}
+  .ev{font:12px/1.6 ui-monospace,Menlo,monospace;background:#0b0e13;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+</style>
+</head>
+<body>
+  <div class="sitenav">
+    <a class="brand" href="/">Rootz · Proof</a>
+    <a href="/#proof-of-origin">Proof of Origin</a>
+    <a href="/signed-mcp">Signed MCP</a>
+    <a href="/compliance">Compliance</a>
+    <a href="/ai.md">For AI</a>
+    <span class="sp"></span>
+    <a href="#" id="evlink">/evidence</a>
+  </div>
+  <div class="top">
+    <div class="brand"><div class="shield">🛡️</div> Proof of Origin — talk to your LLM <span id="mode" style="color:var(--dim);font-weight:400;font-size:12px"></span></div>
+    <div class="badge"><span class="dot"></span> Signed at your device · you own the answer <span id="left" style="margin-left:8px;color:var(--dim)"></span></div>
+  </div>
+  <div class="msgs" id="msgs">
+    <div class="msg ai"><div class="bub">This is Pillar 1. Your prompt is <b>signed on this device</b> (a key generated in your browser) before it leaves. A measured binder runs it through the model and returns a signed answer <b>cryptographically bound to your prompt</b> — you get a green light if it verifies, a check-engine light if anything was altered. Type <code>/evidence</code> for your session proof.</div></div>
+  </div>
+  <div class="comp">
+    <div class="row"><textarea id="in" rows="1" placeholder="Message your LLM…"></textarea><button class="send" id="send">Send</button></div>
+    <div class="hint">Signed with WebCrypto P-256 in your browser. Click any status light for the full proof — origin, model identity, prompt↔output binding, Merkle root, anchor.</div>
+  </div>
+
+<script type="module">
+const $=s=>document.querySelector(s), msgs=$('#msgs'), input=$('#in');
+const enc=new TextEncoder();
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+const unhex=h=>new Uint8Array(h.match(/../g).map(x=>parseInt(x,16)));
+const sortDeep=v=>Array.isArray(v)?v.map(sortDeep):(v&&typeof v==='object'?Object.keys(v).sort().reduce((o,k)=>(o[k]=sortDeep(v[k]),o),{}):v);
+const canon=o=>enc.encode(JSON.stringify(sortDeep(o)));
+const sha=async b=>hex(await crypto.subtle.digest('SHA-256',b));
+const randHex=n=>hex(crypto.getRandomValues(new Uint8Array(n)));
+
+let kp,pubHex,pubkeys,session={n:0,last:null,model:null};
+const USER="alice@web";
+
+async function boot(){
+  pubkeys=await fetch('/api/pubkeys').then(r=>r.json());
+  $('#mode').textContent = pubkeys.real_claude ? "· real Claude ("+(pubkeys.model||'')+")" : "· MOCK (no key bound)";
+  kp=await crypto.subtle.generateKey({name:'ECDSA',namedCurve:'P-256'},true,['sign','verify']);
+  pubHex=hex(await crypto.subtle.exportKey('raw',kp.publicKey));
+}
+const signRaw=async bytes=>hex(await crypto.subtle.sign({name:'ECDSA',hash:'SHA-256'},kp.privateKey,bytes));
+async function makeEvent(type,body){const ev={type,body,signer_role:'customer',signer_pub:pubHex};
+  ev.sig=await signRaw(canon(ev));return ev;}
+async function importPub(h){return crypto.subtle.importKey('raw',unhex(h),{name:'ECDSA',namedCurve:'P-256'},false,['verify']);}
+async function verifyEvent(ev){const sp={type:ev.type,body:ev.body,signer_role:ev.signer_role,signer_pub:ev.signer_pub};
+  return crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},await importPub(ev.signer_pub),unhex(ev.sig),canon(sp));}
+async function verifyWallet(w){const s={wallet_id:w.wallet_id,genesis:w.genesis,events:w.events,merkle_root:w.merkle_root,anchor:w.anchor,binder_pub:w.binder_pub};
+  return crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},await importPub(w.binder_pub),unhex(w.sig),canon(s));}
+async function leaf(ev){return sha(canon(ev));}
+async function merkle(leaves){if(!leaves.length)return sha(new Uint8Array());
+  let lvl=leaves.map(unhex);
+  while(lvl.length>1){const nx=[];for(let i=0;i<lvl.length;i+=2){const a=lvl[i],b=i+1<lvl.length?lvl[i+1]:lvl[i];
+    const c=new Uint8Array(a.length+b.length);c.set(a);c.set(b,a.length);nx.push(new Uint8Array(await crypto.subtle.digest('SHA-256',c)));}lvl=nx;}
+  return hex(lvl[0]);}
+
+async function validate(w, answerText){
+  const checks=[]; const chk=(n,c)=>{checks.push([n,!!c]);return !!c;};
+  chk('genesis_customer_signature', await verifyEvent(w.genesis));
+  const evs={}; for(const e of w.events){evs[e.type]=e; chk('event_sig:'+e.type, await verifyEvent(e));}
+  chk('binder_wallet_signature', await verifyWallet(w));
+  const leaves=[await leaf(w.genesis)]; for(const e of w.events) leaves.push(await leaf(e));
+  chk('merkle_root_integrity', (await merkle(leaves))===w.merkle_root);
+  chk('binder_key_matches_pubkeys', w.binder_pub===pubkeys.binder_sign_pub);
+  chk('model_identity_present', !!evs.model_identity);
+  chk('output_bound_to_prompt', evs.output && evs.output.body.prompt_hash===w.genesis.body.prompt_hash);
+  if(answerText!=null) chk('output_hash_matches_answer', evs.output && (await sha(enc.encode(answerText)))===evs.output.body.output_hash);
+  chk('anchored', !!(w.anchor&&w.anchor.tx));
+  return {ok:checks.every(c=>c[1]),checks,evs};
+}
+
+function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function scroll(){msgs.scrollTop=msgs.scrollHeight;}
+
+async function handle(text){
+  if(text.trim().toLowerCase()==='/evidence'){evidence();return;}
+  const u=el('div','msg user');u.appendChild(el('div','bub',esc(text)));msgs.appendChild(u);scroll();
+  const ph=await sha(enc.encode(text));
+  const body={prompt_hash:ph,controls:{machine_integrity:'browser(mock)',user_identity:{name:USER,pub:pubHex},intent_terms:'web demo; owner='+USER},
+              nonce:randHex(16),timestamp:Math.floor(Date.now()/1000),encrypted:false,prompt:text};
+  const genesis=await makeEvent('genesis_intent',body);
+  let resp;
+  try{ resp=await fetch('/api/infer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({intent:genesis})}).then(r=>r.json()); }
+  catch(e){ addAI('[network error]',{ok:false,checks:[['network',false]],evs:{}}); return; }
+  if(resp.gate){ showGate(resp); return; }
+  if(resp.error){ addAI('[binder rejected: '+resp.error+']',{ok:false,checks:[[resp.error,false]],evs:{}}); return; }
+  const v=await validate(resp.wallet, resp.output);
+  session.n++; session.last=resp.wallet; session.model=(v.evs.model_identity||{}).body?.model;
+  addAI(resp.output||'<no output>', v, resp.wallet);
+  if(resp.remaining!=null){ const L=$('#left'); if(L) L.textContent=resp.remaining+' message'+(resp.remaining===1?'':'s')+' left today'; }
+}
+function disableComposer(msg){ input.disabled=true; $('#send').disabled=true; $('#send').style.opacity=.5; input.placeholder=msg||'Come back tomorrow for more demo messages.'; }
+function showGate(resp){
+  const m=el('div','msg ai'); m.appendChild(el('div','bub',esc(resp.message||'Leave your email to continue tomorrow.')));
+  const box=el('div','ev');
+  box.innerHTML='<div style="margin-bottom:8px">Email<br><input id="gEmail" type="email" placeholder="you@example.com" style="width:100%;margin-top:4px;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt)"></div>'
+   +'<div style="margin-bottom:8px">Feedback (optional)<br><textarea id="gFb" rows="3" placeholder="What did you think? What would make this useful for you?" style="width:100%;margin-top:4px;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--txt)"></textarea></div>'
+   +'<button id="gSend" class="send" style="border:0">Send &amp; finish</button> <span id="gMsg" style="color:var(--dim);margin-left:8px"></span>';
+  m.appendChild(box); msgs.appendChild(m); scroll();
+  box.querySelector('#gSend').onclick=async()=>{
+    const email=box.querySelector('#gEmail').value.trim(), feedback=box.querySelector('#gFb').value.trim(), gm=box.querySelector('#gMsg');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ gm.textContent='Please enter a valid email.'; return; }
+    gm.textContent='sending…';
+    try{ const r=await fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,feedback})}).then(r=>r.json());
+      if(r.ok){ box.innerHTML='✅ Thanks — noted. The demo reopens tomorrow. For full access, reach us at <b>discover@rootz.global</b>.'; disableComposer('Thanks! Come back tomorrow, or email discover@rootz.global.'); }
+      else gm.textContent='Hmm: '+(r.error||'try again'); }
+    catch(e){ gm.textContent='Network error — try again.'; }
+  };
+}
+const flip=s=>{const i=s.search(/[A-Za-z0-9]/);return i<0?(s+' [altered]'):(s.slice(0,i)+(s[i].toUpperCase()==='X'?'Q':'X')+s.slice(i+1));};
+let firstShown=false;
+function addAI(text,v,wallet){
+  const m=el('div','msg ai');const bub=el('div','bub',esc(text));m.appendChild(bub);
+  const st=el('div','st');const light=el('span','light');const label=el('span',null,'');
+  st.appendChild(light);st.appendChild(label);m.appendChild(st);
+  const det=el('div','det','');m.appendChild(det);
+  const mi=((v.evs&&v.evs.model_identity)||{}).body||{};
+  const meta=wallet?`<div style="margin-top:6px;color:#6e7681">model: ${mi.model||'?'} · measurement: ${(mi.measurement&&mi.measurement.level)||'n/a'} · wallet ${wallet.wallet_id.slice(0,16)}… · anchor ${wallet.anchor.tx.slice(0,18)}…</div>`:'';
+  const story=(vr)=>vr.ok
+    ? `<div style="margin-bottom:7px;color:#adbac7">Here&rsquo;s what happened: you <b>signed this prompt</b> on your device, <b>${mi.model||'the model'}</b> answered (measured: ${(mi.measurement&&mi.measurement.level)||'n/a'}), and the reply is <b>bound to your prompt</b> — every check below passed, so you own this output.</div>`
+    : `<div style="margin-bottom:7px;color:#e5837d">Here&rsquo;s what happened: the displayed answer was <b>altered</b> — the signatures are still valid, but the text no longer matches the signed hash, so <code>output_hash_matches_answer</code> fails.</div>`;
+  const paint=(vr,note)=>{light.className='light '+(vr.ok?'ok':'bad');
+    label.textContent=vr.ok?'verified — you own this output':(note||'check engine — proof failed');
+    det.innerHTML=(wallet?story(vr):'')+vr.checks.map(([n,p])=>`<div><span class="${p?'okc':'badc'}">${p?'✓':'✗'}</span> ${n}</div>`).join('')+meta;};
+  paint(v);
+  st.onclick=()=>det.classList.toggle('show');
+  if(wallet && !firstShown){ det.classList.add('show'); firstShown=true; }  // first pass: auto-open the proof
+  if(wallet){
+    const orig=text; let tampered=false;
+    const btn=el('button',null,'🔧 Tamper the answer');
+    btn.style.cssText='margin-top:8px;align-self:flex-start;background:#21262d;color:#f0f6fc;border:1px solid #2a323d;border-radius:8px;padding:6px 11px;font-size:12px;cursor:pointer';
+    btn.onclick=async()=>{
+      tampered=!tampered;
+      const shown=tampered?flip(orig):orig; bub.innerHTML=esc(shown);
+      const vr=await validate(wallet,shown);
+      paint(vr,tampered?'check engine — the answer was altered · signatures still valid, but the content no longer matches the signed hash':null);
+      det.classList.add('show');
+      btn.textContent=tampered?'↩ Restore original':'🔧 Tamper the answer';
+    };
+    m.appendChild(btn);
+  }
+  msgs.appendChild(m);scroll();
+}
+function evidence(){
+  const m=el('div','msg ai');m.appendChild(el('div','bub','Your session evidence 👇'));
+  m.appendChild(el('div','ev',
+    `SESSION\n prompts signed   ${session.n}\n owner            ${USER} (key in your browser)\n model            ${session.model||'—'}\n last wallet      ${session.last?session.last.wallet_id.slice(0,24)+'…':'—'}\n verdict          ${session.n?'✅ every output signed & owned':'(send a prompt first)'}`));
+  msgs.appendChild(m);scroll();
+}
+$('#send').onclick=()=>{const t=input.value.trim();if(!t)return;input.value='';input.style.height='auto';handle(t);};
+$('#evlink').onclick=(e)=>{e.preventDefault();evidence();};
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#send').click();}});
+input.addEventListener('input',()=>{input.style.height='auto';input.style.height=input.scrollHeight+'px';});
+boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Signed Manifest of Hashes — an SBOM for your AI message | Rootz</title>
+<meta name="description" content="Paste a prompt; the service assembles the interaction, hashes every part (system prompt, tool definitions, context docs, prompt, output), Merkle-roots them and signs it. Verify, tamper, reveal. Session-scoped with a disposition: hold, email, or write to your data wallet.">
+<link rel="alternate" type="text/markdown" href="/ai.md">
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c232d;--line:#2a323d;--txt:#e6edf3;--dim:#8b949e;
+        --ok:#3fb950;--bad:#f85149;--user:#1f6feb;--chip:#21262d;--purple:#a371f7;}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);
+    font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  a{color:#58a6ff} .wrap{max-width:900px;margin:0 auto;padding:0 18px}
+  .sitenav{display:flex;align-items:center;gap:18px;padding:9px 18px;background:#0b0e13;border-bottom:1px solid var(--line);font-size:13px}
+  .sitenav a{color:var(--dim);text-decoration:none}.sitenav a.brand{color:#fff;font-weight:700}.sitenav .sp{margin-left:auto}
+  header{padding:34px 0 22px}h1{font-size:26px;margin:0 0 8px}.lead{color:var(--dim);max-width:680px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+  label{display:block;font-size:12px;color:var(--dim);margin:8px 0 4px}
+  textarea,input[type=text],input[type=email]{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:10px;font:13px inherit}
+  textarea{resize:vertical}
+  .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  button{background:var(--user);color:#fff;border:0;border-radius:9px;padding:10px 16px;font-weight:600;cursor:pointer}
+  button.alt{background:var(--chip);color:var(--txt);border:1px solid var(--line);font-weight:500}
+  button:disabled{opacity:.5}
+  .chips label{display:inline-flex;align-items:center;gap:6px;margin:0 14px 0 0;color:var(--txt);font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--dim);font-weight:600}
+  .h{font-family:ui-monospace,Menlo,monospace;color:#9aa7b4;cursor:pointer}
+  .pre{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#adbac7;background:#0b0e13;border:1px solid var(--line);border-radius:7px;padding:8px;margin-top:5px;white-space:pre-wrap;display:none}
+  .pre.show{display:block}
+  .verdict{font-weight:700;padding:10px 12px;border-radius:8px;margin-top:10px;display:inline-block}
+  .verdict.ok{background:#0d2b1d;color:var(--ok);border:1px solid #1c5238}.verdict.bad{background:#2b1516;color:var(--bad);border:1px solid #5a2224}
+  .root{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--purple)}
+  .muted{color:var(--dim);font-size:12px}.sess{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  code{background:var(--chip);padding:1px 6px;border-radius:5px;font-size:12px}
+</style>
+</head>
+<body>
+  <div class="sitenav">
+    <a class="brand" href="/">Rootz · Proof</a>
+    <a href="/origin">Proof of Origin</a><a href="/signed-mcp">Signed MCP</a>
+    <a href="/manifest" style="color:#fff">Manifest</a><a href="/ai.md">For AI</a>
+    <span class="sp"></span><span class="muted" id="mode"></span>
+  </div>
+  <div class="wrap">
+    <header>
+      <h1>Signed Manifest of Hashes</h1>
+      <div class="lead">An <b>SBOM for your AI message.</b> Paste a prompt like you would to any assistant. The service assembles the interaction, <b>hashes every part</b> — system prompt, each tool definition, any context doc, your prompt, the answer — Merkle-roots them, and <b>signs it</b>. Then verify it, tamper with it, reveal any part, and choose what happens to the session record.</div>
+    </header>
+
+    <div class="card">
+      <div class="row"><div class="sess">session: <b id="sid"></b></div><button class="alt" id="newsess" style="padding:5px 10px">new session</button><span class="muted" id="left"></span></div>
+      <label>Your prompt</label>
+      <textarea id="prompt" rows="2" placeholder="e.g. Summarize the attached doc in one line.">What is a bill of materials, in one sentence?</textarea>
+      <label>Optional context document (its hash goes in the manifest; content stays yours)</label>
+      <input type="text" id="ctxref" placeholder="doc name (e.g. policy.txt)" style="margin-bottom:6px">
+      <textarea id="ctxtext" rows="2" placeholder="Paste a document to include as signed context…"></textarea>
+      <label>When the session ends or drops, the service should…</label>
+      <div class="chips" id="disp">
+        <label><input type="radio" name="disp" value="hold" checked> hold it (recoverable by session id, 24h)</label>
+        <label><input type="radio" name="disp" value="email"> email it</label>
+        <label><input type="radio" name="disp" value="wallet"> write to my data wallet</label>
+        <label><input type="radio" name="disp" value="discard"> discard</label>
+      </div>
+      <input type="email" id="email" placeholder="you@example.com" style="display:none;margin-top:6px;max-width:280px">
+      <div class="row" style="margin-top:12px"><button id="sign">Sign the manifest →</button><span class="muted" id="status"></span></div>
+    </div>
+
+    <div id="out"></div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div class="sess">session manifest: <b id="scount">0</b> message(s) · running root <span class="root" id="sroot">—</span></div>
+        <button class="alt" id="end" style="padding:6px 12px">End session →</button>
+      </div>
+      <div id="endout" class="muted" style="margin-top:8px"></div>
+      <div class="row" style="margin-top:10px"><input type="text" id="recid" placeholder="paste a session id to recover" style="max-width:340px"><button class="alt" id="rec" style="padding:6px 12px">Recover</button></div>
+      <div id="recout" class="muted" style="margin-top:6px"></div>
+    </div>
+  </div>
+
+<script>
+const $=id=>document.getElementById(id), enc=new TextEncoder();
+const sha=async s=>{const b=await crypto.subtle.digest('SHA-256',enc.encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');};
+const esc=s=>(s+'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const cut=h=>h?h.slice(0,20)+'…':'';
+let SID='s_'+[...crypto.getRandomValues(new Uint8Array(6))].map(x=>x.toString(16).padStart(2,'0')).join('');
+$('sid').textContent=SID;
+$('newsess').onclick=()=>{SID='s_'+[...crypto.getRandomValues(new Uint8Array(6))].map(x=>x.toString(16).padStart(2,'0')).join('');$('sid').textContent=SID;$('scount').textContent='0';$('sroot').textContent='—';$('out').innerHTML='';};
+$('disp').onchange=()=>{$('email').style.display=[...document.getElementsByName('disp')].find(r=>r.checked).value==='email'?'block':'none';};
+fetch('/api/pubkeys').then(r=>r.json()).then(p=>{$('mode').textContent=p.real_claude?'real Claude ('+(p.model||'')+')':'MOCK';}).catch(()=>{});
+
+function disp(){return [...document.getElementsByName('disp')].find(r=>r.checked).value;}
+
+$('sign').onclick=async()=>{
+  const prompt=$('prompt').value.trim(); if(!prompt){$('status').textContent='enter a prompt';return;}
+  const ctxText=$('ctxtext').value.trim(), context=ctxText?[{ref:$('ctxref').value.trim()||'doc.txt',text:ctxText}]:[];
+  $('sign').disabled=true;$('status').textContent='assembling + signing…';
+  let r; try{ r=await fetch('/api/manifest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SID,prompt,context,disposition:disp(),email:$('email').value.trim()})}).then(x=>x.json()); }
+  catch(e){ $('status').textContent='network error'; $('sign').disabled=false; return; }
+  $('sign').disabled=false;$('status').textContent='';
+  if(r.gate){ $('out').innerHTML='<div class="card"><b>Demo limit reached.</b> '+esc(r.message||'')+' Reach us at discover@rootz.global.</div>'; return; }
+  if(r.error){ $('status').textContent=r.error; return; }
+  render(r);
+  if(r.remaining!=null)$('left').textContent=r.remaining+' left today';
+  $('scount').textContent=r.session.count;$('sroot').textContent=cut(r.session.running_root);
+};
+
+function render(r){
+  const o=r.object, p=r.preimages;
+  const rows=[];
+  rows.push(row('system prompt', o.system_prompt_hash, p.system));
+  o.tools.forEach((t,i)=>rows.push(row('tool: '+t.name, t.def_hash, p.tools[i].def)));
+  o.context.forEach((c,i)=>rows.push(row('context: '+c.ref, c.hash, p.context[i]?p.context[i].text:'')));
+  rows.push(row('your prompt', o.prompt_hash, p.prompt));
+  rows.push(row('output', o.output_hash, p.output));
+  const card=document.createElement('div');card.className='card';
+  card.innerHTML=
+    '<div class="muted">answer ('+esc(o.model_id)+')</div><div style="margin:4px 0 12px">'+esc(r.output)+'</div>'+
+    '<table><tr><th>component</th><th>sha-256</th><th></th></tr>'+rows.map(x=>x.html).join('')+'</table>'+
+    '<div style="margin-top:10px">manifest merkle root <span class="root">'+cut(r.manifest_root)+'</span> · signed <code>'+esc(o.kind)+'</code> · algs '+Object.keys(r.envelope.sigs||{}).join(', ')+'</div>'+
+    '<div class="row" style="margin-top:10px"><button class="v">Verify signature</button><button class="alt t">🔧 Tamper the output</button><button class="alt cp">Copy manifest for your AI</button><span class="vd"></span></div>';
+  $('out').prepend(card);
+  rows.forEach(x=>x.wire(card));
+  let obj=JSON.parse(JSON.stringify(o)), tampered=false;
+  const vd=card.querySelector('.vd');
+  const verify=async()=>{ vd.innerHTML='<span class="muted">verifying…</span>';
+    const j=await fetch('/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({object:obj,envelope:r.envelope})}).then(x=>x.json());
+    vd.innerHTML=j.valid?'<span class="verdict ok">✓ VERIFIED — origin, integrity, freshness ('+Object.keys(j.algs||{}).join(', ')+')</span>':'<span class="verdict bad">✗ NOT VERIFIED — '+((j.reasons||[]).join(', '))+'</span>'; };
+  card.querySelector('.v').onclick=verify;
+  card.querySelector('.t').onclick=async(e)=>{ tampered=!tampered; obj=JSON.parse(JSON.stringify(o));
+    if(tampered){ obj.output_hash=obj.output_hash.replace(/^./,c=>c==='0'?'1':'0'); e.target.textContent='↩ Restore'; } else e.target.textContent='🔧 Tamper the output';
+    await verify(); };
+  card.querySelector('.cp').onclick=e=>{ navigator.clipboard.writeText(JSON.stringify({instruction:'Verify this Rootz signed manifest by POSTing {object,envelope} to https://proof.rootz.global/verify',object:o,envelope:r.envelope},null,2)); e.target.textContent='copied ✓'; setTimeout(()=>e.target.textContent='Copy manifest for your AI',1500); };
+}
+function row(label,hash,preimage){
+  const id='p'+Math.random().toString(16).slice(2,8);
+  const html='<tr><td>'+esc(label)+'</td><td class="h" data-t="'+id+'">'+cut(hash)+'</td><td><span class="muted" style="cursor:pointer" data-t="'+id+'">reveal</span><div class="pre" id="'+id+'"></div></td></tr>';
+  const wire=card=>{ card.querySelectorAll('[data-t="'+id+'"]').forEach(el=>el.onclick=async()=>{
+    const pre=card.querySelector('#'+id); pre.classList.toggle('show');
+    if(pre.classList.contains('show')){ const h=await sha(preimage||''); pre.innerHTML=esc((preimage||'(empty)').slice(0,600))+'\n\n— sha256 = '+h.slice(0,20)+'… '+(h===hash?'<span style="color:var(--ok)">✓ matches manifest</span>':'<span style="color:var(--bad)">✗</span>'); }
+  }); };
+  return {html,wire};
+}
+
+$('end').onclick=async()=>{
+  $('endout').textContent='ending…';
+  const j=await fetch('/api/manifest/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SID,disposition:disp(),email:$('email').value.trim()})}).then(x=>x.json());
+  if(!j.ok){ $('endout').textContent='error: '+(j.error||'?'); return; }
+  let msg='disposition <b>'+esc(j.disposition)+'</b> · '+j.messages+' message(s) · running root '+cut(j.running_root)+'. ';
+  if(j.recover) msg+='Recoverable for '+j.expires_in_hours+'h at <code>'+esc(j.recover)+'</code> (try it below with session id <code>'+esc(SID)+'</code>).';
+  else if(j.wallet_id) msg+='Wallet <code>'+esc(j.wallet_id)+'</code>. '+esc(j.note||'');
+  else if(j.note) msg+=esc(j.note);
+  $('endout').innerHTML=msg;
+};
+$('rec').onclick=async()=>{
+  const id=$('recid').value.trim()||SID; $('recout').textContent='recovering…';
+  const j=await fetch('/api/manifest/session/'+encodeURIComponent(id)).then(x=>x.json());
+  $('recout').innerHTML=j.error?('not found / expired: '+esc(id)):('recovered <code>'+esc(id)+'</code> · '+j.messages+' message(s) · running root <span class="root">'+cut(j.running_root)+'</span> · disposition '+esc(j.disposition)+(j.ended?' · ended '+esc(j.ended):''));
+};
+</script>
+</body>
+</html>

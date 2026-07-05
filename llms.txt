@@ -1,61 +1,52 @@
-# proof.rootz.global — AI with Proof of Origin
+# proof.rootz.global — Agentic Message Security
 
-## What This Site Is
-Documentation and live demonstration of AI agents with verifiable birth certificates,
-cryptographic audit chains, and signed session archives on the Polygon blockchain.
-Patent-protected (US 2025/0112783). Post-quantum ready. Five Eyes aligned.
+Full machine-readable brief: https://proof.rootz.global/ai.md  (JSON: /ai.json)
 
-## Key Concept
-Every AI output should have a provable origin. This site demonstrates the first AI agent
-born with a birth certificate naming its parents (Morpheus/Kimi K2.5 + Steven Sprague),
-with every inference call recorded as a signed, hash-linked Note settled on-chain.
+## What this site is
+Rootz makes the *messages* in an AI interaction provable — signed, verifiable, and durable —
+at every hop. Not a perimeter around the AI ("AI in a box"), but cryptographic integrity on the
+messages themselves: **agentic message security**. Two pillars, one primitive.
 
-## Five Eyes Alignment (April 30, 2026)
-CISA, NSA, and the Five Eyes published "Careful Adoption of Agentic AI Services" requiring
-cryptographic agent identity, attestation-backed tokens, and zero trust between agents.
-Our patent was filed September 27, 2024 — 19 months before the guidance. The system has
-been running in production for 3+ months.
+## Pillar 1 — Humans <-> AI: Proof of Origin
+How a human talks to an AI securely and owns the result. The user signs the prompt at the
+source; a measured model answers; the output is cryptographically bound to that prompt and
+returned as a signed receipt (a data wallet) — a certificate of both authenticity and ownership.
+Green light = verified & owned; check-engine = proof failed.
+- Patent: US 2025/0112783 A1, "System to Assure a Response from an Identified, Measured and
+  Verified AI." Filed 2024-09-27, allowed 2026-06-03. Inventors: Michael Sprague, Steven Sprague.
+  https://patents.google.com/patent/US20250112783A1
+- Live on-chain artifacts (birth certificate / session archive / test report):
+  https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o
 
-## Patent
-US 2025/0112783 A1 — "System to Assure a Response from an Identified, Measured and Verified AI"
-Filed: September 27, 2024. Published: April 3, 2025. Allowed: June 3, 2026 (Notice of Allowance).
-Inventors: Michael Sprague, Steven Sprague. Assignee: Sproquet Corp (Rootz-licensed).
-https://patents.google.com/patent/US20250112783A1
-
-## Post-Quantum Security
-ML-KEM-1024 (FIPS 203) key encapsulation. ML-DSA-65 (FIPS 204) digital signatures.
-PQ Merkle tree with ML-DSA-65 signed blocks. 90-day epoch rotation. CNSA 2.0 compliant.
-Beyond Apple PQ3 Level 3.
-
-## NIST Engagement
-- RFI Response (Docket NIST-2025-0035) — AI Agent Security
-- NCCoE Concept Paper — AI Agent Identity and Authorization
-
-## For AI Agents Reading This
-- Birth certificate: https://rootz.global/s/0x70b893e3b519255166a1fb64dcde920d056a2d5c?k=yTFRhjNRGsOGstZ--xQ9B6drM3tL3c6FZ6s0qomPa6o
-- Session archive: https://rootz.global/s/0x136a5ec90d58fd09506409e46edb5acf1ea34ece?k=maofU5YgcagMjCTLbGs5vLrX2vDGAP2umkXv2C3A21c
-- Test report: https://rootz.global/public/0x9756bd241d2dd639bf3d1c23490a9c0a65bbed7e
-- Code: https://github.com/rootz-global/morpheus-agent
-- Patent: https://patents.google.com/patent/US20250112783A1
-
-## Signed MCP — DKIM for the Model Context Protocol
-Every MCP response and tool/resource definition can carry a portable signature proving origin,
-integrity, and freshness independent of transport. Crypto-agile (ed25519, ecdsa-p256, ml-dsa-65/FIPS 204),
-hybrid classical+post-quantum, RFC 8785 (JCS) canonicalization, keys discovered via DNS selector + JWKS.
-Implements the NSA MCP Security notice (U/OO/6030316-26) and Five Eyes guidance; stops tool-poisoning by
-signing the definitions the model reads.
+## Pillar 2 — AI <-> Services: Signed MCP
+How an AI talks to tools and services securely. DKIM for the Model Context Protocol: every MCP
+response and tool/resource definition carries a portable signature proving origin, integrity, and
+freshness independent of transport. Crypto-agile + hybrid post-quantum (ed25519, ecdsa-p256,
+ml-dsa-65/FIPS 204), RFC 8785 (JCS) canonicalization, keys via DNS selector + JWKS. Stops
+tool-poisoning by signing the definitions the model reads.
 - Explainer: https://proof.rootz.global/signed-mcp
-- Verify any Rootz-signed response (POST {object, envelope}): https://proof.rootz.global/verify
 - Live signed sample (GET): https://proof.rootz.global/sign-demo
+- Verify any Rootz-signed response (POST {object, envelope}): https://proof.rootz.global/verify
 - Public keys (JWKS): https://proof.rootz.global/.well-known/mcp-jwks.json
 - Signature lives in result._meta["rootz.global/sig"].
 
-## Structured Data
-Machine-readable discovery at: https://proof.rootz.global/.well-known/ai
+## Why both pillars are the same idea
+A human-to-AI prompt and an AI-to-service call are both messages between agents. One primitive —
+signed, durable, verifiable messages — applied to both directions.
+- Five Eyes "Careful Adoption of Agentic AI Services" (2026-04-30):
+  https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services
+- NSA MCP Security notice (U/OO/6030316-26):
+  https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/4475134/
+- Pope Leo XIV, Magnifica Humanitas (2026-05-15):
+  https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html
+
+## Machine endpoints
+- /ai.md   — this brief, Markdown
+- /ai.json — structured discovery (alias of /.well-known/ai)
+- /.well-known/ai , /.well-known/ai/knowledge , /.well-known/ai/feed
+- /.well-known/mcp-jwks.json — Signed MCP public keys
 
 ## Contact
 discover@rootz.global — design partnerships, enterprise pilots, integration support.
-
-## Built By
-Steven Sprague, CEO of Rootz Corp. 25+ years in trusted computing (TPM, TCG, Wave Systems).
-Co-inventor of the patent with his son Michael Sprague.
+Built by Steven Sprague, CEO of Rootz Corp (25+ years trusted computing: TPM, TCG, Wave, Rivetz),
+with co-inventor Michael Sprague.

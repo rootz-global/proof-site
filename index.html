@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI with Proof of Origin | Rootz</title>
-    <meta name="description" content="AI interactions are opaque. Rootz makes them visible, controllable, and provable. Data Wallets give AI agents identity, signed audit chains, and owner-controlled archives.">
+    <title>Provable AI — Agentic Message Security | Rootz</title>
+    <meta name="description" content="Two pillars, one primitive: how humans talk to AI securely (Proof of Origin — patented) and how AI talks to services securely (Signed MCP). Signed, verifiable messages at every hop. Post-quantum. Five Eyes aligned.">
 
-    <meta property="og:title" content="AI Interactions Are Opaque. We're Fixing That.">
-    <meta property="og:description" content="Rootz Data Wallets make AI interactions visible, controllable, and provable. Birth certificates, signed message chains, and settlement on Polygon.">
+    <meta property="og:title" content="Provable AI — secure both directions of agentic AI">
+    <meta property="og:description" content="Proof of Origin (humans↔AI, patented) + Signed MCP (AI↔services). One primitive: signed, durable, verifiable messages. Verify it live.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://proof.rootz.global">
 
+    <!-- AI discovery: machine-readable briefs for agents -->
     <link rel="ai-discovery" type="application/json" href="/.well-known/ai" title="AI Discovery — Proof of Origin">
+    <link rel="alternate" type="text/markdown" href="/ai.md" title="AI brief (Markdown) — for agents answering questions about Rootz">
+    <link rel="alternate" type="application/json" href="/ai.json" title="AI brief (JSON)">
 
     <script type="application/ld+json">
     {
@@ -347,24 +350,369 @@
 </head>
 <body>
 
-<!-- Hero -->
+<style>
+  .v2-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.v2-grid{grid-template-columns:1fr}.v2-nav a.v2-link{display:none}}
+</style>
+
+<!-- V2 sticky nav -->
+<nav class="v2-nav" style="position:sticky;top:0;z-index:50;background:rgba(30,27,75,.97);backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,.12);">
+  <div style="max-width:1100px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:20px;">
+    <a href="/" style="color:#fff;font-weight:700;text-decoration:none;letter-spacing:.2px;">Rootz · Proof</a>
+    <a class="v2-link" href="#demos" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">▶ Live demos</a>
+    <a class="v2-link" href="#proof-of-origin" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Proof of Origin</a>
+    <a class="v2-link" href="#signed-mcp" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Signed MCP</a>
+    <a class="v2-link" href="/tour" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">How it works</a>
+    <a class="v2-link" href="/compliance" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Compliance</a>
+    <a class="v2-link" href="/ai.md" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">For AI</a>
+    <a href="mailto:discover@rootz.global" style="margin-left:auto;color:#fff;text-decoration:none;font-size:14px;background:var(--primary-blue);padding:7px 14px;border-radius:8px;">Talk to us</a>
+  </div>
+</nav>
+
+<!-- Hero (V2: two pillars) -->
 <section class="proof-hero">
     <div class="container">
-        <h1>AI Interactions Are Opaque.<br>We&rsquo;re Fixing That.</h1>
+        <span style="display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:5px 14px;border-radius:999px;font-size:13px;margin-bottom:18px;">Agentic message security · we help define the standards</span>
+        <h1>Provable AI, in both directions.</h1>
         <p class="subtitle">
-            Your AI talks to services, makes decisions, and moves data.
-            But you can&rsquo;t see what it did, you can&rsquo;t control what it accesses,
-            and you can&rsquo;t prove what happened. We&rsquo;re building the infrastructure
-            to make AI interactions visible, controllable, and provable.
+            Every AI interaction is a chain of <strong>messages between agents</strong>. Rootz makes those
+            messages <strong>signed, verifiable, and durable</strong> &mdash; so you can prove who said what,
+            to which model, and got which answer, independent of the transport that carried it.
         </p>
         <p class="tagline">
-            Built on Rootz Data Wallets &mdash; data with a chain, not data on a chain.
+            One primitive, two pillars: how <strong>humans talk to AI</strong> securely, and how <strong>AI talks to services</strong> securely.
         </p>
         <p style="margin-top: 1.5rem;">
-            <a href="/tour" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">How We Prove It &rarr;</a>
-            <a href="/router" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">AI Governance &rarr;</a>
-            <a href="/tech" style="color: rgba(255,255,255,0.7); text-decoration: underline; font-size: 1rem;">Architecture &rarr;</a>
+            <a href="#signed-mcp" style="color: #fff; text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem; font-weight: 600;">Verify Signed MCP live &rarr;</a>
+            <a href="/origin" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">Talk to your LLM, own the answer &rarr;</a>
+            <a href="/ai.md" style="color: rgba(255,255,255,0.7); text-decoration: underline; font-size: 1rem;">For AI agents (Markdown) &rarr;</a>
         </p>
+    </div>
+</section>
+
+<!-- Two-pillar map -->
+<section class="proof-section" id="pillars">
+    <div class="proof-content">
+        <h2 style="text-align:center;">Two pillars, one primitive</h2>
+        <p style="text-align:center;max-width:700px;margin:0 auto 1.8rem;color:var(--gray-600);">
+            The industry is building &ldquo;AI in a box&rdquo; &mdash; a perimeter around the model. The Five Eyes
+            and the NSA are asking for something different: <strong>message integrity</strong> &mdash; signed,
+            durable, non-repudiable. Rootz delivers it on both sides of every agent.
+        </p>
+        <div class="v2-grid">
+            <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-blue);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-blue);letter-spacing:.5px;">PILLAR 1 · HUMANS &harr; AI</div>
+                <h3 style="font-size:22px;margin:6px 0 10px;color:var(--dark);">Proof of Origin</h3>
+                <p style="color:var(--gray-600);">You <strong>sign your prompt</strong> at the source. A <strong>measured model</strong> answers. The output is <strong>bound to your prompt</strong> and returned as a signed receipt you <strong>own</strong>. Green light = verified; check-engine = proof failed.</p>
+                <ol style="color:var(--gray-600);margin:10px 0 14px 18px;font-size:.95rem;">
+                    <li>Sign the prompt &mdash; your key, your device</li>
+                    <li>A measured model produces the answer</li>
+                    <li>Output + model identity bound into your data wallet</li>
+                </ol>
+                <p style="margin:0;"><a href="/origin" style="color:var(--primary-blue);font-weight:600;">Try it live &rarr;</a> &nbsp;·&nbsp; <a href="#proof-of-origin">How we prove it</a> &nbsp;·&nbsp; <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">US&nbsp;2025/0112783</a></p>
+            </div>
+            <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-purple);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-purple);letter-spacing:.5px;">PILLAR 2 · AI &harr; SERVICES</div>
+                <h3 style="font-size:22px;margin:6px 0 10px;color:var(--dark);">Signed MCP</h3>
+                <p style="color:var(--gray-600);"><strong>DKIM for the Model Context Protocol.</strong> Every MCP response and tool definition carries a portable signature proving <strong>origin, integrity, and freshness</strong> &mdash; independent of transport. Crypto-agile + hybrid post-quantum.</p>
+                <ol style="color:var(--gray-600);margin:10px 0 14px 18px;font-size:.95rem;">
+                    <li>The service signs the response + tool definitions</li>
+                    <li>The signature travels in <code>result._meta</code></li>
+                    <li>Any client verifies against the published JWKS</li>
+                </ol>
+                <p style="margin:0;"><a href="#signed-mcp" style="color:var(--primary-purple);font-weight:600;">Verify it live &rarr;</a> &nbsp;·&nbsp; <a href="/signed-mcp">Full spec</a></p>
+            </div>
+        </div>
+        <p style="text-align:center;margin-top:1.6rem;font-size:.95rem;color:var(--gray-600);">
+            Aligned with the <a href="https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services" target="_blank" rel="noopener">Five Eyes agentic-AI guidance</a>,
+            the <a href="https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/4475134/" target="_blank" rel="noopener">NSA MCP Security notice</a>,
+            and <a href="https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html" target="_blank" rel="noopener">Pope Leo XIV&rsquo;s <em>Magnifica Humanitas</em></a>.
+            &nbsp;·&nbsp; For machines: <a href="/ai.md">/ai.md</a> · <a href="/ai.json">/ai.json</a>
+        </p>
+    </div>
+</section>
+
+<!-- See the technology working: both live demos -->
+<section class="proof-section" id="demos" style="background:#fff;">
+    <div class="proof-content">
+        <h2 style="text-align:center;">See the technology working</h2>
+        <p style="text-align:center;max-width:720px;margin:0 auto 1.8rem;color:var(--gray-600);">
+            Two live demos, running on this server right now — one per pillar. No install, no login.
+            Click in, watch the green light, then <strong>break it</strong> and watch it go red.
+        </p>
+        <div class="v2-grid">
+            <div style="border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-blue);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-blue);letter-spacing:.5px;">PILLAR 1 · LIVE DEMO</div>
+                <h3 style="font-size:20px;margin:6px 0 8px;color:var(--dark);">Talk to your LLM &mdash; own the answer</h3>
+                <p style="color:var(--gray-600);">Chat with a real model. Your prompt is <strong>signed in your browser</strong> before it leaves; the answer returns <strong>cryptographically bound to it</strong>. You get a green light &mdash; click it for the full proof, then hit <strong>Tamper</strong> and watch it turn red.</p>
+                <p style="color:var(--gray-600);font-size:.9rem;margin-bottom:1rem;"><strong>Proves:</strong> who asked · which model answered · the answer is bound to your prompt · any alteration is caught.</p>
+                <a href="/origin" style="display:inline-block;background:var(--primary-blue);color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-weight:600;">Open the demo &rarr;</a>
+            </div>
+            <div style="border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-purple);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-purple);letter-spacing:.5px;">PILLAR 2 · LIVE DEMO</div>
+                <h3 style="font-size:20px;margin:6px 0 8px;color:var(--dark);">Verify a signed MCP response</h3>
+                <p style="color:var(--gray-600);">Pull a freshly signed MCP response from this server and verify it &mdash; origin, integrity, freshness, including a <strong>post-quantum</strong> signature. Edit one character and it fails closed.</p>
+                <p style="color:var(--gray-600);font-size:.9rem;margin-bottom:1rem;"><strong>Proves:</strong> the response came from who it claims · unaltered · fresh · independent of transport.</p>
+                <a href="/signed-mcp" style="display:inline-block;background:var(--primary-purple);color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-weight:600;">Open the demo &rarr;</a>
+                <a href="#signed-mcp" style="display:inline-block;margin-left:10px;color:var(--primary-purple);text-decoration:none;font-weight:600;">or try it right here &darr;</a>
+            </div>
+            <div style="grid-column:1/-1;border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--accent-cyan);background:linear-gradient(180deg,#ffffff,#f6fbff);">
+                <div style="font-size:13px;font-weight:700;color:var(--accent-cyan);letter-spacing:.5px;">NEW · THE ATOM OF AI MESSAGE SECURITY</div>
+                <h3 style="font-size:20px;margin:6px 0 8px;color:var(--dark);">Signed Manifest of Hashes &mdash; an SBOM for your AI message</h3>
+                <p style="color:var(--gray-600);max-width:760px;">Paste a prompt; the service hashes <strong>every part</strong> of the interaction &mdash; system prompt, each tool definition, your context docs, your prompt, the answer &mdash; Merkle-roots them and <strong>signs it</strong>. Verify, tamper, or <strong>reveal</strong> any part (prove a document was in scope without exposing it). Session-scoped, with a disposition the service runs on session end/drop: <strong>hold (recoverable) · email · write to your data wallet</strong>.</p>
+                <a href="/manifest" style="display:inline-block;margin-top:6px;background:var(--dark);color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-weight:600;">Open the manifest demo &rarr;</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Signed MCP (live demo) -->
+<section class="proof-section" id="signed-mcp">
+    <div class="proof-content">
+        <h2>Signed MCP &mdash; DKIM for the Model Context Protocol</h2>
+        <p>
+            TLS secures the wire, then evaporates. Gateways, registries, caches, proxies and agent
+            frameworks strip it &mdash; so the bytes that reach the model carry no proof of who produced
+            them or whether they were altered. <strong>Signed MCP</strong> makes the proof travel
+            <em>with the bytes</em>: every MCP response and every tool definition carries a portable
+            signature proving <strong>origin, integrity, and freshness</strong>, independent of transport.
+        </p>
+        <p style="margin-bottom: 1rem;">
+            Crypto-agile and hybrid post-quantum
+            (<code>ed25519</code> &middot; <code>ecdsa-p256</code> &middot; <code>ml-dsa-65 / FIPS&nbsp;204</code>),
+            keys discovered DKIM-style from the issuing domain's
+            <a href="/.well-known/mcp-jwks.json">JWKS</a>. Implements the <strong>NSA MCP Security notice</strong>
+            (U/OO/6030316-26) and <strong>Five Eyes</strong> agentic-AI guidance: nonce + bounded-window
+            timestamp, context binding, and signed tool definitions to stop tool-poisoning.
+        </p>
+
+        <div style="background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:22px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.05);">
+            <div style="font-weight:600;color:var(--dark);margin-bottom:4px;">Verify it yourself &mdash; live, against this server</div>
+            <div style="color:var(--gray-600);font-size:.95rem;margin-bottom:12px;">Pull a freshly signed MCP response, then verify it. Tamper with the JSON and watch it fail closed.</div>
+            <div style="margin-bottom:10px;">
+              <button type="button" id="mcpSample" style="background:var(--primary-blue);color:#fff;border:0;padding:10px 16px;border-radius:8px;font-size:15px;cursor:pointer;margin-right:8px;">Get a signed sample &rarr;</button>
+              <button type="button" id="mcpVerify" style="background:var(--gray-100);color:var(--dark);border:1px solid var(--gray-300);padding:10px 16px;border-radius:8px;font-size:15px;cursor:pointer;">Verify</button>
+            </div>
+            <textarea id="mcpPayload" placeholder='{ "object": {…}, "envelope": {…} }' style="width:100%;min-height:150px;font-family:ui-monospace,Menlo,monospace;font-size:12px;border:1px solid var(--gray-300);border-radius:8px;padding:12px;"></textarea>
+            <div id="mcpVerdict" style="margin-top:10px;"></div>
+        </div>
+
+        <p>
+            <a href="/signed-mcp" style="color:var(--primary-blue);font-weight:600;">Read the full Signed MCP page &rarr;</a>
+            &nbsp;&middot;&nbsp; <a href="/.well-known/mcp-jwks.json">Public verification keys (JWKS)</a>
+            &nbsp;&middot;&nbsp; <code>GET /sign-demo</code> &nbsp; <code>POST /verify</code>
+        </p>
+    </div>
+</section>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var s=$('mcpSample'), v=$('mcpVerify'), pay=$('mcpPayload'), vd=$('mcpVerdict');
+  if(!s) return;
+  var bad=function(m){return '<div style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:12px;border-radius:8px;font-weight:700;">'+m+'</div>';};
+  var dim=function(m){return '<span style="color:#4b5563;font-size:.95rem;">'+m+'</span>';};
+  s.onclick=async function(){ vd.innerHTML=dim('fetching…');
+    try{ var r=await fetch('/sign-demo'); var j=await r.json(); pay.value=JSON.stringify(j,null,2);
+      vd.innerHTML=dim('Signed sample loaded. Hit Verify — or edit the JSON to tamper first.'); }
+    catch(e){ vd.innerHTML=bad('Could not fetch sample: '+e.message); } };
+  v.onclick=async function(){ var body; try{ body=JSON.parse(pay.value); }catch(e){ vd.innerHTML=bad('Not valid JSON'); return; }
+    vd.innerHTML=dim('verifying…');
+    try{ var r=await fetch('/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      var j=await r.json();
+      if(j.valid) vd.innerHTML='<div style="background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;padding:12px;border-radius:8px;font-weight:700;">✓ VERIFIED — origin, integrity, and freshness confirmed ('+Object.keys(j.algs||{}).join(', ')+')</div>';
+      else vd.innerHTML=bad('✗ NOT VERIFIED — '+((j.reasons||[]).join(', ')))+(j.note?'<p style="color:#4b5563;font-size:.9rem;margin-top:6px;">'+j.note+'</p>':''); }
+    catch(e){ vd.innerHTML=bad('Verify failed: '+e.message); } };
+})();
+</script>
+
+<!-- Five Eyes Alignment -->
+<section class="proof-section" id="proof-of-origin">
+    <div class="proof-content">
+        <h2>Pillar 1 — Humans &harr; AI: Proof of Origin</h2>
+        <p style="color:var(--gray-600);margin-bottom:1.2rem;">You sign your prompt; a measured model answers; the output is bound to your prompt and owned by you. The same message-integrity primitive as Signed MCP, applied to the human&ndash;to&ndash;AI direction &mdash; and the guidance below maps to what we already run.</p>
+        <h3 style="font-size:20px;color:var(--dark);margin-bottom:.6rem;">The Five Eyes Said WHAT. We Built HOW.</h3>
+        <p>
+            The joint guidance from CISA, NSA, UK NCSC, Australia ASD, Canada CCCS,
+            and New Zealand NCSC specifies requirements for AI agent security.
+            Every requirement maps to something we&rsquo;ve already built and deployed.
+        </p>
+
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Five Eyes Requires</th><th style="background: var(--dark); color: white;">Rootz Implementation</th><th style="background: var(--dark); color: white;">Status</th></tr>
+            <tr><td><strong>Cryptographically verified identity</strong></td>
+                <td>Birth certificate on Polygon. secp256k1 ECDSA. TPM-bound keys.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Short-lived credentials, JIT provisioned</strong></td>
+                <td>Session tokens (5-60 min TTL). Desktop V6 issues and revokes.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Zero trust between agents</strong></td>
+                <td>Every MCP call policy-checked. No implicit trust from co-membership.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Replace persistent API keys</strong></td>
+                <td>Wallet-based OAuth (epistery challenge/sign/verify). No bearer tokens.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Encrypt inter-agent communications</strong></td>
+                <td>ECDH + AES-256-GCM. Post-quantum: ML-KEM-1024 + ML-DSA-65.</td>
+                <td style="color: #34d399; font-weight: 600;">Live + PQ</td></tr>
+            <tr><td><strong>Attestation-backed tokens</strong></td>
+                <td>TPM-bound key derivation. Hardware root of trust. Desktop as HSM.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Agent identity lifecycle</strong></td>
+                <td>Provisioning at spawn, scope binding, revalidation, automatic revocation.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+        </table>
+
+        <div class="analogy-box">
+            <p>
+                <strong>The gap everyone else has:</strong> the Five Eyes guidance says agents need
+                cryptographic identity, but their answer to &ldquo;where does the root key live?&rdquo;
+                is &ldquo;the infrastructure gives you one&rdquo; (SPIFFE issuer, cloud IAM, vault).
+                That creates a central policy engine as a single point of failure.
+                Our answer: <strong>the key lives in the owner&rsquo;s hardware (TPM).</strong>
+                No central issuer. No infrastructure dependency. Sovereign.
+            </p>
+        </div>
+
+        <p style="font-size: 0.95rem; color: var(--gray-600);">
+            Sources:
+            <a href="https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services" target="_blank" rel="noopener">CISA resource page</a> &bull;
+            <a href="https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services" target="_blank" rel="noopener">Full guidance</a> &bull;
+            <a href="https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/4475134/" target="_blank" rel="noopener">NSA press release</a> &bull;
+            <a href="https://cyberscoop.com/cisa-nsa-five-eyes-guidance-secure-deployment-ai-agents/" target="_blank" rel="noopener">CyberScoop coverage</a> &bull;
+            <a href="https://labs.cloudsecurityalliance.org/research/csa-research-note-cisa-agentic-ai-guidance-20260503-csa-styl/" target="_blank" rel="noopener">CSA analysis</a>
+        </p>
+    </div>
+</section>
+
+<!-- The Patent -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>The Patent: US 2025/0112783 A1</h2>
+        <p>
+            <strong>Filed:</strong> September 27, 2024 &mdash; 19 months before the Five Eyes guidance.<br>
+            <strong>Published:</strong> April 3, 2025. <strong>Allowed:</strong> June 3, 2026 (Notice of Allowance).<br>
+            <strong>Inventors:</strong> Michael Sprague, Steven Sprague. <strong>Assignee:</strong> Sproquet Corp (Rootz-licensed).<br>
+            <strong>Title:</strong> <em>System to Assure a Response from an Identified, Measured and Verified AI</em>.<br>
+            <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">View on Google Patents &rarr;</a>
+        </p>
+
+        <h3>Key Claims &mdash; Mapped to Working Code</h3>
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Patent Claim</th><th style="background: var(--dark); color: white;">Implementation</th></tr>
+            <tr><td><strong>Claim 1:</strong> Client signs request &rarr; assurance system validates &rarr; binds identity + assurance into response</td>
+                <td>Agent signs prompt hash via Desktop V6 (TPM). MCP Policy Router validates. Response hash-linked into chain.</td></tr>
+            <tr><td><strong>Claim 2:</strong> DAPP + smart contract + blockchain wallet provides signing key; hash recorded on-chain</td>
+                <td>Sovereign Secret on Polygon. V7 contracts. Wallet-derived signing. Merkle root settled on-chain.</td></tr>
+            <tr><td><strong>Claims 33-37:</strong> Local trusted hardware (TPM, TEE/TrustZone, Intel ME/vPro) holds private keys and validates signatures; trusted display for consent</td>
+                <td>Desktop V6 with Windows TPM. Key never leaves hardware. Agent gets session token, not key.</td></tr>
+            <tr><td><strong>Claim 6:</strong> Blockchain records hash of every boot/loading step</td>
+                <td>Birth certificate (Note 0) + skill loading (Note 1) + session events &rarr; Merkle chain.</td></tr>
+            <tr><td><strong>Claim 10:</strong> Aggregates integrity measurements; binds with signed envelope</td>
+                <td>Settlement Merkle root covers all events across all services. One hash proves everything.</td></tr>
+            <tr><td><strong>Claim 13:</strong> Zero-trust controls verified, signed, and bound into the response</td>
+                <td>Every MCP call is policy-checked; zero-trust control results are signed and hash-linked into the session record.</td></tr>
+            <tr><td><strong>Claim 15:</strong> Third-party security-control logs aggregated into a single signed manifest bound into the response</td>
+                <td>External control/audit logs are collected, signed, and combined into one manifest hash recorded with the session.</td></tr>
+            <tr><td><strong>Claims 29-30:</strong> Encrypted request/response using registered key pairs</td>
+                <td>ECDH + AES-256-GCM. Post-quantum: ML-KEM-1024. Only agent and owner can decrypt.</td></tr>
+        </table>
+
+        <div class="analogy-box">
+            <p>
+                <strong>The insight:</strong> You don&rsquo;t need to own the AI. You need to own the
+                trust wrapper around any AI. The &ldquo;data assurance computing system&rdquo; (the patent&rsquo;s term)
+                is the MCP Policy Router. It wraps Claude, GPT, Gemini &mdash; whatever.
+                Identity, measurement, and assurance happen in YOUR layer.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Post-Quantum -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Post-Quantum Security &mdash; Level 4</h2>
+        <p>
+            Regulatory data must remain verifiable for decades. Classical cryptography won&rsquo;t survive
+            that timeline. We built post-quantum encryption into the data wallet from the start &mdash;
+            not as a future upgrade, but as a shipping feature.
+        </p>
+
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Capability</th><th style="background: var(--dark); color: white;">Algorithm</th><th style="background: var(--dark); color: white;">Standard</th></tr>
+            <tr><td>Key Encapsulation</td><td>ML-KEM-1024 (FIPS 203)</td><td>CNSA 2.0 mandated for data-at-rest</td></tr>
+            <tr><td>Digital Signatures</td><td>ML-DSA-65 (FIPS 204)</td><td>Dilithium — NIST PQ standard</td></tr>
+            <tr><td>Merkle Tree</td><td>PQ Merkle with ML-DSA-65 signed blocks</td><td>RFC 6962 domain separation</td></tr>
+            <tr><td>Key Rotation</td><td>90-day epoch rotation with key chain recovery</td><td>Forward secrecy by design</td></tr>
+            <tr><td>Backup</td><td>Shamir 3-of-5 secret sharing over GF(2&sup8;)</td><td>Master seed recovery</td></tr>
+            <tr><td>Settlement</td><td>Dual-chain: Polygon (ECDSA) + Naoris (Dilithium-5)</td><td>Classical + PQ anchoring</td></tr>
+        </table>
+
+        <h3>Beyond Apple PQ3 Level 3</h3>
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: #4b5563; color: white;">Platform</th><th style="background: #4b5563; color: white;">PQ Encryption</th><th style="background: #4b5563; color: white;">PQ Signing</th><th style="background: #4b5563; color: white;">PQ Time</th><th style="background: #4b5563; color: white;">Level</th></tr>
+            <tr><td>Signal PQXDH</td><td>Yes</td><td>No</td><td>No</td><td>2</td></tr>
+            <tr><td>Apple PQ3 (iMessage)</td><td>Yes</td><td>No</td><td>No</td><td>3</td></tr>
+            <tr><td><strong>Rootz PQ Wallet</strong></td><td><strong>Yes (ML-KEM-1024)</strong></td><td><strong>Yes (ML-DSA-65)</strong></td><td><strong>Yes (PQ Merkle epochs)</strong></td><td><strong>4</strong></td></tr>
+        </table>
+
+        <p>
+            11 TypeScript modules. 30 tests passing. Built on
+            <code>@noble/post-quantum</code> v0.6.0 (MIT, Paul Miller).
+            CNSA 2.0 compliant. Algorithm-agile &mdash; the wallet carries the algorithm,
+            not the protocol.
+        </p>
+    </div>
+</section>
+
+<!-- Church and State -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>When Church and State Both Say &ldquo;Move&rdquo;</h2>
+        <p>
+            Three documents published within 30 days of each other. Three independent authorities.
+            The same conclusion.
+        </p>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>The Moral Authority</h4>
+                <p><strong>Pope Leo XIV, <em>Magnifica Humanitas</em></strong> (May 15, 2026) &mdash;
+                   The first papal encyclical on AI. 245 paragraphs on safeguarding human dignity.
+                   &ldquo;Disarm AI&rdquo; &mdash; not reject, but free from monopolistic control.
+                   Accountability requires verifiable identity. Subsidiarity means the owner holds the key.
+                   Presented alongside Anthropic co-founder Daniela Amodei.<br>
+                   <a href="https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html" target="_blank" rel="noopener">
+                   Read the encyclical &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>The Security Authority</h4>
+                <p><strong>Five Eyes, &ldquo;Careful Adoption of Agentic AI Services&rdquo;</strong> (April 30, 2026) &mdash;
+                   First joint guidance from CISA, NSA, and all Five Eyes agencies on AI agent security.
+                   Cryptographic identity. Attestation-backed tokens. Zero trust. Encrypted communications.
+                   The first AI manufacturing quality checklist.<br>
+                   <a href="https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services" target="_blank" rel="noopener">
+                   Read the guidance &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>The Engineering Authority</h4>
+                <p><strong>US Patent Application 2025/0112783</strong> (filed September 27, 2024; allowed June 3, 2026) &mdash;
+                   &ldquo;System to Assure a Response from an Identified, Measured and Verified AI.&rdquo;
+                   Filed 19 months before the Five Eyes published the problem.
+                   TEE/TPM-rooted identity. Blockchain settlement. Owner-controlled policy. Running in production.<br>
+                   <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">
+                   View on Google Patents &rarr;</a></p>
+            </div>
+        </div>
+
+        <div class="analogy-box">
+            <p>
+                <strong>When the Church and the State are both discussing the future of AI,
+                it is time to move.</strong> The Pope provides the principles. The Five Eyes
+                provides the requirements. The patent provides the architecture. The code
+                provides the proof. Three walls. One Jerusalem. Each builder chose their section.
+            </p>
+        </div>
     </div>
 </section>
 
@@ -412,6 +760,63 @@
                 records what it did WITH that data. As the discovery ecosystem grows,
                 agents have richer verified sources &mdash; and the provenance chain
                 becomes exponentially more valuable.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- The Lab Notebook for AI -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>The Lab Notebook for Everything</h2>
+        <p>
+            For decades the engineering notebook was the gold standard of provenance:
+            dated, witnessed, the durable record of when an idea was first conceived.
+            Every patent, every design review, every audit trail began there.
+            In the age of AI, that notebook has evaporated &mdash; your thinking
+            scattered across model providers, summarized into &ldquo;memory&rdquo; features
+            you don&rsquo;t control, gone the day you switch platforms.
+        </p>
+        <p>
+            <strong>The PC can give it back.</strong> As you work alongside AI &mdash; thinking,
+            designing, deciding, creating &mdash; the device captures it: every exchange,
+            signed and timestamped at the moment it happens, sealed to your hardware,
+            organized not as a transcript pile but as a queryable inventory of what you
+            concluded and when. It belongs to you. It is portable across every AI.
+            And it does not go away.
+        </p>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>Not Just Outputs &mdash; Thinking</h4>
+                <p>The archive captures the conversation, not just the answer.
+                   The questions you asked, the context that evolved, the reasoning
+                   that led to the decision. The thinking IS the asset &mdash;
+                   and it compounds over a lifetime.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Quality, Not Security</h4>
+                <p>This is not about preventing breach. It is about
+                   <strong>data quality</strong> &mdash; the difference between a number
+                   on a napkin and a calibrated instrument reading. Data with origin,
+                   ownership, and context is data an AI can trust and an auditor can verify.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Your Collection of Devices Is You</h4>
+                <p>Identity is not a single machine. It is sharded across the devices
+                   you own &mdash; laptop, phone, desktop. Lose one, replace it, carry on.
+                   Write to your address, all your devices listen.
+                   The keys never leave your hardware.</p>
+            </div>
+        </div>
+
+        <div class="analogy-box">
+            <p>
+                <strong>The agent era is the last clean chance</strong> to put the owner back
+                at the center. There is one asset in the entire stack that you actually own:
+                the device in your hands. That is where identity lives, where the archive
+                grows, and where the proof begins. The PC is not a terminal to someone&rsquo;s
+                cloud &mdash; it is the root of trust for a lifetime of thinking.
             </p>
         </div>
     </div>
@@ -499,6 +904,34 @@
     </div>
 </section>
 
+<!-- NIST Engagement -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>NIST Engagement</h2>
+        <p>
+            We don&rsquo;t just build the technology &mdash; we help define the standards.
+            Two formal submissions to NIST in 2026, both referencing this architecture
+            and the live on-chain proofs on this page.
+        </p>
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>NIST RFI Response</h4>
+                <p><strong>Docket NIST-2025-0035</strong> &mdash; AI Agent Security.<br>
+                   Core thesis: &ldquo;The security architecture for AI agents already exists
+                   in trusted computing standards.&rdquo; Proposes signed prompts, measured AI,
+                   signed responses. 10 key arguments + 3 specific requirements.</p>
+            </div>
+            <div class="audience-card">
+                <h4>NCCoE Concept Paper</h4>
+                <p><strong>AI Agent Identity &amp; Authorization</strong> &mdash; Defines agent identity
+                   as a Merkle chain (not a static credential), four-factor message-level assurance,
+                   and includes live proof.rootz.global evidence. Birth certificate + session archive
+                   referenced as working demonstration.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Sovereignty -->
 <section class="proof-section">
     <div class="proof-content">
@@ -515,11 +948,21 @@
             to a hardware security module that becomes the agent&rsquo;s trusted execution environment.
         </p>
 
-        <p style="text-align: center; margin-top: 1.5rem;">
-            <a href="mailto:discover@rootz.global" style="color: var(--primary-blue); font-weight: 600;">
-                Partnerships &amp; Enterprise: discover@rootz.global
+        <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border-radius: 12px; padding: 2.5rem; margin: 2rem 0; text-align: center;">
+            <h3 style="color: white; margin-bottom: 1rem; font-size: 1.6rem;">Ready to Talk?</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.95;">
+                If you just got handed the Five Eyes guidance and were asked &ldquo;are we compliant?&rdquo;
+                &mdash; we can help. Design partners, enterprise pilots, and integration support.
+            </p>
+            <a href="mailto:discover@rootz.global" style="display: inline-block; background: white; color: var(--primary-blue); padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 1.1rem; text-decoration: none;">
+                discover@rootz.global
             </a>
-        </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                Or explore: <a href="/compliance" style="color: white; text-decoration: underline;">Compliance Demo</a> &bull;
+                <a href="/tour" style="color: white; text-decoration: underline;">How It Works</a> &bull;
+                <a href="/router" style="color: white; text-decoration: underline;">AI Governance</a>
+            </p>
+        </div>
     </div>
 </section>
 
@@ -830,9 +1273,28 @@
 <footer>
     <p>&copy; 2026 Rootz Corp &mdash; <a href="https://rootz.global">rootz.global</a></p>
     <p style="margin-top: 0.5rem;">
+        <a href="mailto:discover@rootz.global" style="font-weight: 600;">discover@rootz.global</a> &bull;
+        Patent: <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">US 2025/0112783</a>
+    </p>
+    <p style="margin-top: 0.5rem;">
         DBA Identity: <code style="font-size: 0.8rem;">0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664</code> (Polygon Mainnet)
     </p>
 </footer>
+
+<!-- Analytics: log page views to server -->
+<script>
+(function() {
+  try {
+    var data = {
+      p: location.pathname,
+      r: document.referrer || '',
+      t: new Date().toISOString(),
+      w: window.innerWidth
+    };
+    navigator.sendBeacon('/hit', JSON.stringify(data));
+  } catch(e) {}
+})();
+</script>
 
 </body>
 </html>
