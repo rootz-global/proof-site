@@ -362,6 +362,8 @@
     <a class="v2-link" href="#demos" style="color:#fff;text-decoration:none;font-size:14px;font-weight:600;">▶ Live demos</a>
     <a class="v2-link" href="#proof-of-origin" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Proof of Origin</a>
     <a class="v2-link" href="#signed-mcp" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Signed MCP</a>
+    <a class="v2-link" href="/measured-ai" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Measured AI</a>
+    <a class="v2-link" href="#silicon" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Silicon</a>
     <a class="v2-link" href="/tour" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">How it works</a>
     <a class="v2-link" href="/compliance" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">Compliance</a>
     <a class="v2-link" href="/ai.md" style="color:rgba(255,255,255,.85);text-decoration:none;font-size:14px;">For AI</a>
@@ -1192,9 +1194,11 @@
             </div>
             <div class="layer-card designed">
                 <div class="status ready">DESIGNED</div>
-                <h4>Layer 3: Encrypted Channel</h4>
+                <h4>Layer 3: Attested Hardware</h4>
                 <p>ECDH key exchange. AES-256-GCM encrypted channel.
-                   TEE attestation proves the enclave. No eavesdropping.</p>
+                   Hardware attestation proves the machine &mdash; NVIDIA GPU EAT,
+                   AMD SEV-SNP, OCI instance principal, TPM quote. No eavesdropping,
+                   and a named plant.</p>
             </div>
             <div class="layer-card future">
                 <div class="status spec">SPEC PHASE</div>
@@ -1203,6 +1207,55 @@
                    Weight hashes. The AI equivalent of pharmaceutical traceability.</p>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- Silicon -->
+<section class="proof-section" id="silicon">
+    <div class="proof-content">
+        <h2>Silicon: the trust root under the chain</h2>
+        <p>
+            Proof has to bottom out in something nobody can forge. For Rootz that is the
+            silicon &mdash; not the ledger. Modern GPUs, CPUs and endpoints already ship a
+            hardware identity fused at manufacture and can sign a report of exactly what
+            they are running. We consume that evidence. The chain is where a result gets
+            settled and notarized; it is not where the trust begins.
+        </p>
+
+        <h3>What the hardware already proves</h3>
+        <p>
+            NVIDIA GPU confidential computing &mdash; H100, H200 and Blackwell B200/GB200 in
+            CC mode &mdash; produces an attestation report signed by a hardware-fused device
+            identity key: measurement records covering firmware, VBIOS and security
+            configuration, behind a device certificate chain anchored to NVIDIA&rsquo;s root CA,
+            checked for revocation over OCSP and compared against NVIDIA&rsquo;s Reference
+            Integrity Manifests. The NVIDIA Remote Attestation Service returns a signed
+            Entity Attestation Token. AMD SEV-SNP and Intel TDX do the equivalent for the CPU
+            side, an Oracle Cloud instance principal certificate proves which data center the
+            machine sits in, and a TPM quote does it at the endpoint.
+        </p>
+
+        <h3>Where it stops &mdash; and what we add</h3>
+        <p>
+            <strong>Platform attestation proves the plant, not the product.</strong> It
+            establishes that a genuine GPU with known firmware is running in a correct
+            security configuration. By design it says nothing about which model weights were
+            loaded, what prompt was submitted, or what output came back. That boundary is the
+            open problem in verifiable AI, and closing it is the whole point of this site.
+        </p>
+        <p>
+            Rootz binds the workload to the platform. An attestation request carries a
+            32-byte nonce that the hardware signs over, so we place an application-layer
+            evidence hash inside it &mdash; model measurement, signed prompt, output digest.
+            The same signature that proves the silicon now also covers the specific result.
+            Platform attestation becomes per-result provenance:
+            <em>this output, from this model, on this machine, for this prompt.</em>
+        </p>
+        <p style="opacity:0.8;">
+            <strong>Status:</strong> specified, and Layer 3 above. Endpoint binding via TPM is
+            working today in Rootz Desktop V6; GPU-side evidence adapters are design-stage.
+            We publish what works and what does not.
+        </p>
     </div>
 </section>
 

@@ -26,8 +26,14 @@
     },
     {
       "name": "Secure Channel",
-      "description": "Three-layer signed communication between AI agents and inference providers. Layer 1: agent signs prompts (working). Layer 2: provider signs responses (patch ready). Layer 3: ECDH encrypted channel with TEE attestation (designed).",
+      "description": "Three-layer signed communication between AI agents and inference providers. Layer 1: agent signs prompts (working). Layer 2: provider signs responses (patch ready). Layer 3: ECDH encrypted channel bound to hardware attestation — NVIDIA GPU Entity Attestation Token via NRAS, AMD SEV-SNP, OCI instance principal, or TPM quote (designed).",
       "status": "active"
+    },
+    {
+      "name": "Hardware Attestation Binding",
+      "description": "Binds an AI workload to the silicon that ran it. Platform attestation proves the plant, not the product: it establishes a genuine GPU with known firmware in a correct security configuration, and by design says nothing about model weights, prompt, or output. Rootz places an application-layer evidence hash (model measurement, signed prompt, output digest) into the 32-byte attestation nonce the hardware signs over, so the same signature that proves the silicon also covers the specific result. Turns platform attestation into per-result provenance.",
+      "status": "designed",
+      "technology": ["NVIDIA Attestation SDK (NVAT)", "NVIDIA Remote Attestation Service (NRAS)", "Entity Attestation Token", "AMD SEV-SNP", "Intel TDX", "TPM 2.0"]
     },
     {
       "name": "Rootz Desktop V6",
@@ -55,7 +61,11 @@
       "ECDH + AES-256-GCM (encryption)",
       "SHA-256 hash-linking (chain integrity)",
       "Merkle trees (settlement proofs)",
-      "TPM 2.0 (hardware key protection)"
+      "TPM 2.0 (hardware key protection)",
+      "NVIDIA GPU confidential computing — H100/H200, Blackwell B200/GB200 in CC mode (platform attestation)",
+      "NVIDIA Attestation SDK (NVAT) + NVIDIA Remote Attestation Service (NRAS), Entity Attestation Tokens",
+      "AMD SEV-SNP / Intel TDX (CPU confidential computing)",
+      "OCI instance principal certificates (data-center attestation)"
     ],
     "contracts": {
       "chain": "Polygon Mainnet (137)",
@@ -96,7 +106,23 @@
     },
     {
       "term": "Four Layers",
-      "definition": "Progressive trust model: Layer 1 (agent signs), Layer 2 (provider signs), Layer 3 (ECDH + TEE), Layer 4 (model provenance from signed sources)."
+      "definition": "Progressive trust model: Layer 1 (agent signs), Layer 2 (provider signs), Layer 3 (ECDH + attested hardware), Layer 4 (model provenance from signed sources)."
+    },
+    {
+      "term": "Platform Attestation",
+      "definition": "A hardware-signed report proving what a machine is and what it is running — firmware, VBIOS, security configuration — signed by a device identity key fused at manufacture. It proves the plant, not the product: by design it says nothing about model weights, prompt, or output."
+    },
+    {
+      "term": "Entity Attestation Token (EAT)",
+      "definition": "The signed token a verifier returns after checking hardware attestation evidence. NVIDIA's Remote Attestation Service (NRAS) issues one for GPU confidential computing after validating the device certificate chain, OCSP revocation status, and measurements against Reference Integrity Manifests."
+    },
+    {
+      "term": "Attestation Nonce Binding",
+      "definition": "The seam that turns platform attestation into per-result provenance. The attestation request carries a 32-byte nonce that the hardware signs over; Rootz places an application-layer evidence hash there — model measurement, signed prompt, output digest — so the signature proving the silicon also covers the specific inference result."
+    },
+    {
+      "term": "Measurement Depth (L0–L3)",
+      "definition": "Proof strength stated as a level, never a boolean. L0 none. L1 attested transport. L2 attested silicon (GPU confidential computing attests the platform). L3 measured weights bound to a declared model identity. A weak claim is not a fake claim; depth is disclosed, not implied."
     }
   ],
   "partnerships": [

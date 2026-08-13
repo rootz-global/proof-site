@@ -1,8 +1,32 @@
 {
   "specVersion": "1.2.0",
-  "generated": "2026-04-01T00:00:00Z",
+  "generated": "2026-08-13T00:00:00Z",
   "domain": "proof.rootz.global",
   "entries": [
+    {
+      "id": "silicon-trust-root-2026-08-13",
+      "title": "The Trust Root Is Silicon, Not the Ledger",
+      "date": "2026-08-13",
+      "summary": "Published the hardware-attestation layer of the proof model. Rootz consumes platform attestation as the root of every claim — NVIDIA GPU confidential computing, AMD SEV-SNP, OCI instance principal, TPM quote — and binds the workload to it through the attestation nonce. Platform attestation proves the plant, not the product; Rootz binds the product to the plant.",
+      "keyFacts": [
+        "NVIDIA CC (H100/H200, Blackwell B200/GB200) signs an attestation report with a hardware-fused device identity key",
+        "Verified against NVIDIA Reference Integrity Manifests + OCSP revocation; NRAS returns a signed Entity Attestation Token",
+        "Platform attestation by design covers platform state, not workload — nothing about model weights, prompt, or output",
+        "Rootz places an application-layer evidence hash (model measurement, signed prompt, output digest) in the 32-byte attestation nonce the hardware signs over",
+        "Result: per-result provenance — this output, from this model, on this machine, for this prompt",
+        "Measurement depth stated as a level (L0-L3), never a boolean; L2 = attested silicon",
+        "The chain is the settlement and notary layer, not the trust root"
+      ],
+      "tags": [
+        "attestation",
+        "confidential-computing",
+        "nvidia",
+        "measured-ai",
+        "proof-of-origin",
+        "hardware-root-of-trust"
+      ],
+      "url": "https://proof.rootz.global/#silicon"
+    },
     {
       "id": "unified-runtime-complete-2026-04-01",
       "title": "Unified Agent Runtime — 3-Week Build Plan Complete",
@@ -16,7 +40,12 @@
         "TEECore.loadSkill() routes signing through policy engine → Desktop TPM",
         "Real TPM signature verified through TEE relay"
       ],
-      "tags": ["milestone", "unified-runtime", "skill-model", "agent-wallet"],
+      "tags": [
+        "milestone",
+        "unified-runtime",
+        "skill-model",
+        "agent-wallet"
+      ],
       "url": "https://proof.rootz.global"
     },
     {
@@ -31,7 +60,13 @@
         "Whitepaper thesis: 'We do not need to trust AI outputs. We need to verify how they were produced.'",
         "Three fragility points identified and documented with mitigations"
       ],
-      "tags": ["peer-review", "chatgpt", "pressure-test", "whitepaper", "thesis"],
+      "tags": [
+        "peer-review",
+        "chatgpt",
+        "pressure-test",
+        "whitepaper",
+        "thesis"
+      ],
       "url": "https://proof.rootz.global"
     },
     {
@@ -46,7 +81,13 @@
         "Full session archive encrypted on IPFS, viewable via share link",
         "Total on-chain cost: $0.03"
       ],
-      "tags": ["milestone", "morpheus", "birth-certificate", "polygon", "live"],
+      "tags": [
+        "milestone",
+        "morpheus",
+        "birth-certificate",
+        "polygon",
+        "live"
+      ],
       "url": "https://proof.rootz.global"
     },
     {
@@ -61,7 +102,12 @@
         "7,082 tokens across 3 inference calls in Session 2",
         "Kimi K2.5 independently described exact Rootz architecture without knowing it exists"
       ],
-      "tags": ["release", "archiving", "secure-channel", "cost-optimization"],
+      "tags": [
+        "release",
+        "archiving",
+        "secure-channel",
+        "cost-optimization"
+      ],
       "url": "https://github.com/rootz-global/morpheus-agent"
     },
     {
@@ -75,7 +121,12 @@
         "GitHub repos: rootz-global/morpheus-agent and rootz-global/proof-site",
         "All content encrypted on IPFS, decryptable via share links in browser"
       ],
-      "tags": ["launch", "website", "ai-discovery", "share-links"],
+      "tags": [
+        "launch",
+        "website",
+        "ai-discovery",
+        "share-links"
+      ],
       "url": "https://proof.rootz.global"
     },
     {
@@ -90,7 +141,12 @@
         "Layer 4: Spec phase — model built from signed training data, weight hashes, build attestation",
         "Layer 4 applies TCG Reference Integrity Manifest (RIM) to AI model supply chain"
       ],
-      "tags": ["architecture", "four-layers", "tee", "model-provenance"],
+      "tags": [
+        "architecture",
+        "four-layers",
+        "tee",
+        "model-provenance"
+      ],
       "url": "https://proof.rootz.global"
     }
   ]

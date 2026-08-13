@@ -84,6 +84,7 @@ const knowledgeJson = loadFile('knowledge.json');
 const feedJson = loadFile('feed.json');
 const aiMd = loadFile('ai.md');
 const originHtml = loadFile('origin.html');
+const measuredAiHtml = loadFile('measured-ai.html');
 const manifestHtml = loadFile('manifest.html');
 
 // --- Proof of Origin (Pillar 1) binder: persisted P-256 identity + model call ---
@@ -336,6 +337,13 @@ const server = createServer((req, res) => {
     logHit(req, req.url, { bot });
     if (originHtml) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=600' }); res.end(originHtml); }
     else { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('origin.html not built'); }
+    return;
+  }
+
+  if (req.url === '/measured-ai' || req.url === '/measured-ai/' || req.url === '/measured-ai.html') {
+    logHit(req, req.url, { bot });
+    if (measuredAiHtml) { res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=3600' }); res.end(measuredAiHtml); }
+    else { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('measured-ai.html not built'); }
     return;
   }
 

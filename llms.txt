@@ -40,6 +40,26 @@ signed, durable, verifiable messages — applied to both directions.
 - Pope Leo XIV, Magnifica Humanitas (2026-05-15):
   https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html
 
+## The trust root is silicon, not the ledger
+Proof bottoms out in hardware that cannot be forged, not in a blockchain. Rootz consumes
+platform attestation as the root of every claim: NVIDIA GPU confidential computing (H100/H200,
+Blackwell B200/GB200 in CC mode) signs a report with a hardware-fused device identity key,
+verified against NVIDIA's Reference Integrity Manifests and returned as a signed Entity
+Attestation Token by the NVIDIA Remote Attestation Service; AMD SEV-SNP and Intel TDX do the CPU
+side; an Oracle Cloud instance principal proves the data center; a TPM quote proves the endpoint.
+The chain is where a result is settled and notarized — not where trust begins.
+
+**Platform attestation proves the plant, not the product.** It establishes a genuine GPU with
+known firmware in a correct security configuration, and by design says nothing about which model
+weights were loaded, what prompt was submitted, or what output came back. Rootz closes that gap:
+the attestation request carries a 32-byte nonce the hardware signs over, so we place an
+application-layer evidence hash there (model measurement, signed prompt, output digest). The
+signature that proves the silicon then also covers the specific result — per-result provenance:
+this output, from this model, on this machine, for this prompt.
+
+Measurement depth is stated as a level, never a boolean — L0 none, L1 attested transport,
+L2 attested silicon, L3 measured weights bound to a declared model identity. See /ai.md.
+
 ## Machine endpoints
 - /ai.md   — this brief, Markdown
 - /ai.json — structured discovery (alias of /.well-known/ai)
