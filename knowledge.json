@@ -8,21 +8,34 @@
       "description": "The canonical runtime for Rootz AI agents. Provides AgentEvent type system (25 categories), InternalChain (Merkle-linked blocks), SkillRegistry (manifest validation), and Zod schemas for runtime validation. TEE is the container. Skills are loaded code. Secrets are state.",
       "url": "https://github.com/rootz-global/agent-runtime",
       "status": "active",
-      "technology": ["TypeScript", "ethers.js", "Zod"]
+      "technology": [
+        "TypeScript",
+        "ethers.js",
+        "Zod"
+      ]
     },
     {
       "name": "Agent Wallet SDK",
       "description": "External developer SDK for AI agents with provable origin. Three calls: createAgentWallet() → recordInference() → settle(). Provider-agnostic — works with any AI API. Includes checkpoint/resume with anti-replay.",
       "url": "https://github.com/rootz-global/agent-wallet",
       "status": "active",
-      "technology": ["TypeScript", "Node.js"]
+      "technology": [
+        "TypeScript",
+        "Node.js"
+      ]
     },
     {
       "name": "Morpheus Agent (Skill #1)",
       "description": "Morpheus decentralized inference integration. Runs as standalone MCP server (6 tools) or as a skill loaded into the TEE runtime. Birth certificates, signed action chains, session archiving, secure channel.",
       "url": "https://github.com/rootz-global/morpheus-agent",
       "status": "active",
-      "technology": ["TypeScript", "Node.js", "MCP", "Polygon", "IPFS"]
+      "technology": [
+        "TypeScript",
+        "Node.js",
+        "MCP",
+        "Polygon",
+        "IPFS"
+      ]
     },
     {
       "name": "Secure Channel",
@@ -33,7 +46,14 @@
       "name": "Hardware Attestation Binding",
       "description": "Binds an AI workload to the silicon that ran it. Platform attestation proves the plant, not the product: it establishes a genuine GPU with known firmware in a correct security configuration, and by design says nothing about model weights, prompt, or output. Rootz places an application-layer evidence hash (model measurement, signed prompt, output digest) into the 32-byte attestation nonce the hardware signs over, so the same signature that proves the silicon also covers the specific result. Turns platform attestation into per-result provenance.",
       "status": "designed",
-      "technology": ["NVIDIA Attestation SDK (NVAT)", "NVIDIA Remote Attestation Service (NRAS)", "Entity Attestation Token", "AMD SEV-SNP", "Intel TDX", "TPM 2.0"]
+      "technology": [
+        "NVIDIA Attestation SDK (NVAT)",
+        "NVIDIA Remote Attestation Service (NRAS)",
+        "Entity Attestation Token",
+        "AMD SEV-SNP",
+        "Intel TDX",
+        "TPM 2.0"
+      ]
     },
     {
       "name": "Rootz Desktop V6",
@@ -47,7 +67,13 @@
       "name": "Steven Sprague",
       "role": "CEO & Co-Founder",
       "background": "CEO of Wave Systems Corp, a founding board member of the Trusted Computing Group at its formation in 1999. Wave shipped 160 million copies of OEM trusted-computing software through Dell, Acer, ASUS and Intel; built the BIOS-integrity prototype for the NSA; and co-sponsored conferences with the NSA to promote TCG. Founder of Rivetz, which built TEE applications including a trusted user interface. 25+ years in trusted computing, TPM and device attestation. Four US/international patents in device attestation and identity verification.",
-      "expertise": ["trusted-computing", "TPM", "TCG", "blockchain", "AI-agent-security"]
+      "expertise": [
+        "trusted-computing",
+        "TPM",
+        "TCG",
+        "blockchain",
+        "AI-agent-security"
+      ]
     }
   ],
   "technology": {
@@ -123,6 +149,10 @@
     {
       "term": "Measurement Depth (L0–L3)",
       "definition": "Proof strength stated as a level, never a boolean. L0 none. L1 attested transport. L2 attested silicon (GPU confidential computing attests the platform). L3 measured weights bound to a declared model identity. A weak claim is not a fake claim; depth is disclosed, not implied."
+    },
+    {
+      "term": "Data with Title",
+      "definition": "Data that carries origin and ownership, making it an asset rather than an anonymous artifact. Data has no origin; assets have origin and ownership. Origin plus ownership is title, and quality is the grade on the title."
     }
   ],
   "partnerships": [
@@ -144,5 +174,25 @@
       "reference": "NIST-2025-0035",
       "description": "Response submitted March 2026 on message security model for AI agents, organizational identity, and trusted computing standards application."
     }
-  ]
+  ],
+  "businessModel": {
+    "thesis": "Output with origin is more valuable than anonymous data.",
+    "transition": "Data into data with title. Creates value for any customer, in any vertical, without Rootz owning their domain.",
+    "whatChanges": [
+      "Anonymous data -> data with title: an asset with a grade, a maker and an owner; something that can be relied on, priced and defended.",
+      "AI output nobody can place -> a signed manufacturing record: admissible, auditable and safe to act on, which is what unlocks autonomy.",
+      "Records a business already keeps -> signed origin and quality claims. No new data collection; we sign what already exists."
+    ],
+    "revenue": [
+      {
+        "model": "licensing",
+        "description": "The signing layer, the verifier, and the Measured AI certification mark, licensed to platforms, data centers and enterprises that want their output to carry a grade."
+      },
+      {
+        "model": "transactional",
+        "description": "Per-record and per-transaction signing and verification. Marginal cost near zero; value scales with the consequence of the decision the record supports."
+      }
+    ],
+    "whyItPays": "A higher-quality AI factory earns more than a generic one."
+  }
 }

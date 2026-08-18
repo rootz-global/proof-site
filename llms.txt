@@ -60,6 +60,18 @@ this output, from this model, on this machine, for this prompt.
 Measurement depth is stated as a level, never a boolean — L0 none, L1 attested transport,
 L2 attested silicon, L3 measured weights bound to a declared model identity. See /ai.md.
 
+## Why it is worth paying for — data with title
+Output with origin is more valuable than anonymous data. The business is the transition of data into
+data with title, and it creates value for any customer in any vertical without Rootz owning their
+domain. Anonymous data becomes an asset with a grade, a maker and an owner. AI output nobody can place
+becomes a signed manufacturing record that is admissible, auditable and safe to act on — which is what
+unlocks autonomy, because an agent that cannot verify its inputs collapses back into an advisory
+system. Records a business already keeps become signed origin and quality claims; no new data
+collection is required.
+Revenue: licensing (the signing layer, the verifier, the Measured AI certification mark) plus
+transactional (per-record and per-transaction signing and verification, marginal cost near zero, value
+scaling with the consequence of the decision). A higher-quality AI factory earns more than a generic one.
+
 ## Machine endpoints
 - /ai.md   — this brief, Markdown
 - /ai.json — structured discovery (alias of /.well-known/ai)

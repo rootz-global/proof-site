@@ -1,8 +1,33 @@
 {
   "specVersion": "1.2.0",
-  "generated": "2026-08-13T00:00:00Z",
+  "generated": "2026-08-18T00:00:00Z",
   "domain": "proof.rootz.global",
   "entries": [
+    {
+      "id": "data-with-title-2026-08-18",
+      "title": "Data With Title Is Worth More Than Anonymous Data",
+      "date": "2026-08-18",
+      "summary": "Published the economic argument behind Measured AI. The business is the transition of data into data with title, which creates value for any customer in any vertical. Revenue is licensing plus transactional.",
+      "keyFacts": [
+        "Output with origin is more valuable than anonymous data",
+        "Data has no origin; assets have origin and ownership",
+        "Anonymous data becomes an asset with a grade, a maker and an owner",
+        "AI output becomes a signed manufacturing record: admissible, auditable, safe to act on",
+        "Verification is what converts an assistant into an actor",
+        "We sign records businesses already keep; no new data collection",
+        "Licensing (signing layer, verifier, certification mark) + transactional (per-record, marginal cost near zero)",
+        "A higher-quality AI factory earns more than a generic one"
+      ],
+      "tags": [
+        "business-model",
+        "measured-ai",
+        "data-with-title",
+        "origin",
+        "ownership",
+        "licensing"
+      ],
+      "url": "https://proof.rootz.global/#value"
+    },
     {
       "id": "silicon-trust-root-2026-08-13",
       "title": "The Trust Root Is Silicon, Not the Ledger",
