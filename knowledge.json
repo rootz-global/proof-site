@@ -46,7 +46,7 @@
     {
       "name": "Steven Sprague",
       "role": "CEO & Co-Founder",
-      "background": "Former CEO of Wave Systems Corp (2003-2017). Co-chaired TCG Technical Working Group. 25+ years in trusted computing, TPM, device attestation. Four US/international patents in device attestation and identity verification.",
+      "background": "CEO of Wave Systems Corp, a founding board member of the Trusted Computing Group at its formation in 1999. Wave shipped 160 million copies of OEM trusted-computing software through Dell, Acer, ASUS and Intel; built the BIOS-integrity prototype for the NSA; and co-sponsored conferences with the NSA to promote TCG. Founder of Rivetz, which built TEE applications including a trusted user interface. 25+ years in trusted computing, TPM and device attestation. Four US/international patents in device attestation and identity verification.",
       "expertise": ["trusted-computing", "TPM", "TCG", "blockchain", "AI-agent-security"]
     }
   ],
