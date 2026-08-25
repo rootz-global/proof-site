@@ -350,21 +350,213 @@
 <!-- Hero -->
 <section class="proof-hero">
     <div class="container">
-        <h1>AI Interactions Are Opaque.<br>We&rsquo;re Fixing That.</h1>
+        <h1>Five Governments Said AI Agents<br>Need Cryptographic Identity.<br>We Filed the Patent 19 Months Earlier.</h1>
         <p class="subtitle">
-            Your AI talks to services, makes decisions, and moves data.
-            But you can&rsquo;t see what it did, you can&rsquo;t control what it accesses,
-            and you can&rsquo;t prove what happened. We&rsquo;re building the infrastructure
-            to make AI interactions visible, controllable, and provable.
+            On April 30, 2026, CISA, NSA, and the Five Eyes published
+            <a href="https://www.cisa.gov/news-events/news/cisa-us-and-international-partners-release-guide-secure-adoption-agentic-ai" target="_blank" rel="noopener" style="color: rgba(255,255,255,0.95); text-decoration: underline;">&ldquo;Careful Adoption of Agentic AI Services&rdquo;</a>
+            &mdash; requiring cryptographic agent identity, attestation-backed tokens, and zero trust between agents.
+            Our patent (<a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener" style="color: rgba(255,255,255,0.95); text-decoration: underline;">US&nbsp;2025/0112783</a>)
+            was filed September 27, 2024. The system has been running in production for 3+ months.
+            Post-quantum ready.
         </p>
         <p class="tagline">
             Built on Rootz Data Wallets &mdash; data with a chain, not data on a chain.
         </p>
         <p style="margin-top: 1.5rem;">
+            <a href="/compliance" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">Compliance Demo &rarr;</a>
             <a href="/tour" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">How We Prove It &rarr;</a>
             <a href="/router" style="color: rgba(255,255,255,0.9); text-decoration: underline; font-size: 1.1rem; margin-right: 1.5rem;">AI Governance &rarr;</a>
             <a href="/tech" style="color: rgba(255,255,255,0.7); text-decoration: underline; font-size: 1rem;">Architecture &rarr;</a>
         </p>
+    </div>
+</section>
+
+<!-- Five Eyes Alignment -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>The Five Eyes Said WHAT. We Built HOW.</h2>
+        <p>
+            The joint guidance from CISA, NSA, UK NCSC, Australia ASD, Canada CCCS,
+            and New Zealand NCSC specifies requirements for AI agent security.
+            Every requirement maps to something we&rsquo;ve already built and deployed.
+        </p>
+
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Five Eyes Requires</th><th style="background: var(--dark); color: white;">Rootz Implementation</th><th style="background: var(--dark); color: white;">Status</th></tr>
+            <tr><td><strong>Cryptographically verified identity</strong></td>
+                <td>Birth certificate on Polygon. secp256k1 ECDSA. TPM-bound keys.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Short-lived credentials, JIT provisioned</strong></td>
+                <td>Session tokens (5-60 min TTL). Desktop V6 issues and revokes.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Zero trust between agents</strong></td>
+                <td>Every MCP call policy-checked. No implicit trust from co-membership.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Replace persistent API keys</strong></td>
+                <td>Wallet-based OAuth (epistery challenge/sign/verify). No bearer tokens.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Encrypt inter-agent communications</strong></td>
+                <td>ECDH + AES-256-GCM. Post-quantum: ML-KEM-1024 + ML-DSA-65.</td>
+                <td style="color: #34d399; font-weight: 600;">Live + PQ</td></tr>
+            <tr><td><strong>Attestation-backed tokens</strong></td>
+                <td>TPM-bound key derivation. Hardware root of trust. Desktop as HSM.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+            <tr><td><strong>Agent identity lifecycle</strong></td>
+                <td>Provisioning at spawn, scope binding, revalidation, automatic revocation.</td>
+                <td style="color: #34d399; font-weight: 600;">Live</td></tr>
+        </table>
+
+        <div class="analogy-box">
+            <p>
+                <strong>The gap everyone else has:</strong> the Five Eyes guidance says agents need
+                cryptographic identity, but their answer to &ldquo;where does the root key live?&rdquo;
+                is &ldquo;the infrastructure gives you one&rdquo; (SPIFFE issuer, cloud IAM, vault).
+                That creates a central policy engine as a single point of failure.
+                Our answer: <strong>the key lives in the owner&rsquo;s hardware (TPM).</strong>
+                No central issuer. No infrastructure dependency. Sovereign.
+            </p>
+        </div>
+
+        <p style="font-size: 0.95rem; color: var(--gray-600);">
+            Sources:
+            <a href="https://www.cisa.gov/resources-tools/resources/careful-adoption-agentic-ai-services" target="_blank" rel="noopener">CISA resource page</a> &bull;
+            <a href="https://media.defense.gov/2026/Apr/30/2003922823/-1/-1/0/CAREFUL%20ADOPTION%20OF%20AGENTIC%20AI%20SERVICES_FINAL.PDF" target="_blank" rel="noopener">Full guidance (PDF)</a> &bull;
+            <a href="https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/4475134/" target="_blank" rel="noopener">NSA press release</a> &bull;
+            <a href="https://cyberscoop.com/cisa-nsa-five-eyes-guidance-secure-deployment-ai-agents/" target="_blank" rel="noopener">CyberScoop coverage</a> &bull;
+            <a href="https://labs.cloudsecurityalliance.org/research/csa-research-note-cisa-agentic-ai-guidance-20260503-csa-styl/" target="_blank" rel="noopener">CSA analysis</a>
+        </p>
+    </div>
+</section>
+
+<!-- The Patent -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>The Patent: US 2025/0112783 A1</h2>
+        <p>
+            <strong>Filed:</strong> September 27, 2024 &mdash; 19 months before the Five Eyes guidance.<br>
+            <strong>Published:</strong> April 3, 2025.<br>
+            <strong>Inventors:</strong> Michael Sprague, Steven Sprague.<br>
+            <strong>Title:</strong> <em>Verifying Trustworthiness of an AI System</em>.<br>
+            <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">View on Google Patents &rarr;</a>
+        </p>
+
+        <h3>Key Claims &mdash; Mapped to Working Code</h3>
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Patent Claim</th><th style="background: var(--dark); color: white;">Implementation</th></tr>
+            <tr><td><strong>Claim 1:</strong> Client signs request &rarr; assurance system validates &rarr; binds identity + assurance into response</td>
+                <td>Agent signs prompt hash via Desktop V6 (TPM). MCP Policy Router validates. Response hash-linked into chain.</td></tr>
+            <tr><td><strong>Claim 2:</strong> DAPP + smart contract + blockchain wallet provides signing key; hash recorded on-chain</td>
+                <td>Sovereign Secret on Polygon. V7 contracts. Wallet-derived signing. Merkle root settled on-chain.</td></tr>
+            <tr><td><strong>Claims 4-5:</strong> TEE/TPM provides private key and signing operation</td>
+                <td>Desktop V6 with Windows TPM. Key never leaves hardware. Agent gets session token, not key.</td></tr>
+            <tr><td><strong>Claim 6:</strong> Blockchain records hash of every boot/loading step</td>
+                <td>Birth certificate (Note 0) + skill loading (Note 1) + session events &rarr; Merkle chain.</td></tr>
+            <tr><td><strong>Claim 10:</strong> Aggregates integrity measurements; binds with signed envelope</td>
+                <td>Settlement Merkle root covers all events across all services. One hash proves everything.</td></tr>
+            <tr><td><strong>Claim 19:</strong> Blockchain token payment bound into assurance process</td>
+                <td>V7 credit system. Payment and attestation use the same wallet key.</td></tr>
+            <tr><td><strong>Claim 21:</strong> Owner controls configuration via signed messages</td>
+                <td>Policy + skill delivered as signed Notes on the agent&rsquo;s wallet. Owner writes instructions IN.</td></tr>
+            <tr><td><strong>Claims 29-30:</strong> Encrypted request/response using registered key pairs</td>
+                <td>ECDH + AES-256-GCM. Post-quantum: ML-KEM-1024. Only agent and owner can decrypt.</td></tr>
+        </table>
+
+        <div class="analogy-box">
+            <p>
+                <strong>The insight:</strong> You don&rsquo;t need to own the AI. You need to own the
+                trust wrapper around any AI. The &ldquo;data assurance computing system&rdquo; (the patent&rsquo;s term)
+                is the MCP Policy Router. It wraps Claude, GPT, Gemini &mdash; whatever.
+                Identity, measurement, and assurance happen in YOUR layer.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Post-Quantum -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>Post-Quantum Security &mdash; Level 4</h2>
+        <p>
+            Regulatory data must remain verifiable for decades. Classical cryptography won&rsquo;t survive
+            that timeline. We built post-quantum encryption into the data wallet from the start &mdash;
+            not as a future upgrade, but as a shipping feature.
+        </p>
+
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: var(--dark); color: white;">Capability</th><th style="background: var(--dark); color: white;">Algorithm</th><th style="background: var(--dark); color: white;">Standard</th></tr>
+            <tr><td>Key Encapsulation</td><td>ML-KEM-1024 (FIPS 203)</td><td>CNSA 2.0 mandated for data-at-rest</td></tr>
+            <tr><td>Digital Signatures</td><td>ML-DSA-65 (FIPS 204)</td><td>Dilithium — NIST PQ standard</td></tr>
+            <tr><td>Merkle Tree</td><td>PQ Merkle with ML-DSA-65 signed blocks</td><td>RFC 6962 domain separation</td></tr>
+            <tr><td>Key Rotation</td><td>90-day epoch rotation with key chain recovery</td><td>Forward secrecy by design</td></tr>
+            <tr><td>Backup</td><td>Shamir 3-of-5 secret sharing over GF(2&sup8;)</td><td>Master seed recovery</td></tr>
+            <tr><td>Settlement</td><td>Dual-chain: Polygon (ECDSA) + Naoris (Dilithium-5)</td><td>Classical + PQ anchoring</td></tr>
+        </table>
+
+        <h3>Beyond Apple PQ3 Level 3</h3>
+        <table class="tech-table" style="margin: 1.5rem 0;">
+            <tr><th style="background: #4b5563; color: white;">Platform</th><th style="background: #4b5563; color: white;">PQ Encryption</th><th style="background: #4b5563; color: white;">PQ Signing</th><th style="background: #4b5563; color: white;">PQ Time</th><th style="background: #4b5563; color: white;">Level</th></tr>
+            <tr><td>Signal PQXDH</td><td>Yes</td><td>No</td><td>No</td><td>2</td></tr>
+            <tr><td>Apple PQ3 (iMessage)</td><td>Yes</td><td>No</td><td>No</td><td>3</td></tr>
+            <tr><td><strong>Rootz PQ Wallet</strong></td><td><strong>Yes (ML-KEM-1024)</strong></td><td><strong>Yes (ML-DSA-65)</strong></td><td><strong>Yes (PQ Merkle epochs)</strong></td><td><strong>4</strong></td></tr>
+        </table>
+
+        <p>
+            11 TypeScript modules. 30 tests passing. Built on
+            <code>@noble/post-quantum</code> v0.6.0 (MIT, Paul Miller).
+            CNSA 2.0 compliant. Algorithm-agile &mdash; the wallet carries the algorithm,
+            not the protocol.
+        </p>
+    </div>
+</section>
+
+<!-- Church and State -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>When Church and State Both Say &ldquo;Move&rdquo;</h2>
+        <p>
+            Three documents published within 30 days of each other. Three independent authorities.
+            The same conclusion.
+        </p>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>The Moral Authority</h4>
+                <p><strong>Pope Leo XIV, <em>Magnifica Humanitas</em></strong> (May 15, 2026) &mdash;
+                   The first papal encyclical on AI. 245 paragraphs on safeguarding human dignity.
+                   &ldquo;Disarm AI&rdquo; &mdash; not reject, but free from monopolistic control.
+                   Accountability requires verifiable identity. Subsidiarity means the owner holds the key.
+                   Presented alongside Anthropic co-founder Daniela Amodei.<br>
+                   <a href="https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html" target="_blank" rel="noopener">
+                   Read the encyclical &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>The Security Authority</h4>
+                <p><strong>Five Eyes, &ldquo;Careful Adoption of Agentic AI Services&rdquo;</strong> (April 30, 2026) &mdash;
+                   First joint guidance from CISA, NSA, and all Five Eyes agencies on AI agent security.
+                   Cryptographic identity. Attestation-backed tokens. Zero trust. Encrypted communications.
+                   The first AI manufacturing quality checklist.<br>
+                   <a href="https://media.defense.gov/2026/Apr/30/2003922823/-1/-1/0/CAREFUL%20ADOPTION%20OF%20AGENTIC%20AI%20SERVICES_FINAL.PDF" target="_blank" rel="noopener">
+                   Read the guidance (PDF) &rarr;</a></p>
+            </div>
+            <div class="audience-card">
+                <h4>The Engineering Authority</h4>
+                <p><strong>US Patent 2025/0112783</strong> (Filed September 27, 2024) &mdash;
+                   &ldquo;Verifying Trustworthiness of an AI System.&rdquo;
+                   Filed 19 months before the Five Eyes published the problem.
+                   TEE/TPM-rooted identity. Blockchain settlement. Owner-controlled policy. Running in production.<br>
+                   <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">
+                   View on Google Patents &rarr;</a></p>
+            </div>
+        </div>
+
+        <div class="analogy-box">
+            <p>
+                <strong>When the Church and the State are both discussing the future of AI,
+                it is time to move.</strong> The Pope provides the principles. The Five Eyes
+                provides the requirements. The patent provides the architecture. The code
+                provides the proof. Three walls. One Jerusalem. Each builder chose their section.
+            </p>
+        </div>
     </div>
 </section>
 
@@ -412,6 +604,63 @@
                 records what it did WITH that data. As the discovery ecosystem grows,
                 agents have richer verified sources &mdash; and the provenance chain
                 becomes exponentially more valuable.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- The Lab Notebook for AI -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>The Lab Notebook for Everything</h2>
+        <p>
+            For decades the engineering notebook was the gold standard of provenance:
+            dated, witnessed, the durable record of when an idea was first conceived.
+            Every patent, every design review, every audit trail began there.
+            In the age of AI, that notebook has evaporated &mdash; your thinking
+            scattered across model providers, summarized into &ldquo;memory&rdquo; features
+            you don&rsquo;t control, gone the day you switch platforms.
+        </p>
+        <p>
+            <strong>The PC can give it back.</strong> As you work alongside AI &mdash; thinking,
+            designing, deciding, creating &mdash; the device captures it: every exchange,
+            signed and timestamped at the moment it happens, sealed to your hardware,
+            organized not as a transcript pile but as a queryable inventory of what you
+            concluded and when. It belongs to you. It is portable across every AI.
+            And it does not go away.
+        </p>
+
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>Not Just Outputs &mdash; Thinking</h4>
+                <p>The archive captures the conversation, not just the answer.
+                   The questions you asked, the context that evolved, the reasoning
+                   that led to the decision. The thinking IS the asset &mdash;
+                   and it compounds over a lifetime.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Quality, Not Security</h4>
+                <p>This is not about preventing breach. It is about
+                   <strong>data quality</strong> &mdash; the difference between a number
+                   on a napkin and a calibrated instrument reading. Data with origin,
+                   ownership, and context is data an AI can trust and an auditor can verify.</p>
+            </div>
+            <div class="audience-card">
+                <h4>Your Collection of Devices Is You</h4>
+                <p>Identity is not a single machine. It is sharded across the devices
+                   you own &mdash; laptop, phone, desktop. Lose one, replace it, carry on.
+                   Write to your address, all your devices listen.
+                   The keys never leave your hardware.</p>
+            </div>
+        </div>
+
+        <div class="analogy-box">
+            <p>
+                <strong>The agent era is the last clean chance</strong> to put the owner back
+                at the center. There is one asset in the entire stack that you actually own:
+                the device in your hands. That is where identity lives, where the archive
+                grows, and where the proof begins. The PC is not a terminal to someone&rsquo;s
+                cloud &mdash; it is the root of trust for a lifetime of thinking.
             </p>
         </div>
     </div>
@@ -499,6 +748,34 @@
     </div>
 </section>
 
+<!-- NIST Engagement -->
+<section class="proof-section">
+    <div class="proof-content">
+        <h2>NIST Engagement</h2>
+        <p>
+            We don&rsquo;t just build the technology &mdash; we help define the standards.
+            Two formal submissions to NIST in 2026, both referencing this architecture
+            and the live on-chain proofs on this page.
+        </p>
+        <div class="audience-grid">
+            <div class="audience-card">
+                <h4>NIST RFI Response</h4>
+                <p><strong>Docket NIST-2025-0035</strong> &mdash; AI Agent Security.<br>
+                   Core thesis: &ldquo;The security architecture for AI agents already exists
+                   in trusted computing standards.&rdquo; Proposes signed prompts, measured AI,
+                   signed responses. 10 key arguments + 3 specific requirements.</p>
+            </div>
+            <div class="audience-card">
+                <h4>NCCoE Concept Paper</h4>
+                <p><strong>AI Agent Identity &amp; Authorization</strong> &mdash; Defines agent identity
+                   as a Merkle chain (not a static credential), four-factor message-level assurance,
+                   and includes live proof.rootz.global evidence. Birth certificate + session archive
+                   referenced as working demonstration.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Sovereignty -->
 <section class="proof-section">
     <div class="proof-content">
@@ -515,11 +792,21 @@
             to a hardware security module that becomes the agent&rsquo;s trusted execution environment.
         </p>
 
-        <p style="text-align: center; margin-top: 1.5rem;">
-            <a href="mailto:discover@rootz.global" style="color: var(--primary-blue); font-weight: 600;">
-                Partnerships &amp; Enterprise: discover@rootz.global
+        <div style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; border-radius: 12px; padding: 2.5rem; margin: 2rem 0; text-align: center;">
+            <h3 style="color: white; margin-bottom: 1rem; font-size: 1.6rem;">Ready to Talk?</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.95;">
+                If you just got handed the Five Eyes guidance and were asked &ldquo;are we compliant?&rdquo;
+                &mdash; we can help. Design partners, enterprise pilots, and integration support.
+            </p>
+            <a href="mailto:discover@rootz.global" style="display: inline-block; background: white; color: var(--primary-blue); padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 1.1rem; text-decoration: none;">
+                discover@rootz.global
             </a>
-        </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                Or explore: <a href="/compliance" style="color: white; text-decoration: underline;">Compliance Demo</a> &bull;
+                <a href="/tour" style="color: white; text-decoration: underline;">How It Works</a> &bull;
+                <a href="/router" style="color: white; text-decoration: underline;">AI Governance</a>
+            </p>
+        </div>
     </div>
 </section>
 
@@ -830,9 +1117,28 @@
 <footer>
     <p>&copy; 2026 Rootz Corp &mdash; <a href="https://rootz.global">rootz.global</a></p>
     <p style="margin-top: 0.5rem;">
+        <a href="mailto:discover@rootz.global" style="font-weight: 600;">discover@rootz.global</a> &bull;
+        Patent: <a href="https://patents.google.com/patent/US20250112783A1" target="_blank" rel="noopener">US 2025/0112783</a>
+    </p>
+    <p style="margin-top: 0.5rem;">
         DBA Identity: <code style="font-size: 0.8rem;">0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664</code> (Polygon Mainnet)
     </p>
 </footer>
+
+<!-- Analytics: log page views to server -->
+<script>
+(function() {
+  try {
+    var data = {
+      p: location.pathname,
+      r: document.referrer || '',
+      t: new Date().toISOString(),
+      w: window.innerWidth
+    };
+    navigator.sendBeacon('/hit', JSON.stringify(data));
+  } catch(e) {}
+})();
+</script>
 
 </body>
 </html>

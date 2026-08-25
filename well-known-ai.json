@@ -2,14 +2,15 @@
   "$schema": "https://rootz.global/ai/schemas/ai-discovery-v1.2.json",
   "specVersion": "1.2.0",
   "schemaVersion": "2026-03",
-  "generated": "2026-03-29T00:00:00Z",
+  "generated": "2026-05-26T00:00:00Z",
   "organization": {
     "name": "Rootz Corp",
     "domain": "rootz.global",
     "digitalName": "0xD36AAf65a91bB7dc69942cF6B6d1dBa4Ef171664",
     "blockchain": "Polygon",
     "tagline": "AI with Proof of Origin",
-    "mission": "Every AI output should have a provable origin — who authorized the agent, what model answered, when it happened.",
+    "mission": "Every AI output should have a provable origin — who authorized the agent, what model answered, when it happened. Patent-protected (US 2025/0112783). Post-quantum ready. Five Eyes aligned.",
+    "contact": "discover@rootz.global",
     "sector": [
       "AI",
       "blockchain",
@@ -39,7 +40,8 @@
     "ai_readable": true,
     "structured_data": true,
     "blockchain_verifiable": true,
-    "mcp_available": false,
+    "mcp_available": true,
+    "post_quantum": true,
     "discovery": true,
     "knowledge": true,
     "feed": true
@@ -67,7 +69,30 @@
       "ECDH + AES-256-GCM encryption",
       "SHA-256 hash-linking",
       "Merkle tree settlement",
-      "OpenAI-compatible inference API"
+      "ML-KEM-1024 (FIPS 203) post-quantum key encapsulation",
+      "ML-DSA-65 (FIPS 204) post-quantum digital signatures",
+      "PQ Merkle tree with ML-DSA-65 signed blocks",
+      "OpenAI-compatible inference API",
+      "MCP (Model Context Protocol) — 44 tools"
+    ]
+  },
+  "patent": {
+    "number": "US 2025/0112783 A1",
+    "title": "Verifying Trustworthiness of an AI System",
+    "filed": "2024-09-27",
+    "published": "2025-04-03",
+    "inventors": ["Michael Sprague", "Steven Sprague"],
+    "assignee": "Sproquet Corp",
+    "url": "https://patents.google.com/patent/US20250112783A1"
+  },
+  "compliance": {
+    "fiveEyesAligned": true,
+    "guidanceDate": "2026-04-30",
+    "guidanceTitle": "Careful Adoption of Agentic AI Services",
+    "guidanceAuthors": ["CISA", "NSA", "UK NCSC", "Australia ASD", "Canada CCCS", "New Zealand NCSC"],
+    "nistSubmissions": [
+      { "docket": "NIST-2025-0035", "type": "RFI Response", "topic": "AI Agent Security" },
+      { "type": "NCCoE Concept Paper", "topic": "AI Agent Identity and Authorization" }
     ]
   },
   "proof": {
