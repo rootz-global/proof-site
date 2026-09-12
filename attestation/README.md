@@ -74,3 +74,44 @@ Endpoint status as observed 2026-09-10:
    ladder stops being aspirational the day `NvidiaAttester` returns a real report.
 
 Related: `../origin-binder.mjs` · `rootz-attested-ai/prototype/SPEC-nvidia-testbench-prototype.md`
+
+---
+
+## Validating that the build was not self-congratulatory
+
+`demo.mjs` is **weak evidence and should not be trusted on its own.** `StubAttester` derives its
+evidence *from* the reference set, so the happy case is tautological — a verifier that ignored its
+inputs entirely and returned `PASS` would pass it. The demo shows the shape of the thing, not that the
+thing works.
+
+Two harnesses exist to catch that:
+
+### `test.mjs` — 14 adversarial tests
+Each asserts a property a cheating implementation breaks: all-wrong evidence must fail; **every**
+single-measurement corruption must be caught (looped over all 25 active measurements, not just one);
+empty evidence must not pass (vacuous truth); coverage must count what was *checked*, not what was
+*supplied*; stub evidence can never exceed L0 however correct it is; hex case must normalise; a
+truncated hash must not match; and evidence for one driver version must fail against another — with a
+control test proving the two reference sets genuinely differ, so that cross-version test isn't vacuous.
+
+### `mutate.mjs` — mutation testing, the check on the tests
+Injects nine plausible bugs into `verify.mjs`, runs the suite against each, and reports which
+**survive**. A surviving mutation means the code could be broken that way and nothing would notice.
+
+```
+node test.mjs      # 14 tests
+node mutate.mjs    # 9/9 applied mutations killed
+```
+
+**Two real findings came out of this, and both were mine:**
+
+1. **A wrong test.** The first depth assertion expected `L2-partial` on stub evidence. The code was
+   right — stub is gated at L0 *before* coverage is considered — and the test was wrong. Split into
+   two tests that check the ordering explicitly.
+2. **A hole in the tests, found by mutation not inspection.** `coverage-counts-supplied` initially
+   **survived**: the coverage test supplied exactly one measurement that was also checkable, so
+   supplied and checked were both 1 and the mutation was invisible. Fixed by supplying four
+   measurements of which only two are checkable. It now dies.
+
+That second one is the whole argument for mutation testing: the test was *present*, *passing*, and
+*not constraining the behaviour it named*.
