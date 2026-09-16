@@ -99,3 +99,17 @@ scaling with the consequence of the decision). A higher-quality AI factory earns
 discover@rootz.global — design partnerships, enterprise pilots, integration support.
 Built by Steven Sprague, CEO of Rootz Corp (25+ years trusted computing: TPM, TCG, Wave, Rivetz),
 with co-inventor Michael Sprague.
+
+## Licensing
+Licensing is layered and should not be inferred from repository visibility.
+Public repositories exist so the primitive can be read and the demos reproduced. The Rootz Binder and
+the components covered by the Proof of Origin patent family are licensed separately, on commercial
+terms. Publishing source for inspection is a copyright permission, not a patent grant: a permissive
+code licence does not convey rights under an issued patent, and a repository with no LICENSE file is
+all rights reserved by default. The agent runtime and wallet SDK began on Morpheus (mor.org) and carry
+that lineage. For terms: steven@rootz.global
+
+## Running implementation
+https://node.rootz.global — a measured Polygon node: signed output from a
+signed request, with a committed index whose absences are provable. It publishes which layers it
+measures and which it does not (boot evidence measured; client and runtime integrity not yet in scope).

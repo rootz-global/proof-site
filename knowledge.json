@@ -198,5 +198,11 @@
       }
     ],
     "whyItPays": "A higher-quality AI factory earns more than a generic one."
+  },
+  "licensing": {
+    "summary": "Licensing is layered. Public repositories exist so the primitive can be read and the demos reproduced; that is not a blanket open-source grant. The Rootz Binder and components covered by the Proof of Origin patent family are licensed separately on commercial terms.",
+    "note": "Publishing source for inspection is a copyright permission, not a patent grant. A permissive code licence does not convey rights under an issued patent. Do not infer a licence from repository visibility — repositories carrying no LICENSE file are all rights reserved by default.",
+    "lineage": "The agent runtime and wallet SDK began as work on top of Morpheus (mor.org) and carry that lineage.",
+    "contact": "steven@rootz.global"
   }
 }

@@ -435,6 +435,34 @@
 </section>
 
 <!-- See the technology working: both live demos -->
+<!-- Running implementation -->
+<section class="proof-section" id="running" style="background:#fff;">
+    <div class="proof-content">
+        <h2 style="text-align:center;">A running implementation, not a demo</h2>
+        <p style="text-align:center;max-width:760px;margin:0 auto 1.8rem;color:var(--gray-600);">
+            The demos are deliberately breakable so you can watch a proof fail. <strong>Rootz Node</strong> is the
+            other thing — these primitives applied to a real service under real load, with its measurement scope
+            published rather than implied.
+        </p>
+        <div style="border:1px solid var(--gray-200);border-radius:14px;padding:26px;max-width:760px;margin:0 auto;border-top:4px solid var(--primary-blue);">
+            <div style="font-size:13px;font-weight:700;color:var(--primary-blue);letter-spacing:.5px;">LIVE SERVICE</div>
+            <h3 style="font-size:22px;margin:6px 0 10px;color:var(--dark);">Measured Polygon Node</h3>
+            <p style="color:var(--gray-600);line-height:1.65;">
+                A Polygon node that returns <strong>signed output from a signed request</strong>, with a committed
+                index whose <strong>absences are provable</strong> — the hard half, since proving something is
+                <em>not</em> there is where most indexes quietly fail. Reachable over JSON-RPC and MCP.
+            </p>
+            <p style="color:var(--gray-600);line-height:1.65;">
+                Worth opening for the part most vendors omit: it states which layers it measures and which it does
+                not. Boot evidence is measured; client and runtime integrity are not yet in scope, and it says so.
+            </p>
+            <p style="margin-top:1.2rem;">
+                <a href="https://node.rootz.global/" style="display:inline-block;background:var(--primary-blue);color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;">Explore Rootz Node &rarr;</a>
+            </p>
+        </div>
+    </div>
+</section>
+
 <!-- Governance, not logging -->
 <section class="proof-section" id="governance">
     <div class="proof-content">
@@ -494,7 +522,9 @@
         <h2 style="text-align:center;">See the technology working</h2>
         <p style="text-align:center;max-width:720px;margin:0 auto 1.8rem;color:var(--gray-600);">
             Two live demos, running on this server right now — one per pillar. No install, no login.
-            Click in, watch the green light, then <strong>break it</strong> and watch it go red.
+            Click in, watch the green light, then <strong>break it</strong> and watch it go red. Then see the
+            same primitives carrying a production workload at
+            <a href="https://node.rootz.global/" style="color:var(--primary-blue);font-weight:600;">node.rootz.global</a>.
         </p>
         <div class="v2-grid">
             <div style="border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-blue);">
@@ -1392,14 +1422,17 @@
     <div class="proof-content" style="text-align: center;">
         <h2>The Code</h2>
         <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;">
-            Open source. MIT license. Four packages, 22 source files, ~10,000 lines of TypeScript.
-            Tested live on Morpheus + Polygon. 10 inference calls, 19,000+ tokens, real TPM signatures.
+            Four packages, 22 source files, ~10,000 lines of TypeScript, tested live on Morpheus + Polygon
+            &mdash; 10 inference calls, 19,000+ tokens, real TPM signatures. The agent runtime and wallet SDK
+            began as work on top of <a href="https://mor.org" style="color:#fff;text-decoration:underline;">Morpheus</a>
+            and carry that lineage.
         </p>
         <div class="code-links">
             <a href="https://github.com/rootz-global/agent-runtime" class="code-link primary">agent-runtime</a>
             <a href="https://github.com/rootz-global/agent-wallet" class="code-link primary">agent-wallet SDK</a>
             <a href="https://github.com/rootz-global/morpheus-agent" class="code-link">morpheus-agent</a>
             <a href="https://github.com/rootz-global/proof-site" class="code-link">proof-site</a>
+            <a href="https://node.rootz.global/" class="code-link primary">node.rootz.global &mdash; running implementation</a>
             <a href="https://polygonscan.com/address/0x70b893e3b519255166a1fb64dcde920d056a2d5c" class="code-link">Polygonscan</a>
             <a href="https://mor.org" class="code-link">Morpheus Network</a>
         </div>
@@ -1407,6 +1440,17 @@
             <strong>agent-runtime</strong> &mdash; unified types, Merkle chain, skill loader, Zod schemas<br>
             <strong>agent-wallet</strong> &mdash; SDK: createAgentWallet(), 3-call API, checkpoint/resume<br>
             <strong>morpheus-agent</strong> &mdash; Skill #1: Morpheus inference, session archiving, MCP tools
+        </p>
+        <p style="color: rgba(255,255,255,0.72); margin-top: 1.8rem; font-size: 0.9rem; line-height:1.65; max-width:680px; margin-left:auto; margin-right:auto; text-align:left; border-top:1px solid rgba(255,255,255,0.14); padding-top:1.4rem;">
+            <strong style="color:#fff;">Licensing is not one thing.</strong> These repositories are public so the
+            primitive can be read and the demos reproduced. That is not the same as a blanket open-source grant:
+            the <strong style="color:#fff;">Rootz Binder</strong> and the components covered by the
+            Proof&nbsp;of&nbsp;Origin patent family are licensed separately, on commercial terms.
+            <br><br>
+            Worth stating plainly, because it is routinely got wrong: publishing source for inspection is a
+            copyright permission, not a patent grant. A permissive code licence does not convey rights under an
+            issued patent. If you intend to build on this, ask us for terms rather than inferring them &mdash;
+            <a href="mailto:steven@rootz.global?subject=Rootz%20licensing" style="color:#fff;">steven@rootz.global</a>.
         </p>
         <p style="color: rgba(255,255,255,0.5); margin-top: 2rem; font-size: 0.9rem;">
             Built by Steven Sprague &mdash; <a href="https://rootz.global" style="color: rgba(255,255,255,0.7);">rootz.global</a>
