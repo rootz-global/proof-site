@@ -435,6 +435,60 @@
 </section>
 
 <!-- See the technology working: both live demos -->
+<!-- Governance, not logging -->
+<section class="proof-section" id="governance">
+    <div class="proof-content">
+        <h2 style="text-align:center;">Why this is governance, not logging</h2>
+        <p style="text-align:center;max-width:760px;margin:0 auto 1.8rem;color:var(--gray-600);">
+            Most governance controls sit beside the work and are read afterwards. The primitive on this page
+            sits <strong>inside</strong> the exchange and is checked before the next action. Three distinctions
+            decide whether that is actually true in your architecture.
+        </p>
+        <div class="v2-grid">
+            <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-blue);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-blue);letter-spacing:.5px;">1 &middot; TRANSPORT</div>
+                <h3 style="font-size:20px;margin:.5rem 0 .6rem;">TLS authenticates a channel, not a message.</h3>
+                <p style="color:var(--gray-600);font-size:15px;line-height:1.6;margin:0;">
+                    mTLS tells you who you connected to. It says nothing once the payload is cached, forwarded,
+                    summarised, or embedded in another model&rsquo;s output. The guarantee ends where the
+                    connection does &mdash; and an agent pipeline is mostly what happens after that.
+                </p>
+            </div>
+            <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-blue);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-blue);letter-spacing:.5px;">2 &middot; LOGGING</div>
+                <h3 style="font-size:20px;margin:.5rem 0 .6rem;">A log is a statement about a message, held apart from it.</h3>
+                <p style="color:var(--gray-600);font-size:15px;line-height:1.6;margin:0;">
+                    It lives in a store you control, under credentials you issue. A relying party with no account
+                    on your infrastructure cannot evaluate it, and you cannot hand them the store. The record
+                    stays home. The data does not.
+                </p>
+            </div>
+            <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;border-top:4px solid var(--primary-blue);">
+                <div style="font-size:13px;font-weight:700;color:var(--primary-blue);letter-spacing:.5px;">3 &middot; BINDING</div>
+                <h3 style="font-size:20px;margin:.5rem 0 .6rem;">A signature bound to the message travels with the bytes.</h3>
+                <p style="color:var(--gray-600);font-size:15px;line-height:1.6;margin:0;">
+                    Verification needs the message and a public key. Not access to your systems, not your logs,
+                    not your goodwill. That is the property that makes a claim usable by a party with no reason
+                    to trust you &mdash; the only kind of verification worth the name.
+                </p>
+            </div>
+        </div>
+        <p style="max-width:760px;margin:1.8rem auto 0;color:var(--gray-600);font-size:15px;line-height:1.7;">
+            Rootz calls this <strong>embedded governance</strong>: authority and measured conditions carried
+            inside the exchange rather than recorded beside it. This site exists so you can test whether the
+            property holds. The demos below verify real signatures, and they fail visibly when the message, the
+            request binding, or the freshness window is wrong.
+        </p>
+        <p style="max-width:760px;margin:.9rem auto 0;color:var(--gray-600);font-size:15px;line-height:1.7;">
+            <strong>What a signature does not give you.</strong> It does not make the content true. It does not,
+            on its own, establish that the signer was authorised to act. It does not prove where the bytes were
+            produced. Those are separate claims requiring separate evidence and they are kept separate here:
+            integrity is cryptographic, origin is measured, authority is asserted and independently checkable.
+            Collapsing the three into one word is the most common error in this field.
+        </p>
+    </div>
+</section>
+
 <section class="proof-section" id="demos" style="background:#fff;">
     <div class="proof-content">
         <h2 style="text-align:center;">See the technology working</h2>

@@ -103,6 +103,10 @@
   },
   "glossary": [
     {
+      "term": "Embedded Governance",
+      "definition": "Governance carried inside the exchange rather than recorded beside it. Conventional controls — policy documents, control catalogues, audit logs — are statements ABOUT the work, held in a store the operator controls and read after the fact. Embedded governance binds the authority and the measured conditions to the message itself, so they travel with the data and remain verifiable by a relying party with no account on the producer's infrastructure. The distinction is position and portability, not rigour: an added-on control can report what happened but cannot be present when it happens. Note the boundary: a signature establishes integrity, not truth, and not authority on its own — origin is measured, authority is asserted and independently checkable, and the relying party applies its own policy."
+    },
+    {
       "term": "Birth Certificate",
       "definition": "A permanent on-chain record created when an AI agent is born, naming its two parents: the AI model that powers it and the human who authorized it."
     },

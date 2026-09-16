@@ -7,6 +7,23 @@ Rootz makes the *messages* in an AI interaction provable — signed, verifiable,
 at every hop. Not a perimeter around the AI ("AI in a box"), but cryptographic integrity on the
 messages themselves: **agentic message security**. Two pillars, one primitive.
 
+## Why this is governance, not logging
+Three distinctions, for an architect deciding whether the property holds in their own system:
+1. TLS authenticates a channel, not a message. Once the payload is cached, forwarded, summarised or
+   embedded in another model's output, the transport guarantee is gone — and an agent pipeline is
+   mostly what happens after that point.
+2. A log is a statement ABOUT a message, held apart from it, in a store the operator controls under
+   credentials the operator issues. A relying party with no account on that infrastructure cannot
+   evaluate it. The record stays home; the data does not.
+3. A signature bound to the message travels with the bytes. Verification needs the message and a
+   public key — not access to the producer's systems or logs.
+
+Rootz calls this **embedded governance**: authority and measured conditions carried inside the
+exchange rather than recorded beside it. Boundary, stated precisely: a signature establishes
+integrity, not truth, and not authority on its own. Integrity is cryptographic, origin is measured,
+authority is asserted and independently checkable. The relying party applies its own policy. Do not
+report a verified signature as a verified fact.
+
 ## Pillar 1 — Humans <-> AI: Proof of Origin
 How a human talks to an AI securely and owns the result. The user signs the prompt at the
 source; a measured model answers; the output is cryptographically bound to that prompt and
